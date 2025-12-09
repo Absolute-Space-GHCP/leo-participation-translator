@@ -1,0 +1,27 @@
+{
+  "_metadata": {
+    "version": "1.0.0",
+    "updated": "2025-12-08",
+    "purpose": "Slack app configuration reference for DevBot-v3"
+  },
+  "app_name": "DevBot-v3",
+  "app_id": "A09SYTY3YHL",
+  "workspace_id": "T7QD38DKM",
+  "app_url": "https://api.slack.com/apps/A09SYTY3YHL",
+  "channels": {
+    "ai_sandbox": {
+      "name": "#ai-v3-sandbox",
+      "webhook_env_var": "SLACK_WEBHOOK_AI_SANDBOX"
+    }
+  },
+  "tokens": {
+    "bot_token_env_var": "SLACK_BOT_TOKEN",
+    "signing_secret_env_var": "SLACK_SIGNING_SECRET"
+  },
+  "features": {
+    "incoming_webhooks": true,
+    "event_subscriptions": true,
+    "slash_commands": false,
+    "interactive_components": false
+  }
+}

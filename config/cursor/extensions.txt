@@ -1,0 +1,44 @@
+# ============================================================================
+# JL Dev Environment - Required Cursor Extensions
+# ============================================================================
+# Version:     1.0.0
+# Updated:     2025-12-08
+# Purpose:     List of Cursor extensions for the Golden Master environment
+# Usage:       cat extensions.txt | xargs -L1 cursor --install-extension
+# Total:       27 extensions
+# ============================================================================
+
+# AI Assistants
+Continue.continue
+anthropic.claude-code
+
+# Python
+ms-python.python
+ms-python.vscode-pylance
+ms-python.debugpy
+ms-python.black-formatter
+
+# Java (via pack - includes LSP, debug, test, maven, gradle)
+vscjava.vscode-java-pack
+
+# JavaScript/TypeScript
+dbaeumer.vscode-eslint
+
+# API Development
+humao.rest-client
+Postman.postman-for-vscode
+
+# Git
+eamodio.gitlens
+
+# Productivity
+christian-kohler.path-intellisense
+streetsidesoftware.code-spell-checker
+
+# Config Files
+redhat.vscode-yaml
+
+# DevOps
+ms-azuretools.vscode-docker
+ms-kubernetes-tools.vscode-kubernetes-tools
+ms-azuretools.vscode-containers

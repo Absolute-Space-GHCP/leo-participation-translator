@@ -1,0 +1,73 @@
+# ============================================================================
+# JL Dev Environment - Docker Compose
+# ============================================================================
+# Version:     1.0.0
+# Updated:     2025-12-08
+# Purpose:     Local development services (expand as needed)
+# Usage:       docker compose up -d
+# ============================================================================
+
+version: '3.8'
+
+services:
+  # ── Redis Cache (uncomment when needed) ────────────────────────────────────
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: jl-dev-redis
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis-data:/data
+  #   command: redis-server --appendonly yes
+  #   healthcheck:
+  #     test: ["CMD", "redis-cli", "ping"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 3
+
+  # ── PostgreSQL (uncomment when needed) ─────────────────────────────────────
+  # postgres:
+  #   image: postgres:16-alpine
+  #   container_name: jl-dev-postgres
+  #   environment:
+  #     POSTGRES_USER: dev
+  #     POSTGRES_PASSWORD: dev
+  #     POSTGRES_DB: jl_dev
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U dev"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 3
+
+  # ── Local Dashboard ────────────────────────────────────────────────────────
+  dashboard:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.dashboard
+    container_name: jl-dev-dashboard
+    ports:
+      - "3333:3333"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ~/.nvm:/home/node/.nvm:ro
+      - ~/.sdkman:/home/node/.sdkman:ro
+      - ~/.config/gcloud:/home/node/.config/gcloud:ro
+      - ~/.continue:/home/node/.continue:ro
+    environment:
+      - DASHBOARD_PORT=3333
+    restart: unless-stopped
+
+# ── Volumes ──────────────────────────────────────────────────────────────────
+volumes:
+  redis-data:
+  postgres-data:
+
+# ── Networks ─────────────────────────────────────────────────────────────────
+networks:
+  default:
+    name: jl-dev-network
+

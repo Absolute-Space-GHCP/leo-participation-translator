@@ -1,0 +1,53 @@
+{
+  "_version": "1.0.0",
+  "_updated": "2025-12-08",
+  "_purpose": "Continue AI assistant configuration for Gemini models via Vertex AI",
+  "models": [
+    {
+      "title": "Gemini 3 Pro (Preview)",
+      "provider": "vertex-ai",
+      "model": "gemini-3-pro-preview",
+      "projectId": "YOUR_PROJECT_ID",
+      "region": "global",
+      "apiType": "vertex"
+    },
+    {
+      "title": "Gemini 2.5 Pro",
+      "provider": "vertex-ai",
+      "model": "gemini-2.5-pro",
+      "projectId": "YOUR_PROJECT_ID",
+      "region": "us-central1",
+      "apiType": "vertex"
+    },
+    {
+      "title": "Gemini 2.5 Flash",
+      "provider": "vertex-ai",
+      "model": "gemini-2.5-flash",
+      "projectId": "YOUR_PROJECT_ID",
+      "region": "us-central1",
+      "apiType": "vertex"
+    }
+  ],
+  "tabAutocompleteModel": {
+    "title": "Gemini 2.5 Flash (Autocomplete)",
+    "provider": "vertex-ai",
+    "model": "gemini-2.5-flash",
+    "projectId": "YOUR_PROJECT_ID",
+    "region": "us-central1"
+  },
+  "contextProviders": [
+    { "name": "code", "params": {} },
+    { "name": "docs", "params": {} },
+    { "name": "diff", "params": {} },
+    { "name": "terminal", "params": {} },
+    { "name": "problems", "params": {} },
+    { "name": "folder", "params": {} },
+    { "name": "codebase", "params": {} }
+  ],
+  "slashCommands": [
+    { "name": "edit", "description": "Edit selected code" },
+    { "name": "comment", "description": "Write comments for the selected code" },
+    { "name": "share", "description": "Export the current chat session to markdown" },
+    { "name": "cmd", "description": "Generate a shell command" }
+  ]
+}

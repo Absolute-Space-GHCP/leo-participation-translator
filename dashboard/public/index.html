@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JL Dev Environment Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <span class="logo">🚀</span>
+        <h1>JL Dev Environment Dashboard</h1>
+        <span id="project-version" class="version-badge">v1.1.0</span>
+      </div>
+      <div class="header-right">
+        <span id="overall-status" class="status-badge status-loading">Checking...</span>
+      </div>
+    </header>
+
+    <!-- System Info Bar -->
+    <div class="system-bar">
+      <span id="system-info">Loading system info...</span>
+    </div>
+
+    <!-- Main Grid -->
+    <main class="main-grid">
+      
+      <!-- Runtimes Section -->
+      <section class="card">
+        <div class="card-header">
+          <h2>⚡ Runtimes</h2>
+          <span class="section-status" data-section="runtimes"></span>
+        </div>
+        <div class="card-content" id="runtimes-content">
+          <div class="loading">Loading...</div>
+        </div>
+      </section>
+
+      <!-- Package Managers Section -->
+      <section class="card">
+        <div class="card-header">
+          <h2>📦 Package Managers</h2>
+          <span class="section-status" data-section="packages"></span>
+        </div>
+        <div class="card-content" id="packages-content">
+          <div class="loading">Loading...</div>
+        </div>
+      </section>
+
+      <!-- DevOps Tools Section -->
+      <section class="card">
+        <div class="card-header">
+          <h2>🔧 DevOps Tools</h2>
+          <span class="section-status" data-section="devops"></span>
+        </div>
+        <div class="card-content" id="devops-content">
+          <div class="loading">Loading...</div>
+        </div>
+      </section>
+
+      <!-- Authentication Section -->
+      <section class="card">
+        <div class="card-header">
+          <h2>🔐 Authentication</h2>
+          <span class="section-status" data-section="auth"></span>
+        </div>
+        <div class="card-content" id="auth-content">
+          <div class="loading">Loading...</div>
+        </div>
+      </section>
+
+      <!-- AI Tools Section -->
+      <section class="card">
+        <div class="card-header">
+          <h2>🤖 AI Integration</h2>
+          <span class="section-status" data-section="ai"></span>
+        </div>
+        <div class="card-content" id="ai-content">
+          <div class="loading">Loading...</div>
+        </div>
+      </section>
+
+      <!-- Repositories Section -->
+      <section class="card card-wide">
+        <div class="card-header">
+          <h2>📂 Repositories</h2>
+          <span class="section-status" data-section="repos"></span>
+        </div>
+        <div class="card-content" id="repos-content">
+          <div class="loading">Loading...</div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Quick Links -->
+    <section class="quick-links">
+      <div class="quick-links-header">
+        <h3>🔗 Quick Links</h3>
+        <button id="verify-links-btn" class="verify-links-btn" title="Test connectivity to all links">
+          <span class="verify-icon">⚡</span>
+          <span class="verify-text">Verify Links</span>
+          <span id="verify-status" class="verify-status"></span>
+        </button>
+      </div>
+      
+      <!-- Link Verification Results (hidden by default) -->
+      <div id="link-verification-results" class="link-verification-results hidden">
+        <div class="verification-summary">
+          <span id="verify-passed" class="verify-count passed">0 passed</span>
+          <span id="verify-auth" class="verify-count auth">0 auth</span>
+          <span id="verify-failed" class="verify-count failed">0 failed</span>
+          <button id="close-verification" class="close-verification-btn">✕</button>
+        </div>
+        <div id="verification-details" class="verification-details"></div>
+      </div>
+      
+      <!-- Primary Links -->
+      <div class="links-section">
+        <h4>📂 Repositories</h4>
+        <div class="links-grid">
+          <a href="https://github.com/Absolute-Space-GHCP/jl-dev-environment-gm-v1.0" target="_blank" class="link-btn" data-link-id="github-dev-env">
+            <span class="link-icon">📘</span> GitHub (Dev Env)
+          </a>
+          <a href="https://github.com/Absolute-Space-GHCP/ai-agents-gmaster-build" target="_blank" class="link-btn" data-link-id="github-ai-agents">
+            <span class="link-icon">📗</span> GitHub (AI Agents)
+          </a>
+        </div>
+      </div>
+      
+      <!-- Cloud & AI -->
+      <div class="links-section">
+        <h4>☁️ Cloud & AI</h4>
+        <div class="links-grid">
+          <a href="https://console.cloud.google.com/home/dashboard?project=jl-dev-environment-gm" target="_blank" class="link-btn" data-link-id="gcp-console">
+            <span class="link-icon">☁️</span> GCP Console
+          </a>
+          <a href="https://console.cloud.google.com/vertex-ai?project=jl-dev-environment-gm" target="_blank" class="link-btn" data-link-id="vertex-ai">
+            <span class="link-icon">🧠</span> Vertex AI
+          </a>
+          <a href="https://console.anthropic.com" target="_blank" class="link-btn" data-link-id="anthropic">
+            <span class="link-icon">🤖</span> Anthropic Console
+          </a>
+          <a href="https://aistudio.google.com" target="_blank" class="link-btn" data-link-id="ai-studio">
+            <span class="link-icon">✨</span> Google AI Studio
+          </a>
+        </div>
+      </div>
+      
+      <!-- Dev Tools -->
+      <div class="links-section">
+        <h4>🔧 Dev Tools</h4>
+        <div class="links-grid">
+          <a href="https://api.slack.com/apps/A09SYTY3YHL" target="_blank" class="link-btn" data-link-id="slack-app">
+            <span class="link-icon">💬</span> Slack App
+          </a>
+          <a href="https://cursor.sh/docs" target="_blank" class="link-btn" data-link-id="cursor-docs">
+            <span class="link-icon">📖</span> Cursor Docs
+          </a>
+          <a href="https://hub.docker.com" target="_blank" class="link-btn" data-link-id="docker-hub">
+            <span class="link-icon">🐳</span> Docker Hub
+          </a>
+          <a href="https://nodejs.org/docs/latest-v22.x/api/" target="_blank" class="link-btn" data-link-id="node-docs">
+            <span class="link-icon">💚</span> Node.js Docs
+          </a>
+        </div>
+      </div>
+      
+      <!-- Documentation -->
+      <div class="links-section">
+        <h4>📚 Documentation</h4>
+        <div class="links-grid">
+          <a href="https://docs.anthropic.com" target="_blank" class="link-btn" data-link-id="claude-docs">
+            <span class="link-icon">📄</span> Claude Docs
+          </a>
+          <a href="https://cloud.google.com/vertex-ai/docs" target="_blank" class="link-btn" data-link-id="vertex-docs">
+            <span class="link-icon">📄</span> Vertex AI Docs
+          </a>
+          <a href="https://brew.sh" target="_blank" class="link-btn" data-link-id="homebrew">
+            <span class="link-icon">🍺</span> Homebrew
+          </a>
+          <a href="https://sdkman.io" target="_blank" class="link-btn" data-link-id="sdkman">
+            <span class="link-icon">☕</span> SDKMAN
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span id="last-updated">Last updated: --</span>
+      <span class="separator">|</span>
+      <span>Auto-refresh: <span id="refresh-status">30s</span></span>
+      <span class="separator">|</span>
+      <button id="refresh-btn" class="refresh-btn">🔄 Refresh Now</button>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+

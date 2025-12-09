@@ -1,0 +1,49 @@
+# ============================================================================
+# Git Ignore - JL Dev Environment
+# ============================================================================
+# Version:     1.0.0
+# Updated:     2025-12-08
+# Purpose:     Files and directories to exclude from version control
+# ============================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# IDE
+.idea/
+*.swp
+*.swo
+.vscode/
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# Dependencies
+node_modules/
+.npm/
+
+# Build outputs
+dist/
+build/
+*.log
+
+# Secrets (NEVER commit these)
+.env
+.env.local
+*.pem
+*.key
+*credentials*.json
+*secret*
+
+# Local overrides
+*.local
+*.local.*
+
+# Test artifacts
+coverage/
+.nyc_output/
+
+# Local backups
+backups/

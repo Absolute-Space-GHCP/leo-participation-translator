@@ -1,0 +1,56 @@
+# ============================================================================
+# JL Dev Environment - .zshrc Template
+# ============================================================================
+# Version:     1.0.0
+# Updated:     2025-12-08
+# Purpose:     Shell configuration template for the Golden Master environment
+# Usage:       Copy to ~/.zshrc and customize YOUR_PROJECT_ID
+# ============================================================================
+
+# PATH Configuration
+export PATH="/opt/homebrew/bin:\$PATH"
+export PATH="\$HOME/.local/bin:\$PATH"
+export PATH="/usr/local/bin:\$PATH"
+
+# nvm (Node Version Manager)
+export NVM_DIR="\$HOME/.nvm"
+[ -s "\$NVM_DIR/nvm.sh" ] && . "\$NVM_DIR/nvm.sh"
+[ -s "\$NVM_DIR/bash_completion" ] && . "\$NVM_DIR/bash_completion"
+
+# SDKMAN (Java Version Manager)
+export SDKMAN_DIR="\$HOME/.sdkman"
+[[ -s "\$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "\$HOME/.sdkman/bin/sdkman-init.sh"
+
+# Google Cloud SDK
+if [ -f "\$HOME/google-cloud-sdk/path.zsh.inc" ]; then
+  source "\$HOME/google-cloud-sdk/path.zsh.inc"
+fi
+if [ -f "\$HOME/google-cloud-sdk/completion.zsh.inc" ]; then
+  source "\$HOME/google-cloud-sdk/completion.zsh.inc"
+fi
+
+# Environment Variables
+export GOOGLE_CLOUD_PROJECT="YOUR_PROJECT_ID"
+export VERTEX_AI_LOCATION="us-central1"
+export JAVA_HOME="\$HOME/.sdkman/candidates/java/current"
+
+# Aliases
+alias pip="python3 -m pip"
+alias ll="ls -la"
+alias ..="cd .."
+alias ...="cd ../.."
+
+# Git shortcuts
+alias gs="git status"
+alias gp="git pull"
+alias gc="git commit"
+alias gd="git diff"
+
+# Shell Options
+setopt AUTO_CD
+setopt CORRECT
+setopt HIST_IGNORE_DUPS
+setopt SHARE_HISTORY
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE=~/.zsh_history
