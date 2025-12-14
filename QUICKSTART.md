@@ -30,6 +30,9 @@ Request access to these before starting:
 | Slack | Join Johannes Leonardo workspace |
 | Cursor | Sign up at cursor.sh (Pro plan recommended) |
 
+> **📋 Repository Access Note:**  
+> New developers start with **Read-only access** to the `Absolute-Space-GHCP` staging organization. This is where you'll clone verified builds from. Once onboarded and ready, you may be granted access to the `JohannesLeonardo-AI-JLIT` production organization. Do not request PROD access until cleared by your team lead.
+
 ---
 
 ## Step 1: Install Prerequisites (Manual)
