@@ -1,7 +1,7 @@
 # Quick Start Guide - New Developer Setup
 
-Version: 1.0.0
-Last Updated: 2025-12-08
+Version: 1.1.0
+Last Updated: 2026-01-09
 Purpose: Complete zero-to-hero guide for setting up the JL Dev Environment
 Time Required: ~45 minutes
 
@@ -11,12 +11,22 @@ Time Required: ~45 minutes
 
 ### Requirements
 
+#### macOS
 | Requirement | Minimum | How to Check |
 |-------------|---------|--------------|
 | macOS | 14.0+ (Sonoma) | `sw_vers` |
 | Apple Silicon | M1/M2/M3 | `uname -m` (should show `arm64`) |
 | Admin access | Required | Can you run `sudo`? |
 | Disk space | 20GB free | Check in System Settings |
+| Internet | Required | For downloads |
+
+#### Windows 11
+| Requirement | Minimum | How to Check |
+|-------------|---------|--------------|
+| Windows | 11 Pro/Enterprise | `winver` |
+| PowerShell | 5.1+ | `$PSVersionTable.PSVersion` |
+| Admin access | Recommended | Run PowerShell as Admin |
+| Disk space | 20GB free | Check in Settings > Storage |
 | Internet | Required | For downloads |
 
 ### Accounts You'll Need
@@ -266,18 +276,54 @@ cd ~/Projects/jl-dev-environment-gm-v1.0
 
 ---
 
-## Step 10: Test AI Integration
+## Step 10: Claude Code Plugins
+
+Install Claude Code CLI and plugins for enhanced development experience.
+
+### macOS/Linux
+
+```bash
+cd ~/Projects/jl-dev-environment-gm-v1.0/scripts/setup
+./claude-code-setup.sh
+```
+
+### Windows 11
+
+```powershell
+cd $HOME\Projects\jl-dev-environment-gm-v1.0\scripts\setup
+.\claude-code-setup.ps1
+```
+
+The script will:
+1. ✅ Install Claude CLI (if not present)
+2. ✅ Add plugin marketplaces
+3. ✅ Install core plugins (LSPs, memory)
+4. ✅ Install external plugins (GitHub, Slack)
+5. ✅ Configure your GitHub Personal Access Token
+
+> **💡 Tip:** Have your GitHub token ready! Create one at: https://github.com/settings/tokens/new  
+> Required scopes: `repo`, `read:org`, `user`, `project`
+
+After setup, restart your terminal and verify:
+```bash
+claude --version
+claude mcp list
+```
+
+---
+
+## Step 11: Test AI Integration
 
 ### Test Gemini (via Continue)
 
 1. Open Cursor with the workspace
-2. Press `Cmd+L` to open Continue sidebar
+2. Press `Cmd+L` (macOS) or `Ctrl+L` (Windows) to open Continue sidebar
 3. Type: "Hello, what model are you?"
 4. Should respond with Gemini model info
 
 ### Test Claude (via Claude Code)
 
-1. Press `Cmd+Shift+P`
+1. Press `Cmd+Shift+P` (macOS) or `Ctrl+Shift+P` (Windows)
 2. Type: "Claude Code: Open"
 3. Ask: "What files are in this project?"
 
@@ -309,6 +355,7 @@ Your environment is now set up with:
 
 ## Quick Reference Card
 
+### macOS/Linux
 ```bash
 # Open workspace
 open ~/Projects/absolute-space-ghcp.code-workspace
@@ -316,11 +363,32 @@ open ~/Projects/absolute-space-ghcp.code-workspace
 # Validate setup
 ./scripts/validate.sh
 
+# Setup Claude Code plugins
+./scripts/setup/claude-code-setup.sh
+
 # Update extensions
 cat config/cursor/extensions.txt | grep -v '^#' | xargs -L1 cursor --install-extension
 
 # Refresh GCP auth
 gcloud auth login && gcloud auth application-default login
+
+# Check GitHub auth
+gh auth status
+```
+
+### Windows 11
+```powershell
+# Open workspace
+Start-Process "$HOME\Projects\absolute-space-ghcp.code-workspace"
+
+# Setup Claude Code plugins
+.\scripts\setup\claude-code-setup.ps1
+
+# Update extensions (from project root)
+Get-Content config\cursor\extensions.txt | Where-Object {$_ -notmatch '^#' -and $_ -ne ''} | ForEach-Object { cursor --install-extension $_ }
+
+# Refresh GCP auth
+gcloud auth login; gcloud auth application-default login
 
 # Check GitHub auth
 gh auth status
