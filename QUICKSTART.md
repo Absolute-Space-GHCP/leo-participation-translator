@@ -1,7 +1,7 @@
 # Quick Start Guide - New Developer Setup
 
-Version: 1.1.0
-Last Updated: 2026-01-09
+Version: 1.3.0
+Last Updated: 2026-01-11
 Purpose: Complete zero-to-hero guide for setting up the JL Dev Environment
 Time Required: ~45 minutes
 
@@ -309,6 +309,120 @@ After setup, restart your terminal and verify:
 claude --version
 claude mcp list
 ```
+
+---
+
+## Step 10.5: AI Development Plugins (NEW - 2026-01-11)
+
+These plugins enhance AI-assisted development in Cursor with persistent memory and code quality tools.
+
+### Claude-Mem (Persistent Memory)
+
+Claude-mem provides persistent memory across coding sessions using local ChromaDB storage.
+
+**Installation (User-level - works across all projects):**
+
+```bash
+# Clone the plugin
+git clone https://github.com/thedotmack/claude-mem.git ~/.claude-mem
+
+# Install dependencies
+cd ~/.claude-mem
+npm install
+
+# Start the worker service
+npm run worker:start
+```
+
+**Configure Cursor hooks** - Create/update `~/.cursor/hooks.json`:
+
+```json
+{
+  "version": 1,
+  "hooks": {
+    "beforeSubmitPrompt": [
+      {
+        "command": "node \"$HOME/.claude-mem/scripts/worker-service.cjs\" hook cursor session-init"
+      },
+      {
+        "command": "node \"$HOME/.claude-mem/scripts/worker-service.cjs\" hook cursor context"
+      }
+    ],
+    "afterMCPExecution": [
+      {
+        "command": "node \"$HOME/.claude-mem/scripts/worker-service.cjs\" hook cursor observation"
+      }
+    ],
+    "afterShellExecution": [
+      {
+        "command": "node \"$HOME/.claude-mem/scripts/worker-service.cjs\" hook cursor observation"
+      }
+    ],
+    "afterFileEdit": [
+      {
+        "command": "node \"$HOME/.claude-mem/scripts/worker-service.cjs\" hook cursor file-edit"
+      }
+    ],
+    "stop": [
+      {
+        "command": "node \"$HOME/.claude-mem/scripts/worker-service.cjs\" hook cursor summarize"
+      }
+    ]
+  }
+}
+```
+
+**Configure Gemini for summarization** - Update `~/.claude-mem/settings.json`:
+
+```json
+{
+  "CLAUDE_MEM_PROVIDER": "gemini",
+  "CLAUDE_MEM_GEMINI_API_KEY": "YOUR_GEMINI_API_KEY",
+  "CLAUDE_MEM_GEMINI_MODEL": "gemini-2.0-flash"
+}
+```
+
+> **💡 Get a Gemini API key:** https://aistudio.google.com/apikey
+
+**Verify installation:**
+```bash
+# Check web viewer
+curl http://localhost:37777/health
+```
+
+### Code-Simplifier Plugin
+
+Code-simplifier helps maintain code quality and consistency by referencing project CLAUDE.md standards.
+
+**Installation (User-level):**
+
+```bash
+# Create plugins directory
+mkdir -p ~/.cursor/plugins/code-simplifier/agents
+
+# Clone official plugin
+git clone https://github.com/anthropics/claude-plugins-official.git /tmp/claude-plugins
+
+# Copy code-simplifier
+cp -r /tmp/claude-plugins/plugins/code-simplifier/* ~/.cursor/plugins/code-simplifier/
+
+# Cleanup
+rm -rf /tmp/claude-plugins
+```
+
+**Verify installation:**
+```bash
+ls ~/.cursor/plugins/code-simplifier/agents/code-simplifier.md
+```
+
+### After Plugin Installation
+
+**Restart Cursor** to load the hooks and plugins.
+
+**Verify both are working:**
+1. Open any project in Cursor
+2. Claude-mem should inject context on first prompt
+3. Code-simplifier available via `@code-simplifier` in chat
 
 ---
 

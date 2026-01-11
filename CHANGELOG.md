@@ -7,7 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [1.0.0] - 2025-12-08
+## [1.3.0] - 2026-01-11 🧠 AI TOOLING INTEGRATION
+
+**Author:** Charley Scholz (Johannes Leonardo IT)  
+**Co-author:** Claude (Anthropic AI Assistant), Cursor (IDE)
+
+### 🧠 AI Development Tooling
+
+- **Claude-Mem Integration** - Persistent memory across coding sessions
+  - User-level hooks installed (`~/.cursor/hooks.json`)
+  - Gemini-powered session summarization
+  - Web viewer at http://localhost:37777
+  - Automatic capture of tool usage, file edits, shell commands
+
+- **Code-Simplifier Plugin** - Code quality and consistency tool
+  - User-level installation (`~/.cursor/plugins/code-simplifier/`)
+  - Follows project standards in CLAUDE.md
+  - Preserves functionality while improving clarity
+
+### Documentation
+- Updated `CLAUDE.md` with AI Development Tooling section
+- Added auto-approve note for batch maintenance tasks
+- Cross-project tooling now works via user-level setup
+
+---
+
+## [1.2.0] - 2025-12-09
 
 ### Summary
 First complete Golden Master build of the JL Dev Environment for Johannes Leonardo engineering team.
@@ -82,6 +107,10 @@ First complete Golden Master build of the JL Dev Environment for Johannes Leonar
 
 ### Summary
 Major dashboard improvements, standardized project path convention, and link verification system.
+
+---
+
+## [1.0.0] - 2025-12-08
 
 ### Added
 

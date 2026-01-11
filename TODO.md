@@ -1,7 +1,7 @@
 # TODO - Future Development
 
-Version: 1.2.0
-Last Updated: 2025-12-09
+Version: 1.3.0
+Last Updated: 2026-01-11
 Purpose: Tracks planned enhancements and future development priorities
 
 Priority Legend: HIGH | MEDIUM | LOW
@@ -104,9 +104,24 @@ Issues resolved for the local monitoring dashboard at `dashboard/`:
 
 | Priority | Task | Notes | Status |
 |----------|------|-------|--------|
+| HIGH | Claude-Mem plugin | Persistent memory across sessions | ✅ DONE |
+| HIGH | Code-Simplifier plugin | Code quality and consistency | ✅ DONE |
 | MEDIUM | Continue + Codebase indexing | Full repo context for AI | PENDING |
 | LOW | Gemini function calling | Tool use for bot responses | PENDING |
 | LOW | RAG pipeline | Document retrieval for bot | PENDING |
+
+### ✅ Completed AI Tooling (2026-01-11)
+
+**Claude-Mem** - Persistent memory across coding sessions
+- Installed at user-level: `~/.claude-mem/`
+- Cursor hooks: `~/.cursor/hooks.json`
+- Web viewer: http://localhost:37777
+- Uses Gemini API for session summarization
+
+**Code-Simplifier** - Code quality plugin
+- Installed at user-level: `~/.cursor/plugins/code-simplifier/`
+- References project CLAUDE.md for standards
+- Preserves functionality while improving clarity
 
 ---
 
@@ -129,6 +144,31 @@ Issues resolved for the local monitoring dashboard at `dashboard/`:
 | LOW | Terraform/Pulumi | Infrastructure as code | PENDING |
 | LOW | Secret Manager | Migrate from env vars | PENDING |
 | LOW | Monitoring/Alerting | Cloud Monitoring dashboards | PENDING |
+
+---
+
+## Git Archive Automation (NEW - 2026-01-11)
+
+| Priority | Task | Notes | Status |
+|----------|------|-------|--------|
+| HIGH | Pre-push archive script | Auto-archive remote state before overwriting | PENDING |
+| MEDIUM | Archive folder structure | `~/Projects/ARCHIVED/{project}_{date}` | ✅ DONE |
+| LOW | Pruning schedule | Define retention policy for archived versions | PENDING |
+
+### Archive Workflow Requirements
+
+Before any `git push` that would overwrite remote changes:
+1. Fetch latest remote state
+2. Compare local vs remote commits  
+3. If remote has commits not in local, archive remote state
+4. Archive to: `~/Projects/ARCHIVED/{project}_archived_{YYYY-MM-DD}`
+5. Then proceed with push
+
+### Pruning Schedule (To Be Defined)
+- Keep all archives for 30 days
+- After 30 days, keep only major version archives
+- After 90 days, keep only monthly snapshots
+- Document in `docs/ARCHIVE_POLICY.md`
 
 ---
 
