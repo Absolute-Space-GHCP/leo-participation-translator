@@ -250,6 +250,44 @@ The code-simplifier plugin helps maintain code quality by simplifying and refini
 
 ---
 
+## Pre-Push Archive Protocol
+
+**CRITICAL:** Before ANY `git push` that would overwrite remote changes, the remote state MUST be archived locally.
+
+### Archive Workflow (REQUIRED)
+
+```bash
+# 1. Fetch remote state
+git fetch origin main
+
+# 2. Check if remote has commits not in local
+git log HEAD..origin/main --oneline
+
+# 3. If remote has changes, archive before push:
+ARCHIVE_DIR="$HOME/Projects/ARCHIVED"
+PROJECT_NAME=$(basename $(pwd))
+ARCHIVE_PATH="$ARCHIVE_DIR/${PROJECT_NAME}_remote_$(date +%Y-%m-%d)"
+
+git clone --depth 1 <remote-url> "$ARCHIVE_PATH"
+echo "Archived to: $ARCHIVE_PATH"
+
+# 4. Now safe to push
+git push origin main
+```
+
+### Archive Location
+- **Path:** `~/Projects/ARCHIVED/`
+- **Format:** `{project-name}_remote_{YYYY-MM-DD}` or `{project-name}_archived_{YYYY-MM-DD}`
+- **Purpose:** Rollback capability if push causes issues
+
+### When to Archive
+- ✅ Before force push
+- ✅ Before push that overwrites remote commits
+- ✅ Before major refactoring pushes
+- ❌ NOT needed for fast-forward pushes (no remote-only commits)
+
+---
+
 ## Quick Reference
 
 | Action | Command / Location |
