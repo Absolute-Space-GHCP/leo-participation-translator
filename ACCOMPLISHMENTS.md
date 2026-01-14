@@ -17,11 +17,11 @@ Major dashboard improvements including standardized project paths, link verifica
 ### Accomplishments
 
 #### Path Convention Standardization
-- [x] Established standard path: `~/dev/ai-agents-and-apps-dev/PROJECT_NAME`
+- [x] Established standard path: `~/Projects/PROJECT_NAME`
 - [x] Updated `CLAUDE.md` with path convention and workspace verification
 - [x] Created `PROJECT_GUARDRAILS.md` with development rules
 - [x] Added workspace path check to `validate.sh` (now 19 checks)
-- [x] Fixed dashboard repo paths from `~/Projects/` to standard path
+- [x] Fixed dashboard repo paths to standard path
 
 #### Dashboard Link Verification (⚡ Verify Links)
 - [x] Created `scripts/utils/verify-links.sh` - CLI link checker
@@ -77,7 +77,7 @@ Completed the JL Dev Environment Golden Master v1.0.0 with full documentation, l
 ### Accomplishments
 
 #### Repository Setup
-- [x] Renamed repo to `jl-dev-environment-gm-v1.0`
+- [x] Renamed repo to `jl-dev-environment-gm`
 - [x] Updated all documentation references
 - [x] Configured git remote for new repo name
 - [x] Synced with GitHub
@@ -132,7 +132,7 @@ Completed the JL Dev Environment Golden Master v1.0.0 with full documentation, l
 
 ### Commits
 
-1. `docs: update repo references to jl-dev-environment-gm-v1.0`
+1. `docs: update repo references to jl-dev-environment-gm`
 2. `docs: add comprehensive onboarding and best-practice files`
 3. `feat(sessions): add session archive system for AI chat preservation`
 4. `feat(dashboard): add local dev environment status dashboard`

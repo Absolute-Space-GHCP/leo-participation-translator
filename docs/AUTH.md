@@ -22,7 +22,7 @@ Purpose: Documents all OAuth accounts, service connections, and authentication m
 
 - Username: `<your-github-username>`
 - Organization: `<company-github-org>`
-- Repositories: jl-dev-environment-gm-v1.0, ai-agents-gmaster-build
+- Repositories: jl-dev-environment-gm, ai-agents-gmaster-build
 
 ### Setup
 

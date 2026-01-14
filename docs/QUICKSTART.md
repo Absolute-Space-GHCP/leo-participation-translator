@@ -269,22 +269,22 @@ Should show client version and `docker-desktop` context.
 > **⚠️ IMPORTANT:** Use the standard project path structure below. The validation script checks for this path.
 
 ```bash
-mkdir -p ~/dev/ai-agents-and-apps-dev && cd ~/dev/ai-agents-and-apps-dev
+mkdir -p ~/Projects && cd ~/Projects
 ```
 
 ```bash
-git clone https://github.com/Absolute-Space-GHCP/jl-dev-environment-gm-v1.0.git
+git clone https://github.com/Absolute-Space-GHCP/jl-dev-environment-gm.git
 ```
 
 ```bash
-cd jl-dev-environment-gm-v1.0
+cd jl-dev-environment-gm
 ```
 
 **Verify you're in the correct location:**
 
 ```bash
 pwd
-# Expected: /Users/<your-username>/dev/ai-agents-and-apps-dev/jl-dev-environment-gm-v1.0
+# Expected: /Users/<your-username>/Projects/jl-dev-environment-gm
 ```
 
 **Verify you're on the correct version:**
@@ -404,7 +404,7 @@ Should show `jlai-gm-v3` in all four places (Gemini 3 Pro, Gemini 2.5 Pro, Gemin
 ## Step 7: Clone the AI Agents Repository
 
 ```bash
-cd ~/dev/ai-agents-and-apps-dev
+cd ~/Projects
 ```
 
 ```bash
@@ -418,7 +418,7 @@ git clone https://github.com/Absolute-Space-GHCP/ai-agents-gmaster-build.git
 Create the workspace file:
 
 ```bash
-cd ~/dev/ai-agents-and-apps-dev
+cd ~/Projects
 ```
 
 ```bash
@@ -426,8 +426,8 @@ cat > absolute-space-ghcp.code-workspace << 'ENDOFFILE'
 {
   "folders": [
     {
-      "name": "jl-dev-environment-gm-v1.0",
-      "path": "jl-dev-environment-gm-v1.0"
+      "name": "jl-dev-environment-gm",
+      "path": "jl-dev-environment-gm"
     },
     {
       "name": "ai-agents-gmaster-build",
@@ -461,7 +461,7 @@ ENDOFFILE
 **Verify it was created:**
 
 ```bash
-ls -la ~/dev/ai-agents-and-apps-dev/absolute-space-ghcp.code-workspace
+ls -la ~/Projects/absolute-space-ghcp.code-workspace
 ```
 
 ---
@@ -469,7 +469,7 @@ ls -la ~/dev/ai-agents-and-apps-dev/absolute-space-ghcp.code-workspace
 ## Step 9: Validate Your Setup
 
 ```bash
-cd ~/dev/ai-agents-and-apps-dev/jl-dev-environment-gm-v1.0
+cd ~/Projects/jl-dev-environment-gm
 ```
 
 ```bash
@@ -482,7 +482,7 @@ cd ~/dev/ai-agents-and-apps-dev/jl-dev-environment-gm-v1.0
 
 | Failed Check | Solution |
 |--------------|----------|
-| Workspace path | Re-clone to `~/dev/ai-agents-and-apps-dev/` |
+| Workspace path | Re-clone to `~/Projects/` |
 | Homebrew | Run: `eval "$(/opt/homebrew/bin/brew shellenv)"` |
 | nvm | Run: `source ~/.zshrc` |
 | Node.js | Run: `source ~/.nvm/nvm.sh && nvm install --lts` |
@@ -497,7 +497,7 @@ cd ~/dev/ai-agents-and-apps-dev/jl-dev-environment-gm-v1.0
 ## Step 10: Open Workspace and Test
 
 ```bash
-open ~/dev/ai-agents-and-apps-dev/absolute-space-ghcp.code-workspace
+open ~/Projects/absolute-space-ghcp.code-workspace
 ```
 
 Cursor will launch with both projects loaded.
@@ -530,14 +530,14 @@ Your environment now includes:
 - **AI:** Claude Opus 4.5 (primary), Gemini models (via Continue)
 - **Runtimes:** Node.js 22+ LTS, Java 21 LTS, Python 3.9+
 - **DevOps:** Docker, kubectl, gcloud, gh CLI
-- **Projects:** jl-dev-environment-gm-v1.0, ai-agents-gmaster-build
+- **Projects:** jl-dev-environment-gm, ai-agents-gmaster-build
 
 ### Daily Workflow
 
 Open the workspace:
 
 ```bash
-open ~/dev/ai-agents-and-apps-dev/absolute-space-ghcp.code-workspace
+open ~/Projects/absolute-space-ghcp.code-workspace
 ```
 
 ### Optional: Shell Aliases
@@ -559,7 +559,7 @@ See `config/shell/.zshrc.template` for useful shell aliases and environment vari
 
 ```bash
 # Open workspace
-open ~/dev/ai-agents-and-apps-dev/absolute-space-ghcp.code-workspace
+open ~/Projects/absolute-space-ghcp.code-workspace
 
 # Validate setup
 ./scripts/validate.sh

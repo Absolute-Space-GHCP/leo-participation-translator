@@ -19,7 +19,7 @@ with essential plugins for the JL Dev Environment across all platforms.
 
 ```powershell
 # Navigate to setup directory
-cd $HOME\Projects\jl-dev-environment-gm-v1.0\scripts\setup
+cd $HOME\Projects\jl-dev-environment-gm\scripts\setup
 
 # Run the script
 .\claude-code-setup.ps1
@@ -36,7 +36,7 @@ cd $HOME\Projects\jl-dev-environment-gm-v1.0\scripts\setup
 
 ```bash
 # Navigate to setup directory
-cd ~/Projects/jl-dev-environment-gm-v1.0/scripts/setup
+cd ~/Projects/jl-dev-environment-gm/scripts/setup
 
 # Run the script
 ./claude-code-setup.sh

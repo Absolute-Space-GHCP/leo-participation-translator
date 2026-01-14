@@ -16,8 +16,8 @@ This repository contains everything needed to bootstrap a standardized macOS dev
 ## Quick Start
 
     # Clone the repo (get URL from team lead or company GitHub)
-    git clone <repo-url>/jl-dev-environment-gm-v1.0.git
-    cd jl-dev-environment-gm-v1.0
+    git clone <repo-url>/jl-dev-environment-gm.git
+    cd jl-dev-environment-gm
 
     # Run the bootstrap script
     ./scripts/bootstrap.sh
@@ -40,7 +40,7 @@ This repository contains everything needed to bootstrap a standardized macOS dev
 
 ## Repository Structure
 
-    jl-dev-environment-gm-v1.0/
+    jl-dev-environment-gm/
     ├── .github/workflows/    # GitHub Actions (Slack notifications)
     ├── config/
     │   ├── continue/         # Gemini AI assistant config

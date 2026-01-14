@@ -1,7 +1,7 @@
 # CLAUDE.md - AI Assistant Context
 
-Version: 1.3.0
-Last Updated: 2026-01-11
+Version: 1.5.0
+Last Updated: 2026-01-14
 Purpose: Provide context to Claude and other AI assistants working in this codebase
 
 ---
@@ -15,26 +15,25 @@ Purpose: Provide context to Claude and other AI assistants working in this codeb
 On ANY local device, projects should follow this folder structure:
 
 ```
-~/dev/ai-agents-and-apps-dev/PROJECT_NAME/
+~/Projects/PROJECT_NAME/
 ```
 
 **Path breakdown:**
 - `~` → User home directory (e.g., `/Users/charleymm`)
-- `dev/` → Development folder
-- `ai-agents-and-apps-dev/` → AI projects parent folder
-- `PROJECT_NAME/` → Specific project (e.g., `jl-dev-environment-gm-v1.0`)
+- `Projects/` → Projects folder (our working local directory)
+- `PROJECT_NAME/` → Specific project (e.g., `jl-dev-environment-gm`)
 
 ### Current Project Path
 
 This project MUST only be worked on from:
 
 ```
-~/dev/ai-agents-and-apps-dev/jl-dev-environment-gm-v1.0
+~/Projects/jl-dev-environment-gm
 ```
 
 **Full absolute path example:**
 ```
-/Users/charleymm/dev/ai-agents-and-apps-dev/jl-dev-environment-gm-v1.0
+/Users/charleymm/Projects/jl-dev-environment-gm
 ```
 
 ### First Check Before Any Session
@@ -44,15 +43,15 @@ Before starting any tasks, verify you are in the correct workspace:
 ```bash
 # Verify workspace path
 pwd
-# Expected output should end with: /dev/ai-agents-and-apps-dev/jl-dev-environment-gm-v1.0
+# Expected output should end with: /Projects/jl-dev-environment-gm
 
 # Or check with this command:
-[[ "$PWD" == *"dev/ai-agents-and-apps-dev/jl-dev-environment-gm-v1.0"* ]] && echo "✓ Correct workspace" || echo "✗ Wrong workspace!"
+[[ "$PWD" == *"Projects/jl-dev-environment-gm"* ]] && echo "✓ Correct workspace" || echo "✗ Wrong workspace!"
 ```
 
 **DO NOT:**
 - Navigate to or modify files in other directories
-- Clone or work from alternative locations (e.g., `~/Projects/`)
+- Clone or work from alternative locations
 - Reference or make changes to files outside this workspace
 - Assume paths from other projects apply here
 
@@ -72,7 +71,7 @@ This is the **JL Dev Environment Golden Master** - a reproducible, AI-first deve
 ## Repository Structure
 
 ```
-jl-dev-environment-gm-v1.0/
+jl-dev-environment-gm/
 ├── .devcontainer/     # VS Code/Cursor dev container config
 ├── .github/           # GitHub Actions, templates
 ├── config/            # Tool configurations (Cursor, Continue, Slack)
@@ -83,6 +82,33 @@ jl-dev-environment-gm-v1.0/
 ├── sessions/          # Archived AI chat sessions
 ├── templates/         # Configuration templates
 └── tests/             # Test files
+```
+
+---
+
+## Version Control & GitHub
+
+**Repository:** https://github.com/absolute-space-ghcp/jl-dev-environment-gm.git
+
+**Authentication:**
+- Uses existing GitHub credentials (SSH keys or GitHub CLI)
+- User is authorized to use any available auth credentials (OAuth, tokens, SSH keys)
+- Check authentication: `gh auth status` or `ssh -T git@github.com`
+
+**Branch:** `main` (tracked as `origin/main`)
+
+**Common Git Operations:**
+```bash
+# Check sync status
+git status
+git fetch origin
+git log origin/main..HEAD  # Show unpushed commits
+
+# Push changes
+git push origin main
+
+# Pull updates
+git pull origin main
 ```
 
 ---
@@ -159,7 +185,7 @@ jl-dev-environment-gm-v1.0/
 
 2. **Verify workspace:**
    ```bash
-   pwd  # Should be: /Users/charleymm/dev/ai-agents-and-apps-dev/jl-dev-environment-gm-v1.0
+   pwd  # Should be: /Users/charleymm/Projects/jl-dev-environment-gm
    ```
 
 3. **Check current status:**
@@ -203,10 +229,7 @@ AI chat sessions are archived in `sessions/` for continuity. When starting a new
 
 ## AI Development Tooling
 
-**Last Updated:** 2026-01-11
-
-> **Auto-Approve Edits:** For batch documentation updates, version bumps, and cross-project maintenance tasks, the user has pre-approved all edits. No individual confirmation needed for these operations.
-
+**Last Updated:** 2026-01-14
 
 ### Claude-Mem (Persistent Memory)
 
@@ -233,9 +256,12 @@ curl http://127.0.0.1:37777/api/readiness
 
 ### Code-Simplifier Plugin
 
-The code-simplifier plugin helps maintain code quality by simplifying and refining code for clarity, consistency, and maintainability while preserving functionality.
+The code-simplifier plugin (from [claude-plugins-official](https://github.com/anthropics/claude-plugins-official/tree/main/plugins/pr-review-toolkit)) helps maintain code quality by simplifying and refining code for clarity, consistency, and maintainability while preserving functionality.
 
-**Setup:** User-level installation at `~/.cursor/plugins/code-simplifier/`
+**Install:**
+```bash
+claude plugin install pr-review-toolkit@claude-plugins-official
+```
 
 **Principles:**
 1. Preserve original functionality (NEVER alter behavior)
@@ -248,43 +274,31 @@ The code-simplifier plugin helps maintain code quality by simplifying and refini
 - When refactoring legacy code
 - To improve readability of complex functions
 
----
+### Superpowers Plugin
 
-## Pre-Push Archive Protocol
+The Superpowers plugin by Jesse Vincent enhances Claude Code with structured workflows for TDD, systematic debugging, and collaborative planning.
 
-**CRITICAL:** Before ANY `git push` that would overwrite remote changes, the remote state MUST be archived locally.
-
-### Archive Workflow (REQUIRED)
-
+**Install:**
 ```bash
-# 1. Fetch remote state
-git fetch origin main
-
-# 2. Check if remote has commits not in local
-git log HEAD..origin/main --oneline
-
-# 3. If remote has changes, archive before push:
-ARCHIVE_DIR="$HOME/Projects/ARCHIVED"
-PROJECT_NAME=$(basename $(pwd))
-ARCHIVE_PATH="$ARCHIVE_DIR/${PROJECT_NAME}_remote_$(date +%Y-%m-%d)"
-
-git clone --depth 1 <remote-url> "$ARCHIVE_PATH"
-echo "Archived to: $ARCHIVE_PATH"
-
-# 4. Now safe to push
-git push origin main
+# In Claude Code CLI:
+/plugin marketplace add obra/superpowers-marketplace
+/plugin install superpowers@superpowers-marketplace
 ```
 
-### Archive Location
-- **Path:** `~/Projects/ARCHIVED/`
-- **Format:** `{project-name}_remote_{YYYY-MM-DD}` or `{project-name}_archived_{YYYY-MM-DD}`
-- **Purpose:** Rollback capability if push causes issues
+**Key Commands:**
+| Command | Purpose |
+|---------|---------|
+| `/superpowers:brainstorm` | Structured brainstorming sessions |
+| `/superpowers:write-plan` | Create detailed implementation plans |
+| `/superpowers:execute-plan` | Execute plans with checkpoints |
+| `/superpowers:tdd` | Test-Driven Development (RED-GREEN-REFACTOR) |
+| `/superpowers:debug` | Systematic 4-phase debugging process |
 
-### When to Archive
-- ✅ Before force push
-- ✅ Before push that overwrites remote commits
-- ✅ Before major refactoring pushes
-- ❌ NOT needed for fast-forward pushes (no remote-only commits)
+**When to use:**
+- Starting complex features (brainstorm → write-plan → execute-plan)
+- Implementing new functionality with TDD workflow
+- Debugging tricky issues systematically
+- Pair programming sessions requiring structure
 
 ---
 

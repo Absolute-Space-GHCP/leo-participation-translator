@@ -20,7 +20,7 @@ FAIL=0
 WARN=0
 
 # Standard project path pattern
-EXPECTED_PATH_PATTERN="dev/ai-agents-and-apps-dev/jl-dev-environment-gm-v1.0"
+EXPECTED_PATH_PATTERN="Projects/jl-dev-environment-gm"
 
 check() {
     local name="$1"

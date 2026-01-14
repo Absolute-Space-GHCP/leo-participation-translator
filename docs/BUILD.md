@@ -177,12 +177,12 @@ Test Gemini 3 Pro (global endpoint):
     gh api user/orgs --jq '.[].login'
 
 ### 5.3 Repository URL
-https://github.com/Absolute-Space-GHCP/jl-dev-environment-gm-v1.0
+https://github.com/Absolute-Space-GHCP/jl-dev-environment-gm
 
 ### 5.4 Clone (Other Team Members)
 
-    gh repo clone Absolute-Space-GHCP/jl-dev-environment-gm-v1.0
-    cd jl-dev-environment-gm-v1.0
+    gh repo clone Absolute-Space-GHCP/jl-dev-environment-gm
+    cd jl-dev-environment-gm
     ./scripts/bootstrap.sh
 
 ---

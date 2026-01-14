@@ -19,30 +19,28 @@ This document defines the guardrails for all development work on the JL Dev Envi
 **On ANY local device, all AI/dev projects should follow this folder structure:**
 
 ```
-~/dev/ai-agents-and-apps-dev/PROJECT_NAME/
+~/Projects/PROJECT_NAME/
 ```
 
 **Path breakdown:**
 | Segment | Description |
 |---------|-------------|
 | `~` | User home directory |
-| `dev/` | Development folder |
-| `ai-agents-and-apps-dev/` | AI projects parent folder |
+| `Projects/` | Projects folder (our working local directory) |
 | `PROJECT_NAME/` | Specific project folder |
 
 **Current project path:**
 ```
-~/dev/ai-agents-and-apps-dev/jl-dev-environment-gm-v1.0/
+~/Projects/jl-dev-environment-gm/
 ```
 
 ### 2. Workspace Boundaries
 
 **Allowed:**
-- All files within `~/dev/ai-agents-and-apps-dev/jl-dev-environment-gm-v1.0/`
+- All files within `~/Projects/jl-dev-environment-gm/`
 
 **Not Allowed:**
 - Modifying files outside this workspace
-- Using legacy paths like `~/Projects/` (deprecated)
 - Creating symlinks to external directories
 - Referencing user home directories without parameterization
 
@@ -52,7 +50,7 @@ This document defines the guardrails for all development work on the JL Dev Envi
 
 ```bash
 # Quick verification
-[[ "$PWD" == *"dev/ai-agents-and-apps-dev/jl-dev-environment-gm-v1.0"* ]] && echo "✓ Correct" || echo "✗ Wrong path!"
+[[ "$PWD" == *"Projects/jl-dev-environment-gm"* ]] && echo "✓ Correct" || echo "✗ Wrong path!"
 ```
 
 This check is enforced in:

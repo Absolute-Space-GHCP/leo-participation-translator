@@ -70,7 +70,7 @@ check_url() {
 echo -e "${CYAN}── Repositories ────────────────────────────────────────────────${NC}"
 # ─────────────────────────────────────────────────────────────────────────────
 
-check_url "GitHub (Dev Env)" "https://github.com/Absolute-Space-GHCP/jl-dev-environment-gm-v1.0" "repos"
+check_url "GitHub (Dev Env)" "https://github.com/Absolute-Space-GHCP/jl-dev-environment-gm" "repos"
 check_url "GitHub (AI Agents)" "https://github.com/Absolute-Space-GHCP/ai-agents-gmaster-build" "repos"
 
 echo ""

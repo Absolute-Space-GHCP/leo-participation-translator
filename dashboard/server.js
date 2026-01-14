@@ -20,11 +20,11 @@ const app = express();
 const PORT = process.env.DASHBOARD_PORT || 3333;
 
 // Project configuration
-const PROJECT_NAME = 'jl-dev-environment-gm-v1.0';
+const PROJECT_NAME = 'jl-dev-environment-gm';
 const PROJECT_VERSION = '1.2.0';
 
-// Standard project path: ~/dev/ai-agents-and-apps-dev/PROJECT_NAME
-const PROJECTS_BASE = path.join(os.homedir(), 'dev', 'ai-agents-and-apps-dev');
+// Standard project path: ~/Projects/PROJECT_NAME
+const PROJECTS_BASE = path.join(os.homedir(), 'Projects');
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
@@ -277,8 +277,8 @@ app.get('/api/auth', (req, res) => {
 
 // API: Repository status
 app.get('/api/repos', (req, res) => {
-  // Standard path: ~/dev/ai-agents-and-apps-dev/PROJECT_NAME
-  const devEnvPath = path.join(PROJECTS_BASE, 'jl-dev-environment-gm-v1.0');
+  // Standard path: ~/Projects/PROJECT_NAME
+  const devEnvPath = path.join(PROJECTS_BASE, 'jl-dev-environment-gm');
   const aiAgentsPath = path.join(PROJECTS_BASE, 'ai-agents-gmaster-build');
   
   // Helper to get repo info safely
@@ -307,7 +307,7 @@ app.get('/api/repos', (req, res) => {
   }
   
   const repos = {
-    devEnv: getRepoInfo(devEnvPath, 'jl-dev-environment-gm-v1.0'),
+    devEnv: getRepoInfo(devEnvPath, 'jl-dev-environment-gm'),
     aiAgents: getRepoInfo(aiAgentsPath, 'ai-agents-gmaster-build')
   };
 
@@ -416,7 +416,7 @@ function getAuthData() {
 }
 
 function getReposData() {
-  const devEnvPath = path.join(PROJECTS_BASE, 'jl-dev-environment-gm-v1.0');
+  const devEnvPath = path.join(PROJECTS_BASE, 'jl-dev-environment-gm');
   const aiAgentsPath = path.join(PROJECTS_BASE, 'ai-agents-gmaster-build');
   
   // Helper to get repo info safely (same logic as /api/repos)
@@ -445,7 +445,7 @@ function getReposData() {
   }
   
   return {
-    devEnv: getRepoInfoInternal(devEnvPath, 'jl-dev-environment-gm-v1.0'),
+    devEnv: getRepoInfoInternal(devEnvPath, 'jl-dev-environment-gm'),
     aiAgents: getRepoInfoInternal(aiAgentsPath, 'ai-agents-gmaster-build')
   };
 }
@@ -511,7 +511,7 @@ app.get('/api/status', (req, res) => {
 // Quick Links configuration - same as in index.html
 const QUICK_LINKS = [
   // Repositories
-  { id: 'github-dev-env', name: 'GitHub (Dev Env)', url: 'https://github.com/Absolute-Space-GHCP/jl-dev-environment-gm-v1.0', category: 'Repositories' },
+  { id: 'github-dev-env', name: 'GitHub (Dev Env)', url: 'https://github.com/Absolute-Space-GHCP/jl-dev-environment-gm', category: 'Repositories' },
   { id: 'github-ai-agents', name: 'GitHub (AI Agents)', url: 'https://github.com/Absolute-Space-GHCP/ai-agents-gmaster-build', category: 'Repositories' },
   // Cloud & AI
   { id: 'gcp-console', name: 'GCP Console', url: 'https://console.cloud.google.com', category: 'Cloud & AI' },

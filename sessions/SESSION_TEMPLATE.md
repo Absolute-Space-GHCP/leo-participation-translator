@@ -8,7 +8,7 @@
 | Duration | ~X hours |
 | AI Assistant | Claude Opus 4.5 / Gemini 3 Pro / Other |
 | IDE | Cursor |
-| Repository | jl-dev-environment-gm-v1.0 |
+| Repository | jl-dev-environment-gm |
 
 ---
 

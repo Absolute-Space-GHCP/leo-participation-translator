@@ -93,10 +93,10 @@ brew install gh
 cd ~/Projects
 
 # Clone the dev environment repo
-git clone https://github.com/Absolute-Space-GHCP/jl-dev-environment-gm-v1.0.git
+git clone https://github.com/Absolute-Space-GHCP/jl-dev-environment-gm.git
 
 # Enter the directory
-cd jl-dev-environment-gm-v1.0
+cd jl-dev-environment-gm
 ```
 
 ---
@@ -214,8 +214,8 @@ cat > ~/Projects/absolute-space-ghcp.code-workspace << 'EOF'
 {
   "folders": [
     {
-      "name": "jl-dev-environment-gm-v1.0",
-      "path": "jl-dev-environment-gm-v1.0"
+      "name": "jl-dev-environment-gm",
+      "path": "jl-dev-environment-gm"
     },
     {
       "name": "ai-agents-gmaster-build",
@@ -256,7 +256,7 @@ open ~/Projects/absolute-space-ghcp.code-workspace
 Run the validation script to check everything:
 
 ```bash
-cd ~/Projects/jl-dev-environment-gm-v1.0
+cd ~/Projects/jl-dev-environment-gm
 ./scripts/validate.sh
 ```
 
@@ -283,14 +283,14 @@ Install Claude Code CLI and plugins for enhanced development experience.
 ### macOS/Linux
 
 ```bash
-cd ~/Projects/jl-dev-environment-gm-v1.0/scripts/setup
+cd ~/Projects/jl-dev-environment-gm/scripts/setup
 ./claude-code-setup.sh
 ```
 
 ### Windows 11
 
 ```powershell
-cd $HOME\Projects\jl-dev-environment-gm-v1.0\scripts\setup
+cd $HOME\Projects\jl-dev-environment-gm\scripts\setup
 .\claude-code-setup.ps1
 ```
 
@@ -451,7 +451,7 @@ Your environment is now set up with:
 - **AI:** Gemini 3 Pro, Claude Opus 4.5
 - **Runtimes:** Node.js 22 LTS, Java 21 LTS, Python 3.11+
 - **DevOps:** Docker, gcloud, gh CLI
-- **Projects:** jl-dev-environment-gm-v1.0, ai-agents-gmaster-build
+- **Projects:** jl-dev-environment-gm, ai-agents-gmaster-build
 
 ### Daily Workflow
 

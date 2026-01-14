@@ -75,7 +75,7 @@ First complete Golden Master build of the JL Dev Environment for Johannes Leonar
 - CLI notification utility script
 
 #### GitHub Integration (Phase 5)
-- Repository: Absolute-Space-GHCP/jl-dev-environment-gm-v1.0
+- Repository: Absolute-Space-GHCP/jl-dev-environment-gm
 - GitHub CLI authentication
 - GitHub Actions CI/CD workflow
 
@@ -128,11 +128,11 @@ Major dashboard improvements, standardized project path convention, and link ver
 
 #### Documentation
 - `PROJECT_GUARDRAILS.md` - Project constraints and development rules
-- Standard project path convention: `~/dev/ai-agents-and-apps-dev/PROJECT_NAME`
+- Standard project path convention: `~/Projects/PROJECT_NAME`
 - Workspace path verification in validation script
 
 ### Changed
-- Dashboard repository paths: `~/Projects/` → `~/dev/ai-agents-and-apps-dev/`
+- Dashboard repository paths: `~/Projects/` (standard convention)
 - Refactored `/api/status` to use direct function calls (removed internal HTTP)
 - Fixed deprecated `kubectl version --client --short` flag
 - Fixed repository display to show clean names (not raw command output)
@@ -174,7 +174,7 @@ Major dashboard improvements, standardized project path convention, and link ver
 
 ### Changed
 - README.md - Updated documentation table with new files
-- All repo URLs updated to jl-dev-environment-gm-v1.0
+- All repo URLs updated to jl-dev-environment-gm
 
 ---
 
@@ -188,6 +188,6 @@ Major dashboard improvements, standardized project path convention, and link ver
 
 ---
 
-[1.2.0]: https://github.com/Absolute-Space-GHCP/jl-dev-environment-gm-v1.0/releases/tag/v1.2.0
-[1.1.0]: https://github.com/Absolute-Space-GHCP/jl-dev-environment-gm-v1.0/releases/tag/v1.1.0
-[1.0.0]: https://github.com/Absolute-Space-GHCP/jl-dev-environment-gm-v1.0/releases/tag/v1.0.0
+[1.2.0]: https://github.com/Absolute-Space-GHCP/jl-dev-environment-gm/releases/tag/v1.2.0
+[1.1.0]: https://github.com/Absolute-Space-GHCP/jl-dev-environment-gm/releases/tag/v1.1.0
+[1.0.0]: https://github.com/Absolute-Space-GHCP/jl-dev-environment-gm/releases/tag/v1.0.0

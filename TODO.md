@@ -1,7 +1,7 @@
 # TODO - Future Development
 
-Version: 1.3.0
-Last Updated: 2026-01-11
+Version: 1.4.0
+Last Updated: 2026-01-14
 Purpose: Tracks planned enhancements and future development priorities
 
 Priority Legend: HIGH | MEDIUM | LOW
@@ -15,7 +15,7 @@ Issues resolved for the local monitoring dashboard at `dashboard/`:
 
 | Priority | Task | File | Notes | Status |
 |----------|------|------|-------|--------|
-| HIGH | Fix hardcoded repo paths | `server.js` | Changed to `~/dev/ai-agents-and-apps-dev/` | ✅ DONE |
+| HIGH | Fix hardcoded repo paths | `server.js` | Changed to `~/Projects/` | ✅ DONE |
 | HIGH | Fix internal fetch calls in /api/status | `server.js` | Refactored to direct function calls | ✅ DONE |
 | HIGH | Add Quick Link verification | `server.js`, `app.js` | ⚡ Verify Links button + API | ✅ DONE |
 | MEDIUM | Fix deprecated kubectl --short flag | `server.js` | Updated to use `-o json` | ✅ DONE |
@@ -106,11 +106,13 @@ Issues resolved for the local monitoring dashboard at `dashboard/`:
 |----------|------|-------|--------|
 | HIGH | Claude-Mem plugin | Persistent memory across sessions | ✅ DONE |
 | HIGH | Code-Simplifier plugin | Code quality and consistency | ✅ DONE |
+| HIGH | Superpowers plugin | TDD, debugging, planning workflows | ✅ DONE |
+| MEDIUM | Install AI plugins across ~/Projects/ | Propagate superpowers to all repos | PENDING |
 | MEDIUM | Continue + Codebase indexing | Full repo context for AI | PENDING |
 | LOW | Gemini function calling | Tool use for bot responses | PENDING |
 | LOW | RAG pipeline | Document retrieval for bot | PENDING |
 
-### ✅ Completed AI Tooling (2026-01-11)
+### ✅ Completed AI Tooling (2026-01-14)
 
 **Claude-Mem** - Persistent memory across coding sessions
 - Installed at user-level: `~/.claude-mem/`
@@ -122,6 +124,12 @@ Issues resolved for the local monitoring dashboard at `dashboard/`:
 - Installed at user-level: `~/.cursor/plugins/code-simplifier/`
 - References project CLAUDE.md for standards
 - Preserves functionality while improving clarity
+
+**Superpowers** - TDD, debugging, and planning workflows
+- Marketplace: `obra/superpowers-marketplace`
+- Plugin: `superpowers@superpowers-marketplace`
+- Commands: `/superpowers:brainstorm`, `/superpowers:write-plan`, `/superpowers:execute-plan`, `/superpowers:tdd`, `/superpowers:debug`
+- By Jesse Vincent - structured workflows for complex development tasks
 
 ---
 
