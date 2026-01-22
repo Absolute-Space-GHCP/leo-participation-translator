@@ -5,59 +5,85 @@ description: "REQUIRED authorship attribution on all files - footer for docs, he
 
 # Authorship Standards
 
-**REQUIRED:** Every file must include authorship attribution.
+**REQUIRED:** Every file must include authorship attribution with AI co-authorship credit.
 
 ---
 
-## Documentation Files (.md, .html, dashboards, monitors)
+## Standard Attribution Format
+
+```
+Author: Charley Scholz, JLIT
+Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
+```
+
+---
+
+## Documentation Files (.md)
 
 Add a **footer** at the end of the file:
 
 ```markdown
 ---
 
-Maintained by: Charley (@charleymm)
+Author: Charley Scholz, JLIT
+Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
 Last Updated: YYYY-MM-DD
-```
-
-For HTML dashboards/monitors, add before closing `</body>`:
-
-```html
-<!-- Maintained by: Charley (@charleymm) | Last Updated: YYYY-MM-DD -->
 ```
 
 ---
 
-## Code Files (.js, .ts, .py, .sh, .ps1, etc.)
+## HTML Files (dashboards, monitors, web pages)
 
-Add a **header** at the beginning of the file:
+Add before closing `</body>`:
 
-### JavaScript/TypeScript
+```html
+<!--
+  Author: Charley Scholz, JLIT
+  Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
+  Last Updated: YYYY-MM-DD
+-->
+```
+
+---
+
+## JavaScript/TypeScript Files
+
+Add at the **beginning** of the file:
 
 ```javascript
 /**
  * @file filename.js
  * @description Brief description of the file's purpose
- * @author Charley (@charleymm)
+ * @author Charley Scholz, JLIT
+ * @coauthor Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
  * @created YYYY-MM-DD
  * @updated YYYY-MM-DD
  */
 ```
 
-### Python
+---
+
+## Python Files
+
+Add at the **beginning** of the file:
 
 ```python
 """
 filename.py
 Brief description of the file's purpose
 
-Author: Charley (@charleymm)
+Author: Charley Scholz, JLIT
+Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
 Created: YYYY-MM-DD
 Updated: YYYY-MM-DD
 """
 ```
 
-### Bash/Shell Scripts
+---
+
+## Bash/Shell Scripts
+
+Add after the shebang:
 
 ```bash
 #!/bin/bash
@@ -65,13 +91,18 @@ Updated: YYYY-MM-DD
 # filename.sh
 # Brief description of the file's purpose
 # ============================================================================
-# Author:      Charley (@charleymm)
-# Created:     YYYY-MM-DD
-# Updated:     YYYY-MM-DD
+# Author:       Charley Scholz, JLIT
+# Co-authored:  Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
+# Created:      YYYY-MM-DD
+# Updated:      YYYY-MM-DD
 # ============================================================================
 ```
 
-### PowerShell
+---
+
+## PowerShell Scripts
+
+Add at the **beginning** of the file:
 
 ```powershell
 <#
@@ -80,7 +111,9 @@ Updated: YYYY-MM-DD
 .DESCRIPTION
     More detailed description
 .AUTHOR
-    Charley (@charleymm)
+    Charley Scholz, JLIT
+.COAUTHOR
+    Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
 .CREATED
     YYYY-MM-DD
 .UPDATED
@@ -92,13 +125,45 @@ Updated: YYYY-MM-DD
 
 ## CSS/SCSS Files
 
+Add at the **beginning** of the file:
+
 ```css
 /**
  * @file styles.css
  * @description Stylesheet for [component/page]
- * @author Charley (@charleymm)
+ * @author Charley Scholz, JLIT
+ * @coauthor Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
  * @updated YYYY-MM-DD
  */
+```
+
+---
+
+## JSON Files (package.json, config files)
+
+For `package.json`, use the author field:
+
+```json
+{
+  "author": "Charley Scholz, JLIT",
+  "contributors": [
+    "Claude Opus 4.5 (AI)",
+    "Claude Code (coding assistant)",
+    "Cursor (IDE)"
+  ]
+}
+```
+
+For config files without comment support, add a `_meta` field if the format allows:
+
+```json
+{
+  "_meta": {
+    "author": "Charley Scholz, JLIT",
+    "coauthored": "Claude Opus 4.5, Claude Code, Cursor IDE",
+    "updated": "YYYY-MM-DD"
+  }
+}
 ```
 
 ---
@@ -122,45 +187,10 @@ Update the `Last Updated` or `Updated` field when:
 
 Before committing:
 - [ ] New files have authorship header/footer
+- [ ] Attribution includes both Author and Co-authored lines
 - [ ] Modified files have updated date (if substantive changes)
 - [ ] Date format is consistent (YYYY-MM-DD)
-- [ ] Author attribution is correct
 
 ---
 
-## Example File Headers
-
-### Express Server (index.js)
-
-```javascript
-/**
- * @file index.js
- * @description Main Express server with API endpoints
- * @author Charley (@charleymm)
- * @created 2026-01-15
- * @updated 2026-01-22
- */
-
-const express = require('express');
-// ...
-```
-
-### Dashboard HTML
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Dashboard</title>
-</head>
-<body>
-    <!-- content -->
-    
-    <!-- Maintained by: Charley (@charleymm) | Last Updated: 2026-01-22 -->
-</body>
-</html>
-```
-
----
-
-*This rule applies globally. All files must have authorship attribution.*
+*This rule applies globally. All files must have authorship attribution with AI co-authorship credit.*

@@ -594,6 +594,7 @@ gh auth status
 
 ---
 
-Maintained by: Charley (@charleymm)
+Author: Charley Scholz, JLIT
+Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
 Last Updated: 2026-01-22
 
