@@ -1,7 +1,7 @@
 # TODO - Future Development
 
-Version: 1.4.0
-Last Updated: 2026-01-14
+Version: 1.5.0
+Last Updated: 2026-01-22
 Purpose: Tracks planned enhancements and future development priorities
 
 Priority Legend: HIGH | MEDIUM | LOW
@@ -199,6 +199,27 @@ Before any `git push` that would overwrite remote changes:
 
 ---
 
+## Future Enhancements (Long-Term)
+
+| Priority | Task | Notes | Status |
+|----------|------|-------|--------|
+| MEDIUM | TypeScript-first orientation | Migrate build to TypeScript for better type safety, IDE support, and maintainability | PENDING |
+| LOW | Agent orchestration framework | Add home dev build agent orchestration after extensive testing in other environments | PENDING |
+
+### TypeScript Migration Notes
+- Evaluate tsconfig setup for Node.js projects
+- Consider gradual migration (JS → TS) vs full rewrite
+- Add type definitions for existing modules
+- Update bootstrap.sh to install TypeScript tooling
+
+### Agent Orchestration Notes
+- Test framework extensively before adding to this build
+- Document agent patterns and best practices
+- Evaluate: LangChain, AutoGen, CrewAI, or custom solution
+- Ensure compatibility with existing MCP servers
+
+---
+
 ## Notes
 
 - GitHub Actions Slack notification requires SLACK_WEBHOOK_URL secret
@@ -207,4 +228,6 @@ Before any `git push` that would overwrite remote changes:
 
 ---
 
-Maintained by: Charley (@charleymm)
+Author: Charley Scholz, JLIT
+Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
+Last Updated: 2026-01-22
