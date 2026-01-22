@@ -1,6 +1,6 @@
 # Quick Start Guide - New Developer Setup
 
-Version: 1.6.0
+Version: 1.7.0
 Last Updated: 2026-01-22
 Purpose: Complete zero-to-hero guide for setting up the JL Dev Environment
 Time Required: ~45 minutes
@@ -399,6 +399,28 @@ If using Claude Code CLI, install the Superpowers plugin for TDD and debugging w
 - `/superpowers:tdd` - Test-Driven Development workflow
 - `/superpowers:debug` - Systematic debugging process
 
+### Configure Sequential-Thinking MCP Server
+
+The Sequential-Thinking MCP server enables step-by-step reasoning with revision capabilities:
+
+```bash
+# Create MCP config (runs via npx, no global install needed)
+cat > ~/.cursor/mcp.json << 'EOF'
+{
+  "mcpServers": {
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+    }
+  }
+}
+EOF
+```
+
+**Restart Cursor** after creating this file.
+
+**Trigger:** Automatically activates for complex reasoning, or prompt with "think step by step"
+
 > **💡 Tip:** Have your GitHub token ready! Create one at: https://github.com/settings/tokens/new  
 > Required scopes: `repo`, `read:org`, `user`, `project`
 
@@ -538,6 +560,8 @@ Your environment is now set up with:
 ### Getting Help
 
 - **Global Standards:** `~/.cursor/CLAUDE.md`
+- **Installed Components:** `docs/INSTALLED_COMPONENTS.md` (full inventory)
+- **First-Time Setup:** `docs/FIRST_TIME_SETUP.md` (simplified 7-step guide)
 - Build details: `docs/BUILD.md`
 - Auth reference: `docs/AUTH.md`
 - Roadmap: `TODO.md`
