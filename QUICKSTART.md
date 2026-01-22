@@ -295,9 +295,40 @@ cd ~/Projects/jl-dev-environment-gm
 
 ---
 
-## Step 10: Claude Code Plugins
+## Step 10: Local Monitoring Dashboard
 
-Install Claude Code CLI and plugins for enhanced development experience.
+The dashboard provides real-time monitoring of your dev environment health.
+
+### Start the Dashboard
+
+```bash
+# One-click launch
+./scripts/utils/dashboard.sh
+```
+
+This will:
+1. Install dependencies (first run only)
+2. Start server on port 3333
+3. Open dashboard in your browser
+
+### Dashboard Features
+
+| Section | What It Checks |
+|---------|----------------|
+| **Runtimes** | Node.js, npm, Java, Python versions |
+| **DevOps** | Docker, gcloud, gh, kubectl status |
+| **Authentication** | GitHub auth, GCP auth, ADC status |
+| **AI Tools** | Cursor, Continue, Claude CLI |
+
+**Dashboard URL:** http://localhost:3333
+
+**API Endpoint:** `curl http://localhost:3333/api/status | jq`
+
+---
+
+## Step 11: Claude Code and Cursor Hooks
+
+Install Claude Code CLI, Cursor hooks, and AI development plugins.
 
 ### macOS/Linux
 
@@ -314,84 +345,49 @@ cd $HOME\Projects\jl-dev-environment-gm\scripts\setup
 ```
 
 The script will:
-1. ✅ Install Claude CLI (if not present)
-2. ✅ Add plugin marketplaces
-3. ✅ Install core plugins (LSPs, memory)
-4. ✅ Install external plugins (GitHub, Slack)
-5. ✅ Configure your GitHub Personal Access Token
+1. Install Claude CLI (if not present)
+2. Create `~/.cursor/hooks.json` for claude-mem integration
+3. Set up `~/.cursor/rules/` and `~/.cursor/plugins/` directories
+4. Install global `~/.cursor/CLAUDE.md` standards
+5. Configure code-simplifier plugin
+6. Optionally configure GitHub token
 
 > **💡 Tip:** Have your GitHub token ready! Create one at: https://github.com/settings/tokens/new  
 > Required scopes: `repo`, `read:org`, `user`, `project`
 
-After setup, restart your terminal and verify:
+After setup, restart Cursor and verify:
 ```bash
 claude --version
-claude mcp list
+ls ~/.cursor/hooks.json
 ```
 
 ---
 
-## Step 10.5: AI Development Plugins (NEW - 2026-01-11)
+## Step 12: Claude-Mem Worker (Persistent Memory)
 
-These plugins enhance AI-assisted development in Cursor with persistent memory and code quality tools.
+Claude-mem provides persistent memory across coding sessions. The hooks were installed in Step 11; now start the worker.
 
-### Claude-Mem (Persistent Memory)
-
-Claude-mem provides persistent memory across coding sessions using local ChromaDB storage.
-
-**Installation (User-level - works across all projects):**
+### Install Claude-Mem
 
 ```bash
-# Clone the plugin
-git clone https://github.com/thedotmack/claude-mem.git ~/.claude-mem
-
-# Install dependencies
-cd ~/.claude-mem
-npm install
-
-# Start the worker service
-npm run worker:start
+# Install using bun (recommended) or npm
+cd ~/.claude/plugins/marketplaces
+git clone https://github.com/thedotmack/claude-mem.git thedotmack
+cd thedotmack
+bun install  # or: npm install
 ```
 
-**Configure Cursor hooks** - Create/update `~/.cursor/hooks.json`:
+### Start the Worker
 
-```json
-{
-  "version": 1,
-  "hooks": {
-    "beforeSubmitPrompt": [
-      {
-        "command": "node \"$HOME/.claude-mem/scripts/worker-service.cjs\" hook cursor session-init"
-      },
-      {
-        "command": "node \"$HOME/.claude-mem/scripts/worker-service.cjs\" hook cursor context"
-      }
-    ],
-    "afterMCPExecution": [
-      {
-        "command": "node \"$HOME/.claude-mem/scripts/worker-service.cjs\" hook cursor observation"
-      }
-    ],
-    "afterShellExecution": [
-      {
-        "command": "node \"$HOME/.claude-mem/scripts/worker-service.cjs\" hook cursor observation"
-      }
-    ],
-    "afterFileEdit": [
-      {
-        "command": "node \"$HOME/.claude-mem/scripts/worker-service.cjs\" hook cursor file-edit"
-      }
-    ],
-    "stop": [
-      {
-        "command": "node \"$HOME/.claude-mem/scripts/worker-service.cjs\" hook cursor summarize"
-      }
-    ]
-  }
-}
+```bash
+# Start worker service
+cd ~/.claude/plugins/marketplaces/thedotmack
+bun run worker:start  # or: npm run worker:start
 ```
 
-**Configure Gemini for summarization** - Update `~/.claude-mem/settings.json`:
+### Configure Gemini for Summarization
+
+Create `~/.claude/plugins/marketplaces/thedotmack/settings.json`:
 
 ```json
 {
@@ -401,51 +397,32 @@ npm run worker:start
 }
 ```
 
-> **💡 Get a Gemini API key:** https://aistudio.google.com/apikey
+> **Get a Gemini API key:** https://aistudio.google.com/apikey
 
-**Verify installation:**
+### Verify Installation
+
 ```bash
+# Check worker is running
+curl http://localhost:37777/api/readiness
+# Expected: {"status":"ready","mcpReady":true}
+
 # Check web viewer
-curl http://localhost:37777/health
+open http://localhost:37777
 ```
 
-### Code-Simplifier Plugin
+### After Installation
 
-Code-simplifier helps maintain code quality and consistency by referencing project CLAUDE.md standards.
+**Restart Cursor** to load the hooks.
 
-**Installation (User-level):**
-
-```bash
-# Create plugins directory
-mkdir -p ~/.cursor/plugins/code-simplifier/agents
-
-# Clone official plugin
-git clone https://github.com/anthropics/claude-plugins-official.git /tmp/claude-plugins
-
-# Copy code-simplifier
-cp -r /tmp/claude-plugins/plugins/code-simplifier/* ~/.cursor/plugins/code-simplifier/
-
-# Cleanup
-rm -rf /tmp/claude-plugins
-```
-
-**Verify installation:**
-```bash
-ls ~/.cursor/plugins/code-simplifier/agents/code-simplifier.md
-```
-
-### After Plugin Installation
-
-**Restart Cursor** to load the hooks and plugins.
-
-**Verify both are working:**
+**Verify working:**
 1. Open any project in Cursor
-2. Claude-mem should inject context on first prompt
-3. Code-simplifier available via `@code-simplifier` in chat
+2. Start a new chat
+3. Claude-mem should inject context automatically
+4. Web viewer at http://localhost:37777 shows session history
 
 ---
 
-## Step 11: Test AI Integration
+## Step 13: Test AI Integration
 
 ### Test Gemini (via Continue)
 
@@ -460,9 +437,15 @@ ls ~/.cursor/plugins/code-simplifier/agents/code-simplifier.md
 2. Type: "Claude Code: Open"
 3. Ask: "What files are in this project?"
 
+### Test Claude-Mem
+
+1. Start a new Cursor chat in any project
+2. Check http://localhost:37777 for session tracking
+3. Session context should auto-inject on prompts
+
 ---
 
-## Step 12: Install Global AI Standards
+## Step 14: Verify Global AI Standards
 
 Copy the global CLAUDE.md that provides session protocols and coding standards for all AI sessions:
 
@@ -518,11 +501,17 @@ Your environment is now set up with:
 # Open workspace
 open ~/Projects/absolute-space-ghcp.code-workspace
 
+# Start monitoring dashboard
+./scripts/utils/dashboard.sh
+
 # Validate setup
 ./scripts/validate.sh
 
-# Setup Claude Code plugins
+# Setup Claude Code + Cursor hooks
 ./scripts/setup/claude-code-setup.sh
+
+# Start claude-mem worker
+cd ~/.claude/plugins/marketplaces/thedotmack && bun run worker:start
 
 # Update extensions
 cat config/cursor/extensions.txt | grep -v '^#' | xargs -L1 cursor --install-extension
@@ -539,7 +528,7 @@ gh auth status
 # Open workspace
 Start-Process "$HOME\Projects\absolute-space-ghcp.code-workspace"
 
-# Setup Claude Code plugins
+# Setup Claude Code + Cursor hooks
 .\scripts\setup\claude-code-setup.ps1
 
 # Update extensions (from project root)
@@ -551,8 +540,6 @@ gcloud auth login; gcloud auth application-default login
 # Check GitHub auth
 gh auth status
 ```
-
----
 
 ---
 

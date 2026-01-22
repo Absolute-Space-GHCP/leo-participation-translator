@@ -2,8 +2,8 @@
 # ============================================================================
 # JL Dev Environment - Bootstrap Script
 # ============================================================================
-# Version:     1.0.0
-# Updated:     2025-12-08
+# Version:     1.1.0
+# Updated:     2026-01-22
 # Purpose:     One-command setup for the Golden Master dev environment
 # Usage:       ./scripts/bootstrap.sh
 # ============================================================================

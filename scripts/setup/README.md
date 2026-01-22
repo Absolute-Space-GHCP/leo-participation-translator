@@ -1,15 +1,19 @@
 # Claude Code Setup Scripts
 
-Version: 1.0.0  
-Last Updated: 2026-01-09  
-Purpose: Automated setup of Claude Code plugins and integrations
+Version: 1.1.0  
+Last Updated: 2026-01-22  
+Purpose: Automated setup of Claude Code, Cursor hooks, and AI plugins
 
 ---
 
 ## Overview
 
-These scripts automate the installation and configuration of Claude Code (Claude CLI) 
-with essential plugins for the JL Dev Environment across all platforms.
+These scripts automate the installation and configuration of:
+- Claude Code (Claude CLI)
+- Cursor hooks for claude-mem integration
+- Global CLAUDE.md standards
+- Code-simplifier plugin
+- Directory structure for plugins and rules
 
 ## Scripts
 
@@ -51,18 +55,23 @@ cd ~/Projects/jl-dev-environment-gm/scripts/setup
 
 ## What Gets Installed
 
-### Core Plugins
+### Cursor Configuration
+
+| Item | Location | Purpose |
+|------|----------|---------|
+| `hooks.json` | `~/.cursor/hooks.json` | Claude-mem integration hooks |
+| `CLAUDE.md` | `~/.cursor/CLAUDE.md` | Global coding standards and session protocols |
+| `rules/` | `~/.cursor/rules/` | Project rule templates |
+| `plugins/` | `~/.cursor/plugins/` | Plugin agents directory |
+| `code-simplifier` | `~/.cursor/plugins/code-simplifier/` | Code quality plugin |
+
+### Claude CLI Plugins (via Windows script)
 
 | Plugin | Purpose |
 |--------|---------|
 | `claude-mem` | Conversation history and memory persistence |
 | `typescript-lsp` | TypeScript IntelliSense and language features |
 | `pyright-lsp` | Python IntelliSense and type checking |
-
-### External Plugins
-
-| Plugin | Purpose |
-|--------|---------|
 | `github` | GitHub API integration (issues, PRs, repos) |
 | `slack` | Slack workspace access and notifications |
 
@@ -202,6 +211,7 @@ chmod +x ./claude-code-setup.sh
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1.0 | 2026-01-22 | Added Cursor hooks, global CLAUDE.md, code-simplifier |
 | 1.0.0 | 2026-01-09 | Initial release with Windows and macOS support |
 
 ---
