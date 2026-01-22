@@ -1,9 +1,28 @@
 # Quick Start Guide - New Developer Setup
 
-Version: 1.3.0
-Last Updated: 2026-01-11
+Version: 1.4.0
+Last Updated: 2026-01-22
 Purpose: Complete zero-to-hero guide for setting up the JL Dev Environment
 Time Required: ~45 minutes
+
+---
+
+## Important: Global Standards
+
+After setup, all AI coding sessions should follow the global standards in:
+
+```
+~/.cursor/CLAUDE.md
+```
+
+This file contains:
+- Session startup checklist
+- User authorization policy (pre-approved auth flows)
+- Session backup and wrap-up protocols
+- Coding standards and best practices
+- AI development tooling documentation
+
+**Read this file at the start of every coding session.**
 
 ---
 
@@ -443,6 +462,27 @@ ls ~/.cursor/plugins/code-simplifier/agents/code-simplifier.md
 
 ---
 
+## Step 12: Install Global AI Standards
+
+Copy the global CLAUDE.md that provides session protocols and coding standards for all AI sessions:
+
+```bash
+# The global CLAUDE.md should already exist at ~/.cursor/CLAUDE.md
+# If not, copy from this repo:
+cp config/cursor/CLAUDE.md ~/.cursor/CLAUDE.md
+
+# Verify it exists
+cat ~/.cursor/CLAUDE.md | head -20
+```
+
+This file contains:
+- **User Authorization Policy** - Pre-approved auth flows
+- **Session Protocols** - Backup, wrap-up, git safety
+- **Coding Standards** - JS/Node.js, error handling, security
+- **AI Development Tooling** - Claude-mem, Code-simplifier, Superpowers
+
+---
+
 ## You're Done!
 
 Your environment is now set up with:
@@ -452,14 +492,18 @@ Your environment is now set up with:
 - **Runtimes:** Node.js 22 LTS, Java 21 LTS, Python 3.11+
 - **DevOps:** Docker, gcloud, gh CLI
 - **Projects:** jl-dev-environment-gm, ai-agents-gmaster-build
+- **Global Standards:** `~/.cursor/CLAUDE.md` (session protocols, coding standards)
 
 ### Daily Workflow
 
-1. Open the workspace: `open ~/Projects/absolute-space-ghcp.code-workspace`
-2. Or double-click `Absolute-Space-Workspace` on Desktop (if shortcut created)
+1. **Start:** Read `~/.cursor/CLAUDE.md` for session protocols
+2. **Backup:** Create session backup (per protocol)
+3. **Work:** Open workspace: `open ~/Projects/absolute-space-ghcp.code-workspace`
+4. **End:** Follow wrap-up protocol (commit, push, document)
 
 ### Getting Help
 
+- **Global Standards:** `~/.cursor/CLAUDE.md`
 - Build details: `docs/BUILD.md`
 - Auth reference: `docs/AUTH.md`
 - Roadmap: `TODO.md`
@@ -510,5 +554,8 @@ gh auth status
 
 ---
 
+---
+
 Maintained by: Charley (@charleymm)
+Last Updated: 2026-01-22
 
