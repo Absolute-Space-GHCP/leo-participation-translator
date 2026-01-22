@@ -104,13 +104,15 @@ ls ~/.cursor/hooks/
 
 ---
 
-## 5. MCP Servers (1)
+## 5. MCP Servers (3)
 
 **Location:** `~/.cursor/mcp.json`
 
 | Server | Package | Purpose |
 |--------|---------|---------|
 | sequential-thinking | `@modelcontextprotocol/server-sequential-thinking` | Step-by-step reasoning with revision/branching |
+| filesystem | `@modelcontextprotocol/server-filesystem` | Secure file operations with access controls |
+| git | `mcp-server-git` (Python) | Git repository automation |
 
 **Current Config:**
 ```json
@@ -119,18 +121,36 @@ ls ~/.cursor/hooks/
     "sequential-thinking": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/Users/charleymm/Projects"]
+    },
+    "git": {
+      "command": "mcp-server-git",
+      "args": ["--repository", "/Users/charleymm/Projects"]
     }
   }
 }
 ```
 
-**Features:**
+### Sequential-Thinking MCP
 - Breaks down complex problems into manageable steps
 - Revises and refines thoughts as understanding deepens
 - Branches into alternative reasoning paths
-- Dynamically adjusts total number of thoughts needed
+- **Trigger:** Automatically for complex reasoning, or "think step by step"
 
-**Trigger:** Automatically activates for complex reasoning, or prompt with "think step by step"
+### Filesystem MCP
+- Read/write files with access controls
+- Create/list/delete directories
+- Search files and get metadata
+- **Scope:** Limited to `/Users/charleymm/Projects`
+
+### Git MCP
+- Git status, diff, log, blame
+- Commit, branch, merge operations
+- Repository automation
+- **Scope:** All repos under `/Users/charleymm/Projects`
 
 ---
 
@@ -233,10 +253,10 @@ gh --version
 | Cursor Rules | 6 | ✅ |
 | Cursor Plugins | 1 | ✅ |
 | Cursor Hooks | 6 scripts | ✅ |
-| MCP Servers | 1 | ✅ |
+| MCP Servers | 3 | ✅ |
 | Claude-Mem | 1 | ✅ Running |
 | CLI Tools | 4 | ✅ |
-| **Superpowers** | - | ⚠️ Needs CLI activation |
+| Superpowers | 1 | ✅ Installed |
 
 ---
 

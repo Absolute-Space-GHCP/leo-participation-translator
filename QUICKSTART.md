@@ -399,18 +399,29 @@ If using Claude Code CLI, install the Superpowers plugin for TDD and debugging w
 - `/superpowers:tdd` - Test-Driven Development workflow
 - `/superpowers:debug` - Systematic debugging process
 
-### Configure Sequential-Thinking MCP Server
+### Configure MCP Servers
 
-The Sequential-Thinking MCP server enables step-by-step reasoning with revision capabilities:
+Install the official Anthropic MCP servers for enhanced capabilities:
 
 ```bash
-# Create MCP config (runs via npx, no global install needed)
+# Install Git MCP (Python)
+pip install mcp-server-git
+
+# Create MCP config with all 3 servers
 cat > ~/.cursor/mcp.json << 'EOF'
 {
   "mcpServers": {
     "sequential-thinking": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "$HOME/Projects"]
+    },
+    "git": {
+      "command": "mcp-server-git",
+      "args": ["--repository", "$HOME/Projects"]
     }
   }
 }
@@ -419,7 +430,11 @@ EOF
 
 **Restart Cursor** after creating this file.
 
-**Trigger:** Automatically activates for complex reasoning, or prompt with "think step by step"
+| MCP Server | Purpose |
+|------------|---------|
+| **sequential-thinking** | Step-by-step reasoning with revision/branching |
+| **filesystem** | Secure file operations with access controls |
+| **git** | Git repository automation (status, diff, commit, etc.) |
 
 > **💡 Tip:** Have your GitHub token ready! Create one at: https://github.com/settings/tokens/new  
 > Required scopes: `repo`, `read:org`, `user`, `project`
