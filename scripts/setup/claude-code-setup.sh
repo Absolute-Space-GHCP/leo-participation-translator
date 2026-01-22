@@ -10,7 +10,7 @@
 
 set -e
 
-VERSION="1.0.0"
+VERSION="1.1.0"
 DRY_RUN=false
 SKIP_TOKENS=false
 
@@ -242,9 +242,31 @@ else
     print_ok "Global CLAUDE.md already exists"
 fi
 
-# Step 7: Setup code-simplifier plugin
+# Step 7: Install Cursor rules
 echo ""
-print_step 7 "Setting up code-simplifier plugin..."
+print_step 7 "Installing Cursor rules..."
+
+RULES_SRC="$PROJECT_ROOT/config/cursor/rules"
+if [ -d "$RULES_SRC" ]; then
+    for rule in "$RULES_SRC"/*.mdc; do
+        if [ -f "$rule" ]; then
+            rule_name=$(basename "$rule")
+            if ! $DRY_RUN; then
+                cp "$rule" "$CURSOR_RULES/$rule_name"
+                print_ok "Installed rule: $rule_name"
+            else
+                print_note "[DRY RUN] Would copy: $rule_name"
+            fi
+        fi
+    done
+else
+    print_warn "Rules directory not found: $RULES_SRC"
+    print_note "Skipping rule installation"
+fi
+
+# Step 8: Setup code-simplifier plugin
+echo ""
+print_step 8 "Setting up code-simplifier plugin..."
 
 CODE_SIMP_DIR="$CURSOR_PLUGINS/code-simplifier/agents"
 CODE_SIMP_FILE="$CODE_SIMP_DIR/code-simplifier.md"
@@ -268,10 +290,10 @@ else
     print_ok "code-simplifier plugin already installed"
 fi
 
-# Step 8: Configure GitHub token (optional)
+# Step 9: Configure GitHub token (optional)
 echo ""
 if ! $SKIP_TOKENS; then
-    print_step 8 "Configuring GitHub token..."
+    print_step 9 "Configuring GitHub token..."
     
     if [ -z "$GITHUB_TOKEN" ]; then
         echo ""
@@ -303,7 +325,7 @@ if ! $SKIP_TOKENS; then
         print_ok "GitHub token already set"
     fi
 else
-    print_step 8 "Skipping token configuration (--skip-tokens flag)"
+    print_step 9 "Skipping token configuration (--skip-tokens flag)"
 fi
 
 # Summary
@@ -312,10 +334,10 @@ print_header "Setup Complete!"
 echo -e "${GREEN}Claude Code and Cursor plugins configured!${NC}"
 echo ""
 echo -e "${CYAN}INSTALLED:${NC}"
-echo "  - ~/.cursor/hooks.json (Cursor hooks)"
-echo "  - ~/.cursor/rules/ (Rule templates)"
-echo "  - ~/.cursor/plugins/ (Plugin structure)"
-echo "  - ~/.cursor/CLAUDE.md (Global standards)"
+echo "  - ~/.cursor/hooks.json (Cursor hooks for claude-mem)"
+echo "  - ~/.cursor/rules/*.mdc (Global rules: auth, git-safety, session-wrap-up)"
+echo "  - ~/.cursor/plugins/code-simplifier/ (Code quality plugin)"
+echo "  - ~/.cursor/CLAUDE.md (Global standards and session protocols)"
 echo ""
 echo -e "${CYAN}NEXT STEPS:${NC}"
 echo "  1. Restart Cursor to load hooks"

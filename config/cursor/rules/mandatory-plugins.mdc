@@ -1,0 +1,148 @@
+---
+alwaysApply: true
+description: "Mandatory AI development plugins - ensure installed and configured for all projects"
+---
+
+# Mandatory AI Development Plugins
+
+**IMPORTANT:** At the start of EVERY new project or first session in a workspace, verify these 3 plugins are installed and configured.
+
+## Quick Verification Checklist
+
+```
+[ ] claude-mem - Worker running, context rule exists
+[ ] code-simplifier - Plugin folder exists in .cursor/plugins/
+[ ] superpowers - Documented in CLAUDE.md (Claude Code CLI plugin)
+```
+
+---
+
+## 1. Claude-Mem (Persistent Memory)
+
+Provides persistent memory across AI coding sessions. Automatically captures tool usage, file edits, and shell commands.
+
+### Verify Installation
+
+```bash
+# Check worker is running
+curl -s http://127.0.0.1:37777/api/readiness
+# Expected: {"status":"ready","mcpReady":true}
+
+# Check project is registered
+curl -s http://127.0.0.1:37777/api/projects
+```
+
+### Project Configuration Required
+
+Each project needs:
+1. **Context rule file:** `.cursor/rules/claude-mem-context.mdc`
+2. **Context populated:** Should show recent observations, not "No previous sessions"
+
+### Fix Missing Context
+
+```bash
+# Refresh context for a project
+PROJECT="project-name"
+curl -s "http://127.0.0.1:37777/api/context/inject?project=${PROJECT}" > .cursor/rules/claude-mem-context.mdc
+```
+
+### Start Worker (if not running)
+
+```bash
+cd ~/.claude/plugins/marketplaces/thedotmack && bun run worker:start
+```
+
+---
+
+## 2. Code-Simplifier Plugin
+
+Simplifies and refines code for clarity, consistency, and maintainability while preserving functionality.
+
+### Verify Installation
+
+Check for: `.cursor/plugins/code-simplifier/agents/code-simplifier.md`
+
+### Install for New Project
+
+Create the directory structure and agent file:
+
+```bash
+mkdir -p .cursor/plugins/code-simplifier/agents
+```
+
+Then create `.cursor/plugins/code-simplifier/agents/code-simplifier.md` with the standard agent definition (copy from an existing project like leonnes-prod).
+
+### Agent File Contents
+
+The code-simplifier.md should contain:
+- YAML frontmatter with `name: code-simplifier`, `model: opus`
+- Instructions to preserve functionality while simplifying
+- Project-specific coding standards from CLAUDE.md
+- Focus on recently modified code
+
+---
+
+## 3. Superpowers Plugin (Claude Code CLI)
+
+Provides structured workflows for TDD, systematic debugging, and collaborative planning.
+
+### Verify Installation
+
+In Claude Code CLI, check available commands:
+```
+/superpowers:brainstorm
+/superpowers:write-plan
+/superpowers:execute-plan
+/superpowers:tdd
+/superpowers:debug
+```
+
+### Install (in Claude Code CLI)
+
+```bash
+/plugin marketplace add obra/superpowers-marketplace
+/plugin install superpowers@superpowers-marketplace
+```
+
+### Document in CLAUDE.md
+
+Each project's CLAUDE.md should have an "AI Development Tooling" section documenting all 3 plugins with:
+- Installation instructions
+- Key commands/capabilities
+- When to use each plugin
+
+---
+
+## New Project Setup Procedure
+
+When starting a new project:
+
+1. **Create `.cursor/rules/` directory**
+2. **Initialize claude-mem context:**
+   ```bash
+   mkdir -p .cursor/rules
+   # Context will auto-populate on first session
+   ```
+
+3. **Add code-simplifier plugin:**
+   ```bash
+   mkdir -p .cursor/plugins/code-simplifier/agents
+   # Copy code-simplifier.md from template project
+   ```
+
+4. **Update CLAUDE.md** with AI Development Tooling section including all 3 plugins
+
+5. **Verify claude-mem worker** is running globally
+
+---
+
+## Template Locations
+
+Copy configurations from these established projects:
+- **leonnes-prod:** Full plugin setup with all documentation
+- **jl-dev-environment-gm:** Complete .cursor/plugins structure
+- **glados-ba-reconciliation:** Updated CLAUDE.md with all plugin docs
+
+---
+
+*This rule applies globally to all workspaces. Plugins enhance AI development quality and session continuity.*

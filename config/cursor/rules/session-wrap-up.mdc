@@ -1,0 +1,122 @@
+---
+alwaysApply: true
+description: "REQUIRED session wrap-up checklist - execute at end of every session"
+---
+
+# Session Wrap-Up Protocol
+
+**REQUIRED:** At the end of EVERY coding session, complete this checklist before closing.
+
+---
+
+## Wrap-Up Checklist
+
+### 1. Sync Repos
+- [ ] Ensure local and GitHub repos are 1:1 in sync
+- [ ] Commit all changes with descriptive messages
+- [ ] Push to remote: `git push origin <branch>`
+- [ ] If on feature branch, merge to main when stable
+
+```bash
+# Verification commands
+git status
+git log --oneline -3
+git fetch origin main && git log HEAD..origin/main --oneline  # Should be empty
+```
+
+### 2. Archive Working Code (if major changes)
+- [ ] Before replacing working code with new versions, create an archive
+- [ ] Archive naming: `{project-name}_working_{version}_{date}`
+- [ ] Archive location: `~/Projects/ARCHIVED/`
+
+```bash
+ARCHIVE_DIR="$HOME/Projects/ARCHIVED"
+PROJECT_NAME=$(basename $(pwd))
+VERSION="v2.5.11"  # Update as needed
+ARCHIVE_PATH="$ARCHIVE_DIR/${PROJECT_NAME}_working_${VERSION}_$(date +%Y-%m-%d)"
+mkdir -p "$ARCHIVE_DIR"
+rsync -a --exclude='node_modules' --exclude='.git' . "$ARCHIVE_PATH/"
+```
+
+### 3. Update Documentation
+- [ ] Update version numbers in README.md, CHANGELOG.md (if applicable)
+- [ ] Add session notes to `docs/SESSION_{date}_{version}.md`
+- [ ] Update TODO.md with completed tasks and new items
+
+### 4. Verify No Remnants
+- [ ] Check documentation for references to other projects
+- [ ] Ensure all file paths and URLs are correct for this project
+- [ ] No hardcoded paths from other workspaces
+
+### 5. Final Checks
+- [ ] Run `git status` to confirm clean working tree
+- [ ] Verify production deployment matches committed code
+- [ ] Note any pending items for next session
+
+---
+
+## Create Handoff Document
+
+At session end, create or update `docs/SESSION_{date}_{version}.md` with:
+
+```markdown
+# Session Summary: {project-name} {version}
+
+**Date:** {date}
+**Duration:** {approximate duration}
+
+## What Was Done
+
+| Task | Status |
+|------|--------|
+| Task 1 | ✅ |
+| Task 2 | ✅ |
+
+## Files Changed
+
+- `file1.js` - Description
+- `file2.html` - Description
+
+## Deployment Info
+
+- **URL:** {production URL}
+- **Revision:** {revision number}
+- **Verified:** ✅/❌
+
+## Next Steps
+
+- [ ] Pending item 1
+- [ ] Pending item 2
+
+## Quick Reference
+
+- **Test command:** `npm test`
+- **Deploy command:** `gcloud run deploy ...`
+```
+
+---
+
+## Quick Wrap-Up Commands
+
+```bash
+# 1. Check git status
+git status
+
+# 2. Commit any remaining changes
+git add -A && git commit -m "chore: session wrap-up"
+
+# 3. Safe push with archive check
+git fetch origin main && \
+if [ -n "$(git log HEAD..origin/main --oneline)" ]; then \
+  echo "⚠️ Remote has changes - archive first!"; \
+else \
+  git push origin main && echo "✅ Pushed successfully"; \
+fi
+
+# 4. Verify clean state
+git status  # Should show "nothing to commit, working tree clean"
+```
+
+---
+
+*Execute this checklist at the end of EVERY session. No exceptions.*

@@ -1,6 +1,6 @@
 # Quick Start Guide - New Developer Setup
 
-Version: 1.4.0
+Version: 1.5.0
 Last Updated: 2026-01-22
 Purpose: Complete zero-to-hero guide for setting up the JL Dev Environment
 Time Required: ~45 minutes
@@ -348,9 +348,26 @@ The script will:
 1. Install Claude CLI (if not present)
 2. Create `~/.cursor/hooks.json` for claude-mem integration
 3. Set up `~/.cursor/rules/` and `~/.cursor/plugins/` directories
-4. Install global `~/.cursor/CLAUDE.md` standards
-5. Configure code-simplifier plugin
-6. Optionally configure GitHub token
+4. Install Cursor rules (auth-permissions, git-safety, session-wrap-up, mandatory-plugins)
+5. Install global `~/.cursor/CLAUDE.md` standards
+6. Configure code-simplifier plugin
+7. Optionally configure GitHub token
+
+### Install Superpowers Plugin (Optional - Claude Code CLI)
+
+If using Claude Code CLI, install the Superpowers plugin for TDD and debugging workflows:
+
+```bash
+# In Claude Code CLI terminal:
+/plugin marketplace add obra/superpowers-marketplace
+/plugin install superpowers@superpowers-marketplace
+```
+
+**Available commands:**
+- `/superpowers:brainstorm` - Structured brainstorming
+- `/superpowers:write-plan` - Create implementation plans
+- `/superpowers:tdd` - Test-Driven Development workflow
+- `/superpowers:debug` - Systematic debugging process
 
 > **💡 Tip:** Have your GitHub token ready! Create one at: https://github.com/settings/tokens/new  
 > Required scopes: `repo`, `read:org`, `user`, `project`
@@ -476,6 +493,8 @@ Your environment is now set up with:
 - **DevOps:** Docker, gcloud, gh CLI
 - **Projects:** jl-dev-environment-gm, ai-agents-gmaster-build
 - **Global Standards:** `~/.cursor/CLAUDE.md` (session protocols, coding standards)
+- **Cursor Rules:** `~/.cursor/rules/*.mdc` (auth, git-safety, session wrap-up)
+- **AI Plugins:** claude-mem (memory), code-simplifier, superpowers (optional)
 
 ### Daily Workflow
 

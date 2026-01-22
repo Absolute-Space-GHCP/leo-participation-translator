@@ -1,0 +1,117 @@
+---
+alwaysApply: true
+description: "CRITICAL: Archive remote before any git push - never overwrite GitHub"
+---
+
+# Git Safety: Pre-Push Archive Protocol
+
+**CRITICAL RULE:** Before ANY `git push`, the remote repository state MUST be checked and archived if it contains commits not in local.
+
+**NEVER overwrite the GitHub remote without archiving first.**
+
+---
+
+## Before Every Push - REQUIRED Steps
+
+### Step 1: Fetch and Compare
+
+```bash
+# Fetch latest remote state
+git fetch origin main
+
+# Check if remote has commits not in local
+git log HEAD..origin/main --oneline
+```
+
+### Step 2: If Remote Has Changes → ARCHIVE FIRST
+
+If the above command shows ANY commits, you MUST archive before pushing:
+
+```bash
+# Set archive variables
+ARCHIVE_DIR="$HOME/Projects/ARCHIVED"
+PROJECT_NAME=$(basename $(pwd))
+TIMESTAMP=$(date +%Y-%m-%d_%H%M%S)
+ARCHIVE_PATH="$ARCHIVE_DIR/${PROJECT_NAME}_remote_${TIMESTAMP}"
+
+# Create archive directory
+mkdir -p "$ARCHIVE_DIR"
+
+# Clone current remote state to archive
+git clone --depth 1 $(git remote get-url origin) "$ARCHIVE_PATH"
+
+echo "✅ Remote archived to: $ARCHIVE_PATH"
+```
+
+### Step 3: Now Safe to Push
+
+```bash
+git push origin main
+```
+
+---
+
+## Quick Reference
+
+| Scenario | Action |
+|----------|--------|
+| `git log HEAD..origin/main` shows commits | ⚠️ ARCHIVE FIRST |
+| `git log HEAD..origin/main` is empty | ✅ Safe to push (fast-forward) |
+| Force push (`--force`) | ⚠️ ALWAYS ARCHIVE FIRST |
+| First push to new repo | ✅ Safe (nothing to overwrite) |
+
+---
+
+## Archive Location
+
+- **Path:** `~/Projects/ARCHIVED/`
+- **Format:** `{project-name}_remote_{YYYY-MM-DD_HHMMSS}`
+- **Purpose:** Rollback capability if push causes issues or data loss
+
+---
+
+## Why This Matters
+
+1. **Work from other sessions** may exist on remote that isn't in local
+2. **Collaborator changes** could be lost
+3. **Force pushes** are destructive and irreversible without archive
+4. **Recovery** is trivial when archives exist, impossible when they don't
+
+---
+
+## One-Liner Safe Push Script
+
+Copy this to use as a safe push command:
+
+```bash
+# Safe push with auto-archive
+git fetch origin main && \
+if [ -n "$(git log HEAD..origin/main --oneline)" ]; then \
+  ARCHIVE="$HOME/Projects/ARCHIVED/$(basename $(pwd))_remote_$(date +%Y-%m-%d_%H%M%S)" && \
+  mkdir -p "$HOME/Projects/ARCHIVED" && \
+  git clone --depth 1 $(git remote get-url origin) "$ARCHIVE" && \
+  echo "✅ Archived to: $ARCHIVE"; \
+fi && \
+git push origin main
+```
+
+---
+
+## Session Start Backup
+
+Additionally, at the START of every session, backup the local repo:
+
+```bash
+ARCHIVE_DIR="$HOME/Projects/ARCHIVED"
+PROJECT_NAME=$(basename $(pwd))
+TIMESTAMP=$(date +%Y-%m-%d_%H%M%S)
+ARCHIVE_PATH="$ARCHIVE_DIR/${PROJECT_NAME}_backup_${TIMESTAMP}"
+
+mkdir -p "$ARCHIVE_DIR"
+rsync -a --exclude='node_modules' --exclude='.git' . "$ARCHIVE_PATH/"
+echo "✅ Session backup: $ARCHIVE_PATH"
+```
+
+---
+
+*This rule applies globally. NEVER skip the archive step when remote has diverged.*
