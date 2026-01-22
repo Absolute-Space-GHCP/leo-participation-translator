@@ -1,0 +1,166 @@
+---
+alwaysApply: true
+description: "REQUIRED authorship attribution on all files - footer for docs, header for code"
+---
+
+# Authorship Standards
+
+**REQUIRED:** Every file must include authorship attribution.
+
+---
+
+## Documentation Files (.md, .html, dashboards, monitors)
+
+Add a **footer** at the end of the file:
+
+```markdown
+---
+
+Maintained by: Charley (@charleymm)
+Last Updated: YYYY-MM-DD
+```
+
+For HTML dashboards/monitors, add before closing `</body>`:
+
+```html
+<!-- Maintained by: Charley (@charleymm) | Last Updated: YYYY-MM-DD -->
+```
+
+---
+
+## Code Files (.js, .ts, .py, .sh, .ps1, etc.)
+
+Add a **header** at the beginning of the file:
+
+### JavaScript/TypeScript
+
+```javascript
+/**
+ * @file filename.js
+ * @description Brief description of the file's purpose
+ * @author Charley (@charleymm)
+ * @created YYYY-MM-DD
+ * @updated YYYY-MM-DD
+ */
+```
+
+### Python
+
+```python
+"""
+filename.py
+Brief description of the file's purpose
+
+Author: Charley (@charleymm)
+Created: YYYY-MM-DD
+Updated: YYYY-MM-DD
+"""
+```
+
+### Bash/Shell Scripts
+
+```bash
+#!/bin/bash
+# ============================================================================
+# filename.sh
+# Brief description of the file's purpose
+# ============================================================================
+# Author:      Charley (@charleymm)
+# Created:     YYYY-MM-DD
+# Updated:     YYYY-MM-DD
+# ============================================================================
+```
+
+### PowerShell
+
+```powershell
+<#
+.SYNOPSIS
+    Brief description of the script's purpose
+.DESCRIPTION
+    More detailed description
+.AUTHOR
+    Charley (@charleymm)
+.CREATED
+    YYYY-MM-DD
+.UPDATED
+    YYYY-MM-DD
+#>
+```
+
+---
+
+## CSS/SCSS Files
+
+```css
+/**
+ * @file styles.css
+ * @description Stylesheet for [component/page]
+ * @author Charley (@charleymm)
+ * @updated YYYY-MM-DD
+ */
+```
+
+---
+
+## When to Update
+
+Update the `Last Updated` or `Updated` field when:
+- Making substantive changes to the file
+- Fixing bugs
+- Adding new functionality
+- Refactoring code
+
+**Do NOT update** for:
+- Minor whitespace changes
+- Automated formatting
+- Comment-only changes
+
+---
+
+## Verification Checklist
+
+Before committing:
+- [ ] New files have authorship header/footer
+- [ ] Modified files have updated date (if substantive changes)
+- [ ] Date format is consistent (YYYY-MM-DD)
+- [ ] Author attribution is correct
+
+---
+
+## Example File Headers
+
+### Express Server (index.js)
+
+```javascript
+/**
+ * @file index.js
+ * @description Main Express server with API endpoints
+ * @author Charley (@charleymm)
+ * @created 2026-01-15
+ * @updated 2026-01-22
+ */
+
+const express = require('express');
+// ...
+```
+
+### Dashboard HTML
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <!-- content -->
+    
+    <!-- Maintained by: Charley (@charleymm) | Last Updated: 2026-01-22 -->
+</body>
+</html>
+```
+
+---
+
+*This rule applies globally. All files must have authorship attribution.*

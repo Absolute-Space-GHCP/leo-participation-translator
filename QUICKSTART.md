@@ -1,6 +1,6 @@
 # Quick Start Guide - New Developer Setup
 
-Version: 1.5.0
+Version: 1.6.0
 Last Updated: 2026-01-22
 Purpose: Complete zero-to-hero guide for setting up the JL Dev Environment
 Time Required: ~45 minutes
@@ -102,6 +102,36 @@ brew install --cask google-cloud-sdk
 ```bash
 brew install gh
 ```
+
+### 1.5 Gemini CLI
+
+Install the Google Gemini CLI for terminal-based AI assistance:
+
+```bash
+# Via npm (recommended)
+npm install -g @google/gemini-cli
+
+# Or via Homebrew
+brew install gemini-cli
+```
+
+Verify installation:
+```bash
+gemini --version
+```
+
+> **Note:** Requires Node.js 20+. Free tier includes 60 requests/minute and 1,000 requests/day with a personal Google account.
+
+### 1.6 Claude Chrome Extension (Optional)
+
+Install the Claude browser extension for web-based AI assistance:
+
+1. Open Chrome Web Store: https://chrome.google.com/webstore/
+2. Search for "Claude" by Anthropic
+3. Click "Add to Chrome"
+4. Sign in with your Anthropic account
+
+> **Note:** Full features require Claude Max subscription ($100-200/month). Works on Chromium browsers (Chrome, Brave, Edge, Opera).
 
 ---
 
@@ -488,12 +518,14 @@ This file contains:
 Your environment is now set up with:
 
 - **IDE:** Cursor with 27 extensions
-- **AI:** Gemini 3 Pro, Claude Opus 4.5
+- **AI CLIs:** Gemini CLI, Claude Code CLI
+- **AI Models:** Gemini 2.5 Pro/Flash, Claude Opus 4.5
+- **Browser:** Claude Chrome Extension (optional)
 - **Runtimes:** Node.js 22 LTS, Java 21 LTS, Python 3.11+
 - **DevOps:** Docker, gcloud, gh CLI
 - **Projects:** jl-dev-environment-gm, ai-agents-gmaster-build
 - **Global Standards:** `~/.cursor/CLAUDE.md` (session protocols, coding standards)
-- **Cursor Rules:** `~/.cursor/rules/*.mdc` (auth, git-safety, session wrap-up)
+- **Cursor Rules:** `~/.cursor/rules/*.mdc` (auth, git-safety, session wrap-up, authorship)
 - **AI Plugins:** claude-mem (memory), code-simplifier, superpowers (optional)
 
 ### Daily Workflow
