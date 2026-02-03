@@ -1,0 +1,112 @@
+---
+description: Agent delegation guidance for the Participation Translator. When to use specialized agents for complex strategic and technical tasks.
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Agent Delegation Guide
+
+When working on complex tasks, delegate to specialized agents for better results. Each agent is optimized for specific types of work.
+
+## Available Specialized Agents
+
+### Document & Knowledge
+
+| Agent                 | Use When                                                |
+| --------------------- | ------------------------------------------------------- |
+| **document-analyzer** | Parsing presentations, extracting JL patterns and voice |
+| **rag-engineer**      | Embeddings, vector storage, retrieval optimization      |
+
+### Strategy & Intelligence
+
+| Agent                        | Use When                                                  |
+| ---------------------------- | --------------------------------------------------------- |
+| **cultural-intelligence**    | Trend analysis, subculture identification, real-time data |
+| **participation-strategist** | Applying 8-Part Framework, strategic reasoning            |
+
+### Output & Export
+
+| Agent                      | Use When                                      |
+| -------------------------- | --------------------------------------------- |
+| **presentation-generator** | Creating Google Slides, formatting blueprints |
+
+## Delegation Rules
+
+### ALWAYS Delegate When:
+
+1. **Document ingestion** → Use `document-analyzer`
+
+   - New presentation uploads
+   - Extracting patterns from past work
+   - Identifying JL voice and tactics
+
+2. **Retrieval queries** → Use `rag-engineer`
+
+   - Finding similar past work
+   - Optimizing context selection
+   - Vector store operations
+
+3. **Cultural analysis** → Use `cultural-intelligence`
+
+   - Trend identification
+   - Subculture mapping
+   - 72-hour opportunity windows
+
+4. **Framework application** → Use `participation-strategist`
+
+   - Applying 8-Part Participation Framework
+   - Strategic reasoning
+   - Connecting patterns to current context
+
+5. **Presentation creation** → Use `presentation-generator`
+   - Google Slides generation
+   - Blueprint formatting
+   - Export operations
+
+### Delegation Flow
+
+```
+User Request
+    │
+    ├─ Document upload? ──► document-analyzer
+    │
+    ├─ Retrieval query? ──► rag-engineer
+    │
+    ├─ Trend analysis? ──► cultural-intelligence
+    │
+    ├─ Framework application? ──► participation-strategist
+    │
+    └─ Presentation export? ──► presentation-generator
+```
+
+## Agent Combination Patterns
+
+### Full Blueprint Generation Pattern
+
+1. `rag-engineer` - Retrieve relevant JL past work
+2. `cultural-intelligence` - Gather current cultural context
+3. `participation-strategist` - Apply 8-Part Framework
+4. `presentation-generator` - Create Google Slides output
+
+### Document Ingestion Pattern
+
+1. `document-analyzer` - Parse and extract patterns
+2. `rag-engineer` - Generate embeddings and store
+
+### Quick Retrieval Pattern
+
+1. `rag-engineer` - Find similar past work
+2. Return ranked results with context
+
+## Remember
+
+- **Complex reasoning requires Opus** - Framework application uses Claude Opus 4.5
+- **Simple tasks can use faster models** - Parsing, formatting use Sonnet/Haiku
+- **Delegate early** - Don't try to do everything in one agent
+- **Chain agents** - Results from one feed into the next
+
+---
+
+Author: Charley Scholz, JLIT
+Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
+Created: 2026-02-03

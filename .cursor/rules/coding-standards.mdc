@@ -1,0 +1,195 @@
+---
+description: Coding standards and conventions for the Participation Translator project. Apply to all TypeScript/JavaScript code.
+globs: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"]
+alwaysApply: true
+---
+
+# Coding Standards
+
+## TypeScript Conventions
+
+### Use ES Modules
+
+```typescript
+// ✅ Correct
+import { KnowledgeGraph } from "../memory/knowledge-graph.js";
+export function myFunction(): void {}
+
+// ❌ Incorrect
+const { KnowledgeGraph } = require("../memory/knowledge-graph");
+module.exports = { myFunction };
+```
+
+### Prefer `function` Over Arrow Functions (for top-level)
+
+```typescript
+// ✅ Correct - top-level functions
+export function processDocument(doc: Document): ProcessedDoc {
+  return transform(doc);
+}
+
+// ✅ Correct - callbacks and inline
+const results = items.map((item) => item.value);
+
+// ❌ Incorrect - top-level arrow function
+export const processDocument = (doc: Document): ProcessedDoc => {
+  return transform(doc);
+};
+```
+
+### Explicit Return Types on Exports
+
+```typescript
+// ✅ Correct
+export function getPatterns(graph: KnowledgeGraph): KnowledgeNode[] {
+  return graph.getPatterns();
+}
+
+// ❌ Incorrect - implicit return type
+export function getPatterns(graph: KnowledgeGraph) {
+  return graph.getPatterns();
+}
+```
+
+### No `any` Type
+
+```typescript
+// ✅ Correct
+function processData(data: unknown): ProcessedData {
+  if (isValidData(data)) {
+    return transform(data);
+  }
+  throw new Error("Invalid data");
+}
+
+// ❌ Incorrect
+function processData(data: any): any {
+  return data;
+}
+```
+
+## Naming Conventions
+
+| Type             | Convention      | Example              |
+| ---------------- | --------------- | -------------------- |
+| Files            | kebab-case      | `knowledge-graph.ts` |
+| Classes          | PascalCase      | `KnowledgeGraph`     |
+| Functions        | camelCase       | `getPatterns()`      |
+| Constants        | SCREAMING_SNAKE | `MAX_CHUNK_SIZE`     |
+| Types/Interfaces | PascalCase      | `KnowledgeNode`      |
+| Enums            | PascalCase      | `TaskComplexity`     |
+
+## Error Handling
+
+### Prefer Early Returns Over Try/Catch
+
+```typescript
+// ✅ Correct - early validation
+export function processChunk(chunk: unknown): ProcessedChunk {
+  if (!chunk || typeof chunk !== "object") {
+    throw new Error("Invalid chunk: must be an object");
+  }
+  if (!("content" in chunk)) {
+    throw new Error("Invalid chunk: missing content");
+  }
+  return transform(chunk as Chunk);
+}
+
+// ❌ Incorrect - unnecessary try/catch
+export function processChunk(chunk: unknown): ProcessedChunk {
+  try {
+    return transform(chunk as Chunk);
+  } catch (e) {
+    throw e;
+  }
+}
+```
+
+### Use Try/Catch for External Operations
+
+```typescript
+// ✅ Correct - external API call
+export async function generateEmbedding(text: string): Promise<number[]> {
+  try {
+    const response = await vertexAI.embed(text);
+    return response.values;
+  } catch (error) {
+    logger.error({ error, text }, "Embedding generation failed");
+    throw new EmbeddingError("Failed to generate embedding", { cause: error });
+  }
+}
+```
+
+## Imports
+
+### Order Imports
+
+```typescript
+// 1. Node.js built-ins
+import { readFile } from "fs/promises";
+import path from "path";
+
+// 2. External packages
+import { VertexAI } from "@google-cloud/vertexai";
+
+// 3. Internal modules (absolute paths)
+import { KnowledgeGraph } from "@/lib/memory/knowledge-graph";
+import { routeTask } from "@/lib/router/task-router";
+
+// 4. Relative imports
+import { parseDocument } from "./parsers";
+import type { ChunkMetadata } from "./types";
+```
+
+## Comments
+
+### Use JSDoc for Public APIs
+
+```typescript
+/**
+ * Retrieves patterns used in a specific campaign.
+ *
+ * @param campaignId - The unique identifier of the campaign
+ * @returns Array of pattern nodes used in the campaign
+ * @throws {Error} If campaign does not exist
+ */
+export function getPatternsForCampaign(campaignId: string): KnowledgeNode[] {
+  // Implementation
+}
+```
+
+### Avoid Obvious Comments
+
+```typescript
+// ❌ Avoid
+// Loop through items
+for (const item of items) {
+}
+
+// ✅ Good - explain why, not what
+// Skip documents without metadata - they can't be filtered during retrieval
+if (!doc.metadata) continue;
+```
+
+## React Components (Phase 4)
+
+### Explicit Props Type
+
+```typescript
+interface BlueprintViewerProps {
+  blueprintId: string;
+  onExport?: () => void;
+}
+
+export function BlueprintViewer({
+  blueprintId,
+  onExport,
+}: BlueprintViewerProps): JSX.Element {
+  // Component implementation
+}
+```
+
+---
+
+Author: Charley Scholz, JLIT
+Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)

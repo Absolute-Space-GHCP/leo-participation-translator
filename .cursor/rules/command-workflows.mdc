@@ -1,0 +1,156 @@
+---
+description: Command workflows for common development tasks. Invoke specific workflows for planning, testing, reviewing, and documentation.
+globs: ["**/*"]
+alwaysApply: false
+---
+
+# Command Workflows
+
+Invoke these workflows for structured task execution.
+
+## Available Workflows
+
+### /plan - Implementation Planning
+
+When to use: Complex features, multi-step refactoring
+
+Workflow:
+
+1. Analyze requirements
+2. Review existing architecture
+3. Break down into steps
+4. Create implementation plan with phases
+5. Identify risks and mitigations
+
+Output: Structured implementation plan with phases and steps.
+
+### /tdd - Test-Driven Development
+
+When to use: New features, bug fixes
+
+Workflow:
+
+1. Write failing test (RED)
+2. Run test, verify fails
+3. Write minimal implementation (GREEN)
+4. Run test, verify passes
+5. Refactor (IMPROVE)
+6. Verify 80%+ coverage
+
+Output: Tests and implementation following TDD cycle.
+
+### /code-review - Quality Review
+
+When to use: After code changes, before commits
+
+Workflow:
+
+1. Run git diff to see changes
+2. Check security issues (Critical)
+3. Check code quality (High)
+4. Check performance (Medium)
+5. Check best practices (Medium)
+
+Output: Review report with prioritized issues.
+
+### /build-fix - Fix Build Errors
+
+When to use: TypeScript errors, build failures
+
+Workflow:
+
+1. Run tsc --noEmit
+2. Categorize errors
+3. Fix with minimal changes
+4. Verify build passes
+
+Output: Fixed code with minimal diffs.
+
+### /e2e - E2E Test Generation
+
+When to use: Testing user journeys
+
+Workflow:
+
+1. Identify critical flows
+2. Create page objects
+3. Write Playwright tests
+4. Add assertions
+5. Handle flakiness
+
+Output: Playwright test files.
+
+### /update-docs - Documentation Sync
+
+When to use: After code changes affect docs
+
+Workflow:
+
+1. Identify affected documentation
+2. Update CHANGELOG.md
+3. Update relevant docs
+4. Verify all links work
+
+Output: Updated documentation.
+
+### /refactor-clean - Code Cleanup
+
+When to use: Dead code, complexity reduction
+
+Workflow:
+
+1. Identify code smells
+2. Check for dead code
+3. Apply simplifications
+4. Verify no regressions
+
+Output: Cleaner code with same functionality.
+
+### /blueprint - Generate Participation Blueprint
+
+When to use: Testing the Participation Translator output
+
+Workflow:
+
+1. Gather project seed (brand, idea, audience)
+2. Invoke rag-engineer for context retrieval
+3. Invoke cultural-intelligence for trends (Phase 3)
+4. Invoke participation-strategist for 8-Part Framework
+5. Invoke presentation-generator for Google Slides
+
+Output: Participation Blueprint presentation.
+
+## Usage Pattern
+
+State the workflow name and context:
+
+"Use /plan workflow for adding user authentication"
+"Use /tdd workflow for the new validation function"
+"Use /code-review workflow on my recent changes"
+"Use /blueprint workflow for Nike running campaign"
+
+## Combining Workflows
+
+Feature development pattern:
+
+1. /plan - Create implementation plan
+2. /tdd - Write tests and implement
+3. /code-review - Review code quality
+4. /update-docs - Update documentation
+
+Bug fix pattern:
+
+1. /tdd - Write test that reproduces bug
+2. Fix implementation
+3. /code-review - Verify fix quality
+
+Blueprint generation pattern:
+
+1. /blueprint - Generate initial output
+2. /code-review - Check for quality
+3. Iterate with feedback
+
+---
+
+Author: Charley Scholz, JLIT
+Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)

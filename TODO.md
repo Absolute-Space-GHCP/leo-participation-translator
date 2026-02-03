@@ -1,233 +1,188 @@
-# TODO - Future Development
+# TODO - The Participation Translator
 
-Version: 1.5.0
-Last Updated: 2026-01-22
-Purpose: Tracks planned enhancements and future development priorities
+Version: 1.0.1
+Last Updated: 2026-02-03
+Purpose: Tracks implementation progress (Phase 0-1 focus)
 
 Priority Legend: HIGH | MEDIUM | LOW
 Status Legend: PENDING | IN_PROGRESS | DONE
 
 ---
 
-## ✅ Monitoring Dashboard Fixes (COMPLETED)
+## Current Status: Phase 1 In Progress
 
-Issues resolved for the local monitoring dashboard at `dashboard/`:
-
-| Priority | Task | File | Notes | Status |
-|----------|------|------|-------|--------|
-| HIGH | Fix hardcoded repo paths | `server.js` | Changed to `~/Projects/` | ✅ DONE |
-| HIGH | Fix internal fetch calls in /api/status | `server.js` | Refactored to direct function calls | ✅ DONE |
-| HIGH | Add Quick Link verification | `server.js`, `app.js` | ⚡ Verify Links button + API | ✅ DONE |
-| MEDIUM | Fix deprecated kubectl --short flag | `server.js` | Updated to use `-o json` | ✅ DONE |
-| MEDIUM | Add version display in header | `index.html` | Shows project version dynamically | ✅ DONE |
-| MEDIUM | Organize Quick Links by category | `index.html` | Repos, Cloud & AI, Dev Tools, Docs | ✅ DONE |
-| LOW | Add error boundary/fallbacks | `app.js` | Better UI handling when API calls fail | PENDING |
-| LOW | Add disk space monitoring | `server.js` | Show available disk space | PENDING |
-| LOW | Add CPU/memory usage display | `server.js` | Show system resource usage | PENDING |
-
-### Dashboard Enhancement Ideas (Remaining)
-
-| Priority | Task | Notes | Status |
-|----------|------|-------|--------|
-| MEDIUM | Add health check history | Store last N check results | PENDING |
-| LOW | Add dark/light theme toggle | Currently dark only | PENDING |
-| LOW | Add notification sounds | Alert on status changes | PENDING |
-| LOW | Add export to JSON | Export current status snapshot | PENDING |
+**Architecture:** Multi-agent with specialized subagents, knowledge graph, task routing
+**Focus:** RAG Core + Knowledge Base (ready for Leo to guide Phase 2)
 
 ---
 
-## Current Project Status
+## Phase 0: Foundation Setup - COMPLETE
 
-### ✅ Completed Components
-
-| Component | Status | Notes |
-|-----------|--------|-------|
-| Core documentation | ✅ Done | README, QUICKSTART, BUILD, AUTH, DOCKER |
-| Session management | ✅ Done | Archive system with templates |
-| Validation script | ✅ Done | 19 checks (includes workspace path) |
-| Dashboard v1.2 | ✅ Done | Fixed paths, ⚡ Verify Links, organized Quick Links |
-| Docker integration | ✅ Done | Dev container + compose files |
-| AI context files | ✅ Done | CLAUDE.md v1.3, PROJECT_GUARDRAILS.md v1.1 |
-| GitHub templates | ✅ Done | PR and issue templates |
-| Bootstrap script | ✅ Done | One-command setup |
-| Link verification | ✅ Done | CLI script + Dashboard button |
-
-### 🟡 Needs Improvement
-
-| Component | Issue | Priority |
-|-----------|-------|----------|
-| Test coverage | No automated tests | LOW |
-| nvm version detection | Sometimes shows "installed" | LOW |
-
-### ⚪ Not Started
-
-| Component | Notes |
-|-----------|-------|
-| MCP Server | Model Context Protocol for AI |
-| Slack slash commands | Interactive bot commands |
-| CI/CD pipeline | GitHub Actions automation |
-| Architecture diagrams | Visual documentation |
+| Task                           | Status  | Notes                               |
+| ------------------------------ | ------- | ----------------------------------- |
+| Create agent delegation rule   | ✅ DONE | `.cursor/rules/agents.mdc`          |
+| Create 5 subagent definitions  | ✅ DONE | 2 active, 3 placeholders            |
+| Create participation-rag skill | ✅ DONE | SKILL.md + scripts                  |
+| Create document-analysis skill | ✅ DONE | SKILL.md                            |
+| Adapt knowledge graph          | ✅ DONE | `src/lib/memory/knowledge-graph.ts` |
+| Adapt task router              | ✅ DONE | `src/lib/router/task-router.ts`     |
+| Document GCP setup             | ✅ DONE | `docs/GCP_SETUP.md`                 |
+| Update documentation           | ✅ DONE | PLAN.md, CLAUDE.md, TODO.md         |
 
 ---
 
-## Local Development Infrastructure
+## Phase 1: Knowledge Base & RAG Core - IN PROGRESS
 
-| Priority | Task | Notes | Status |
-|----------|------|-------|--------|
-| MEDIUM | MCP Server (Local) | Local Model Context Protocol server | PENDING |
-| LOW | Hot-reload dev server | Local Slack bot testing | PENDING |
-| LOW | ngrok/Cloudflare tunnel | Expose local dev for webhooks | PENDING |
+### 1.1 GCP Infrastructure - ✅ COMPLETE
 
----
+| Priority | Task                         | Notes                         | Status  |
+| -------- | ---------------------------- | ----------------------------- | ------- |
+| HIGH     | Create GCP project           | `participation-translator`    | ✅ DONE |
+| HIGH     | Enable required APIs         | Vertex AI, Firestore, Storage | ✅ DONE |
+| HIGH     | Set up service account       | IAM roles configured          | ✅ DONE |
+| HIGH     | Link billing                 | JL billing account            | ✅ DONE |
+| HIGH     | Create Cloud Storage buckets | documents, exports            | ✅ DONE |
+| HIGH     | Create Firestore database    | Native mode, us-central1      | ✅ DONE |
+| MEDIUM   | Create Vector Search index   | 768 dimensions                | PENDING |
 
-## Slack Bot Enhancements
+### 1.2 Document Ingestion Pipeline - ✅ MOSTLY COMPLETE
 
-| Priority | Task | Notes | Status |
-|----------|------|-------|--------|
-| MEDIUM | Slash commands | Interactive dev workflow commands | PENDING |
-| LOW | Home tab | Bot home screen with quick actions | PENDING |
-| LOW | App mentions | Respond when @DevBot-v3 mentioned | PENDING |
+| Priority | Task                        | Notes                      | Status  |
+| -------- | --------------------------- | -------------------------- | ------- |
+| HIGH     | Implement PDF parser        | `src/lib/parsers/index.ts` | ✅ DONE |
+| HIGH     | Implement PPTX parser       | `src/lib/parsers/index.ts` | ✅ DONE |
+| MEDIUM   | Implement DOCX parser       | `src/lib/parsers/index.ts` | ✅ DONE |
+| HIGH     | Implement chunking strategy | Semantic with overlap      | ✅ DONE |
+| MEDIUM   | Create CLI ingest script    | `src/cli/ingest.ts`        | ✅ DONE |
 
----
+### 1.3 Embedding & Vector Storage - ✅ MOSTLY COMPLETE
 
-## CI/CD and Automation
+| Priority | Task                           | Notes                           | Status  |
+| -------- | ------------------------------ | ------------------------------- | ------- |
+| HIGH     | Implement embedding generation | Vertex AI text-embedding-005    | ✅ DONE |
+| HIGH     | Implement vector upsert        | Firestore (temp), Vector Search | ✅ DONE |
+| HIGH     | Create retrieval API           | `src/cli/retrieve.ts`           | ✅ DONE |
+| MEDIUM   | Implement metadata filtering   | Client, category, year          | ✅ DONE |
+| MEDIUM   | Upgrade to Vector Search       | For production performance      | PENDING |
 
-| Priority | Task | Notes | Status |
-|----------|------|-------|--------|
-| HIGH | GitHub Actions to Slack | Push/PR notifications | PENDING |
-| MEDIUM | Deployment notifications | Cloud Run deploy status | PENDING |
-| MEDIUM | Build status badges | README badges | PENDING |
+### 1.4 Knowledge Graph - ✅ COMPLETE
 
----
+| Priority | Task                     | Notes                | Status  |
+| -------- | ------------------------ | -------------------- | ------- |
+| HIGH     | Seed framework sections  | 9 sections as nodes  | ✅ DONE |
+| HIGH     | Add strategic patterns   | 5 initial patterns   | ✅ DONE |
+| HIGH     | Add initial tactics      | 4 initial tactics    | ✅ DONE |
+| MEDIUM   | Create graph persistence | JSON export to data/ | ✅ DONE |
+| MEDIUM   | Build pattern extractor  | Identify JL patterns | PENDING |
 
-## AI Integration
+### 1.5 Initial Document Ingestion - PENDING
 
-| Priority | Task | Notes | Status |
-|----------|------|-------|--------|
-| HIGH | Claude-Mem plugin | Persistent memory across sessions | ✅ DONE |
-| HIGH | Code-Simplifier plugin | Code quality and consistency | ✅ DONE |
-| HIGH | Superpowers plugin | TDD, debugging, planning workflows | ✅ DONE |
-| MEDIUM | Install AI plugins across ~/Projects/ | Propagate superpowers to all repos | PENDING |
-| MEDIUM | Continue + Codebase indexing | Full repo context for AI | PENDING |
-| LOW | Gemini function calling | Tool use for bot responses | PENDING |
-| LOW | RAG pipeline | Document retrieval for bot | PENDING |
-
-### ✅ Completed AI Tooling (2026-01-14)
-
-**Claude-Mem** - Persistent memory across coding sessions
-- Installed at user-level: `~/.claude-mem/`
-- Cursor hooks: `~/.cursor/hooks.json`
-- Web viewer: http://localhost:37777
-- Uses Gemini API for session summarization
-
-**Code-Simplifier** - Code quality plugin
-- Installed at user-level: `~/.cursor/plugins/code-simplifier/`
-- References project CLAUDE.md for standards
-- Preserves functionality while improving clarity
-
-**Superpowers** - TDD, debugging, and planning workflows
-- Marketplace: `obra/superpowers-marketplace`
-- Plugin: `superpowers@superpowers-marketplace`
-- Commands: `/superpowers:brainstorm`, `/superpowers:write-plan`, `/superpowers:execute-plan`, `/superpowers:tdd`, `/superpowers:debug`
-- By Jesse Vincent - structured workflows for complex development tasks
+| Priority | Task                              | Notes            | Status  |
+| -------- | --------------------------------- | ---------------- | ------- |
+| HIGH     | Get sample presentations from Leo | VW, Adidas, etc. | PENDING |
+| HIGH     | Ingest 3-5 documents              | Test pipeline    | PENDING |
+| HIGH     | Validate retrieval quality        | Manual testing   | PENDING |
 
 ---
 
-## Documentation
+## Phase 1.5: Learning/Evolution System - ✅ COMPLETE
 
-| Priority | Task | Notes | Status |
-|----------|------|-------|--------|
-| MEDIUM | Architecture diagram | Visual system overview | PENDING |
-| LOW | Video walkthrough | Screen recording of setup | PENDING |
-| DONE | Troubleshooting guide | Common issues and solutions | DONE |
-| DONE | AI assistant context | CLAUDE.md created | DONE |
-| DONE | Project guardrails | PROJECT_GUARDRAILS.md created | DONE |
-
----
-
-## Infrastructure
-
-| Priority | Task | Notes | Status |
-|----------|------|-------|--------|
-| LOW | Terraform/Pulumi | Infrastructure as code | PENDING |
-| LOW | Secret Manager | Migrate from env vars | PENDING |
-| LOW | Monitoring/Alerting | Cloud Monitoring dashboards | PENDING |
+| Task                            | Status  | Notes                                   |
+| ------------------------------- | ------- | --------------------------------------- |
+| Create observation types        | ✅ DONE | `src/lib/learning/types.ts`             |
+| Implement observation store     | ✅ DONE | `src/lib/learning/observation-store.ts` |
+| Implement pattern analyzer      | ✅ DONE | `src/lib/learning/pattern-analyzer.ts`  |
+| Create context injector         | ✅ DONE | `src/lib/learning/context-injector.ts`  |
+| Document evolution architecture | ✅ DONE | `docs/EVOLUTION.md`                     |
 
 ---
 
-## Git Archive Automation (NEW - 2026-01-11)
+## Phase 4: Frontend (Started Early)
 
-| Priority | Task | Notes | Status |
-|----------|------|-------|--------|
-| HIGH | Pre-push archive script | Auto-archive remote state before overwriting | PENDING |
-| MEDIUM | Archive folder structure | `~/Projects/ARCHIVED/{project}_{date}` | ✅ DONE |
-| LOW | Pruning schedule | Define retention policy for archived versions | PENDING |
-
-### Archive Workflow Requirements
-
-Before any `git push` that would overwrite remote changes:
-1. Fetch latest remote state
-2. Compare local vs remote commits  
-3. If remote has commits not in local, archive remote state
-4. Archive to: `~/Projects/ARCHIVED/{project}_archived_{YYYY-MM-DD}`
-5. Then proceed with push
-
-### Pruning Schedule (To Be Defined)
-- Keep all archives for 30 days
-- After 30 days, keep only major version archives
-- After 90 days, keep only monthly snapshots
-- Document in `docs/ARCHIVE_POLICY.md`
+| Task                     | Status  | Notes                   |
+| ------------------------ | ------- | ----------------------- |
+| Create Next.js app       | ✅ DONE | `app/` directory        |
+| Install shadcn/ui        | ✅ DONE | 14 components installed |
+| Create landing page      | ✅ DONE | `app/src/app/page.tsx`  |
+| Create generation wizard | ✅ DONE | `app/src/app/generate/` |
+| Create history page      | ✅ DONE | `app/src/app/history/`  |
+| Connect to backend APIs  | PENDING | Phase 4 main work       |
 
 ---
 
-## Next Steps (Immediate)
+## Files Created/Updated This Session
 
-1. **Dashboard Fixes** (This Session)
-   - [ ] Fix hardcoded repository paths in `server.js`
-   - [ ] Refactor `/api/status` to avoid internal HTTP calls
-   - [ ] Fix deprecated kubectl flag
+### Core Libraries (`src/lib/`)
 
-2. **Testing**
-   - [ ] Test full setup on clean machine
-   - [ ] Run validation script
-   - [ ] Test all dashboard endpoints
+| File                            | Status      |
+| ------------------------------- | ----------- |
+| `parsers/index.ts`              | ✅ Complete |
+| `parsers/types.ts`              | ✅ Complete |
+| `embeddings/index.ts`           | ✅ Complete |
+| `memory/knowledge-graph.ts`     | ✅ Complete |
+| `learning/types.ts`             | ✅ Complete |
+| `learning/observation-store.ts` | ✅ Complete |
+| `learning/pattern-analyzer.ts`  | ✅ Complete |
+| `learning/context-injector.ts`  | ✅ Complete |
+| `learning/index.ts`             | ✅ Complete |
 
-3. **Documentation**
-   - [x] Update CLAUDE.md with workspace rules
-   - [x] Create PROJECT_GUARDRAILS.md
-   - [ ] Update CHANGELOG.md with session changes
+### CLI Tools (`src/cli/`)
+
+| File            | Status      |
+| --------------- | ----------- |
+| `ingest.ts`     | ✅ Complete |
+| `retrieve.ts`   | ✅ Complete |
+| `seed-graph.ts` | ✅ Complete |
+
+### Configuration
+
+| File            | Status      |
+| --------------- | ----------- |
+| `package.json`  | ✅ Complete |
+| `tsconfig.json` | ✅ Complete |
+| `.env`          | ✅ Updated  |
+| `.env.example`  | ✅ Updated  |
+
+### Documentation
+
+| File                            | Status     |
+| ------------------------------- | ---------- |
+| `docs/CULTURAL_INTELLIGENCE.md` | ✅ Created |
+| `docs/EVOLUTION.md`             | ✅ Created |
 
 ---
 
-## Future Enhancements (Long-Term)
+## Next Immediate Steps
 
-| Priority | Task | Notes | Status |
-|----------|------|-------|--------|
-| MEDIUM | TypeScript-first orientation | Migrate build to TypeScript for better type safety, IDE support, and maintainability | PENDING |
-| LOW | Agent orchestration framework | Add home dev build agent orchestration after extensive testing in other environments | PENDING |
-
-### TypeScript Migration Notes
-- Evaluate tsconfig setup for Node.js projects
-- Consider gradual migration (JS → TS) vs full rewrite
-- Add type definitions for existing modules
-- Update bootstrap.sh to install TypeScript tooling
-
-### Agent Orchestration Notes
-- Test framework extensively before adding to this build
-- Document agent patterns and best practices
-- Evaluate: LangChain, AutoGen, CrewAI, or custom solution
-- Ensure compatibility with existing MCP servers
+1. [x] ~~Create GCP project `participation-translator`~~
+2. [x] ~~Implement parsers (PDF, PPTX, DOCX)~~
+3. [x] ~~Implement embeddings~~
+4. [x] ~~Seed knowledge graph~~
+5. [ ] Create Vector Search index (optional, Firestore works for now)
+6. [ ] Get sample presentations from Sylvia
+7. [ ] Ingest first documents
+8. [ ] Demo retrieval to Leo
 
 ---
 
-## Notes
+## CLI Commands Reference
 
-- GitHub Actions Slack notification requires SLACK_WEBHOOK_URL secret
-- See docs/AUTH.md for authentication details
-- Dashboard runs on port 3333 by default (configurable via DASHBOARD_PORT)
+```bash
+# Ingest a document
+npm run ingest -- ./path/to/document.pptx --client "ClientName" --type presentation
+
+# Test retrieval
+npm run retrieve -- "participation mechanics for automotive"
+
+# Show vector store stats
+npm run stats
+
+# Seed knowledge graph
+npm run seed-graph
+```
 
 ---
 
 Author: Charley Scholz, JLIT
 Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
-Last Updated: 2026-01-22
+Last Updated: 2026-02-03

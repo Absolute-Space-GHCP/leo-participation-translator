@@ -1,0 +1,207 @@
+---
+description: API endpoint design patterns for Next.js App Router. Use when creating or modifying API routes.
+globs: ["**/app/api/**/*.ts", "**/api/**"]
+alwaysApply: false
+---
+
+# API Endpoint Patterns
+
+## Next.js App Router Conventions
+
+### File Structure
+
+```
+src/app/api/
+├── retrieve/
+│   └── route.ts        # GET /api/retrieve
+├── ingest/
+│   └── route.ts        # POST /api/ingest
+├── generate/
+│   └── route.ts        # POST /api/generate
+└── health/
+    └── route.ts        # GET /api/health
+```
+
+### Standard Handler Pattern
+
+```typescript
+import { NextRequest, NextResponse } from "next/server";
+
+export async function GET(request: NextRequest): Promise<NextResponse> {
+  try {
+    // 1. Validate input
+    const query = request.nextUrl.searchParams.get("q");
+    if (!query) {
+      return NextResponse.json(
+        { error: "Missing required parameter: q" },
+        { status: 400 }
+      );
+    }
+
+    // 2. Process request
+    const result = await processQuery(query);
+
+    // 3. Return success response
+    return NextResponse.json(result, { status: 200 });
+  } catch (error) {
+    // 4. Handle errors
+    console.error("API error:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+```
+
+## Participation Translator Endpoints
+
+### GET /api/retrieve
+
+Query the knowledge base for relevant context.
+
+```typescript
+// Request
+GET /api/retrieve?q=participation+mechanics+automotive&topK=10&client=VW
+
+// Response
+{
+  "query": "participation mechanics automotive",
+  "results": [
+    {
+      "content": "...",
+      "score": 0.89,
+      "metadata": {
+        "client": "VW",
+        "campaign": "Think Small Revival",
+        "patterns": ["cultural_hijack"]
+      }
+    }
+  ],
+  "totalFound": 45
+}
+```
+
+### POST /api/ingest
+
+Ingest a new document into the knowledge base.
+
+```typescript
+// Request
+POST /api/ingest
+Content-Type: multipart/form-data
+
+{
+  "file": <binary>,
+  "client": "Nike",
+  "campaign": "Just Do It 2.0",
+  "year": 2025
+}
+
+// Response
+{
+  "success": true,
+  "documentId": "doc_abc123",
+  "chunksCreated": 45,
+  "patternsFound": ["first_responders", "unfinished_platform"]
+}
+```
+
+### POST /api/generate
+
+Generate a participation blueprint.
+
+```typescript
+// Request
+POST /api/generate
+Content-Type: application/json
+
+{
+  "projectSeed": {
+    "brand": "Nike",
+    "idea": "Running community challenge",
+    "audience": "Urban runners 25-40"
+  },
+  "options": {
+    "includeCulturalIntel": true,
+    "outputFormat": "google_slides"
+  }
+}
+
+// Response
+{
+  "blueprintId": "bp_xyz789",
+  "status": "processing",
+  "estimatedTime": 120
+}
+```
+
+### GET /api/health
+
+Health check for monitoring.
+
+```typescript
+// Response
+{
+  "status": "healthy",
+  "version": "1.0.0",
+  "services": {
+    "vertexAI": "connected",
+    "vectorStore": "connected",
+    "firestore": "connected"
+  },
+  "timestamp": "2026-02-03T14:30:00Z"
+}
+```
+
+## Error Response Format
+
+```typescript
+interface ErrorResponse {
+  error: string;
+  code?: string;
+  details?: Record<string, unknown>;
+}
+
+// Example
+{
+  "error": "Document parsing failed",
+  "code": "PARSE_ERROR",
+  "details": {
+    "filename": "presentation.pptx",
+    "reason": "Corrupted file structure"
+  }
+}
+```
+
+## Validation Patterns
+
+```typescript
+import { z } from "zod";
+
+const IngestSchema = z.object({
+  client: z.string().min(1).max(100),
+  campaign: z.string().optional(),
+  year: z.number().int().min(2000).max(2100).optional(),
+});
+
+export async function POST(request: NextRequest): Promise<NextResponse> {
+  const body = await request.json();
+
+  const validation = IngestSchema.safeParse(body);
+  if (!validation.success) {
+    return NextResponse.json(
+      { error: "Validation failed", details: validation.error.flatten() },
+      { status: 400 }
+    );
+  }
+
+  // Process validated data
+  const { client, campaign, year } = validation.data;
+}
+```
+
+---
+
+Author: Charley Scholz, JLIT
+Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)

@@ -1,0 +1,287 @@
+{
+  "_meta": {
+    "author": "Charley Scholz, JLIT",
+    "coauthored": "Claude Opus 4.5, Claude Code, Cursor IDE",
+    "description": "Slide layout definitions for Participation Blueprint presentations",
+    "updated": "2026-02-03"
+  },
+  
+  "branding": {
+    "company": "Johannes Leonardo",
+    "colors": {
+      "primary": "#1A1A2E",
+      "secondary": "#16213E",
+      "accent": "#E94560",
+      "textLight": "#FFFFFF",
+      "textDark": "#1A1A2E",
+      "background": "#FFFFFF",
+      "muted": "#6C757D"
+    },
+    "fonts": {
+      "heading": {
+        "name": "Helvetica Neue",
+        "fallback": "Arial",
+        "weight": "Bold"
+      },
+      "body": {
+        "name": "Helvetica Neue",
+        "fallback": "Arial",
+        "weight": "Regular"
+      }
+    },
+    "logo": {
+      "path": "assets/jl-logo.png",
+      "position": "bottomRight",
+      "width": 1.5,
+      "height": 0.5
+    }
+  },
+  
+  "layouts": {
+    "title": {
+      "name": "Title Slide",
+      "background": "#1A1A2E",
+      "elements": {
+        "title": {
+          "x": 0.5,
+          "y": 2.5,
+          "w": 9,
+          "h": 1.5,
+          "fontSize": 44,
+          "fontFace": "Helvetica Neue",
+          "fontWeight": "Bold",
+          "color": "#FFFFFF",
+          "align": "left"
+        },
+        "subtitle": {
+          "x": 0.5,
+          "y": 4.0,
+          "w": 9,
+          "h": 1,
+          "fontSize": 24,
+          "fontFace": "Helvetica Neue",
+          "color": "#E94560",
+          "align": "left"
+        },
+        "date": {
+          "x": 0.5,
+          "y": 5.5,
+          "w": 4,
+          "h": 0.5,
+          "fontSize": 14,
+          "fontFace": "Helvetica Neue",
+          "color": "#6C757D",
+          "align": "left"
+        }
+      }
+    },
+    
+    "section": {
+      "name": "Section Header",
+      "background": "#FFFFFF",
+      "elements": {
+        "sectionNumber": {
+          "x": 0.5,
+          "y": 0.5,
+          "w": 1,
+          "h": 0.8,
+          "fontSize": 48,
+          "fontFace": "Helvetica Neue",
+          "fontWeight": "Bold",
+          "color": "#E94560",
+          "align": "left"
+        },
+        "title": {
+          "x": 0.5,
+          "y": 1.5,
+          "w": 9,
+          "h": 1,
+          "fontSize": 32,
+          "fontFace": "Helvetica Neue",
+          "fontWeight": "Bold",
+          "color": "#1A1A2E",
+          "align": "left"
+        },
+        "body": {
+          "x": 0.5,
+          "y": 2.8,
+          "w": 9,
+          "h": 4,
+          "fontSize": 18,
+          "fontFace": "Helvetica Neue",
+          "color": "#1A1A2E",
+          "align": "left",
+          "lineSpacing": 1.5
+        }
+      }
+    },
+    
+    "content": {
+      "name": "Content Slide",
+      "background": "#FFFFFF",
+      "elements": {
+        "title": {
+          "x": 0.5,
+          "y": 0.5,
+          "w": 9,
+          "h": 0.8,
+          "fontSize": 28,
+          "fontFace": "Helvetica Neue",
+          "fontWeight": "Bold",
+          "color": "#1A1A2E",
+          "align": "left"
+        },
+        "subtitle": {
+          "x": 0.5,
+          "y": 1.3,
+          "w": 9,
+          "h": 0.5,
+          "fontSize": 16,
+          "fontFace": "Helvetica Neue",
+          "color": "#E94560",
+          "align": "left"
+        },
+        "body": {
+          "x": 0.5,
+          "y": 2.0,
+          "w": 9,
+          "h": 4.5,
+          "fontSize": 16,
+          "fontFace": "Helvetica Neue",
+          "color": "#1A1A2E",
+          "align": "left",
+          "lineSpacing": 1.4
+        }
+      }
+    },
+    
+    "bullets": {
+      "name": "Bullet Points",
+      "background": "#FFFFFF",
+      "elements": {
+        "title": {
+          "x": 0.5,
+          "y": 0.5,
+          "w": 9,
+          "h": 0.8,
+          "fontSize": 28,
+          "fontFace": "Helvetica Neue",
+          "fontWeight": "Bold",
+          "color": "#1A1A2E",
+          "align": "left"
+        },
+        "bullets": {
+          "x": 0.5,
+          "y": 1.5,
+          "w": 9,
+          "h": 5,
+          "fontSize": 18,
+          "fontFace": "Helvetica Neue",
+          "color": "#1A1A2E",
+          "align": "left",
+          "bullet": {
+            "type": "bullet",
+            "color": "#E94560"
+          },
+          "indentLevel": 0.5,
+          "lineSpacing": 1.6
+        }
+      }
+    },
+    
+    "twoColumn": {
+      "name": "Two Column",
+      "background": "#FFFFFF",
+      "elements": {
+        "title": {
+          "x": 0.5,
+          "y": 0.5,
+          "w": 9,
+          "h": 0.8,
+          "fontSize": 28,
+          "fontFace": "Helvetica Neue",
+          "fontWeight": "Bold",
+          "color": "#1A1A2E",
+          "align": "left"
+        },
+        "leftColumn": {
+          "x": 0.5,
+          "y": 1.5,
+          "w": 4.25,
+          "h": 5,
+          "fontSize": 16,
+          "fontFace": "Helvetica Neue",
+          "color": "#1A1A2E",
+          "align": "left"
+        },
+        "rightColumn": {
+          "x": 5.25,
+          "y": 1.5,
+          "w": 4.25,
+          "h": 5,
+          "fontSize": 16,
+          "fontFace": "Helvetica Neue",
+          "color": "#1A1A2E",
+          "align": "left"
+        }
+      }
+    },
+    
+    "image": {
+      "name": "Image with Caption",
+      "background": "#FFFFFF",
+      "elements": {
+        "title": {
+          "x": 0.5,
+          "y": 0.5,
+          "w": 9,
+          "h": 0.8,
+          "fontSize": 28,
+          "fontFace": "Helvetica Neue",
+          "fontWeight": "Bold",
+          "color": "#1A1A2E",
+          "align": "left"
+        },
+        "image": {
+          "x": 0.5,
+          "y": 1.5,
+          "w": 6,
+          "h": 4,
+          "sizing": "contain"
+        },
+        "caption": {
+          "x": 7,
+          "y": 1.5,
+          "w": 2.5,
+          "h": 4,
+          "fontSize": 14,
+          "fontFace": "Helvetica Neue",
+          "color": "#6C757D",
+          "align": "left"
+        }
+      }
+    }
+  },
+  
+  "slideOrder": {
+    "writeup": [
+      { "section": 1, "title": "Current Cultural Context", "layout": "section" },
+      { "section": 2, "title": "Brand Credibility", "layout": "section" },
+      { "section": 3, "title": "The Shared Interest", "layout": "section" },
+      { "section": 4, "title": "The Passive Trap", "layout": "section" },
+      { "section": 5, "title": "The Participation Worthy Idea", "layout": "section" },
+      { "section": 6, "title": "Moments and Places", "layout": "section" },
+      { "section": 7, "title": "Mechanics of Participation", "layout": "bullets" },
+      { "section": 8, "title": "First Responders", "layout": "section" },
+      { "section": 9, "title": "The Ripple Effect", "layout": "section" }
+    ],
+    "pack": [
+      { "section": "bigAudaciousAct", "title": "The Big Audacious Act", "layout": "content" },
+      { "section": "subcultureBriefs", "title": "First Responder Briefs", "layout": "content", "repeat": true },
+      { "section": "mechanics", "title": "Participation Mechanics", "layout": "content", "repeat": true },
+      { "section": "creators", "title": "Casting & Creators", "layout": "bullets" },
+      { "section": "trendHijacks", "title": "72-Hour Trend Hijacks", "layout": "bullets" },
+      { "section": "nextSteps", "title": "Next Steps", "layout": "bullets" }
+    ]
+  }
+}

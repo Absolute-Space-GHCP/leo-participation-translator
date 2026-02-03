@@ -1,0 +1,215 @@
+---
+description: React and Next.js frontend patterns. Use when building UI components and pages (Phase 4).
+globs: ["**/*.tsx", "**/components/**", "**/app/**"]
+alwaysApply: false
+---
+
+# Frontend Patterns
+
+## React Component Patterns
+
+### Explicit Props Types
+
+```typescript
+interface BlueprintCardProps {
+  blueprintId: string;
+  title: string;
+  sections: FrameworkSection[];
+  onExport?: () => void;
+  isLoading?: boolean;
+}
+
+export function BlueprintCard({
+  blueprintId,
+  title,
+  sections,
+  onExport,
+  isLoading = false,
+}: BlueprintCardProps): JSX.Element {
+  // Component implementation
+}
+```
+
+### Server Components (Default in App Router)
+
+```typescript
+// app/blueprints/page.tsx
+export default async function BlueprintsPage(): Promise<JSX.Element> {
+  // Server-side data fetching
+  const blueprints = await getBlueprints();
+
+  return (
+    <div className="container mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-4">Blueprints</h1>
+      <BlueprintList blueprints={blueprints} />
+    </div>
+  );
+}
+```
+
+### Client Components (When Needed)
+
+```typescript
+"use client";
+
+import { useState } from "react";
+
+interface GeneratorFormProps {
+  onSubmit: (seed: ProjectSeed) => Promise<void>;
+}
+
+export function GeneratorForm({ onSubmit }: GeneratorFormProps): JSX.Element {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Client-side interactivity
+}
+```
+
+## Next.js App Router Patterns
+
+### Layout Pattern
+
+```typescript
+// app/layout.tsx
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}): JSX.Element {
+  return (
+    <html lang="en">
+      <body className="min-h-screen bg-gray-50">
+        <Header />
+        <main className="container mx-auto p-6">{children}</main>
+        <Footer />
+      </body>
+    </html>
+  );
+}
+```
+
+### Loading States
+
+```typescript
+// app/blueprints/loading.tsx
+export default function Loading(): JSX.Element {
+  return (
+    <div className="flex items-center justify-center h-64">
+      <div className="animate-spin h-8 w-8 border-4 border-blue-500 rounded-full border-t-transparent" />
+    </div>
+  );
+}
+```
+
+### Error Handling
+
+```typescript
+// app/blueprints/error.tsx
+"use client";
+
+interface ErrorProps {
+  error: Error;
+  reset: () => void;
+}
+
+export default function Error({ error, reset }: ErrorProps): JSX.Element {
+  return (
+    <div className="p-6 bg-red-50 rounded-lg">
+      <h2 className="text-red-800 font-bold">Something went wrong</h2>
+      <p className="text-red-600 mt-2">{error.message}</p>
+      <button
+        onClick={reset}
+        className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+      >
+        Try again
+      </button>
+    </div>
+  );
+}
+```
+
+## State Management
+
+### React Query for Server State
+
+```typescript
+"use client";
+
+import { useQuery, useMutation } from "@tanstack/react-query";
+
+export function useBlueprintQuery(id: string) {
+  return useQuery({
+    queryKey: ["blueprint", id],
+    queryFn: () => fetchBlueprint(id),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+}
+
+export function useGenerateBlueprint() {
+  return useMutation({
+    mutationFn: (seed: ProjectSeed) => generateBlueprint(seed),
+    onSuccess: (data) => {
+      // Invalidate queries, redirect, etc.
+    },
+  });
+}
+```
+
+## Tailwind CSS Patterns
+
+### Component Classes
+
+```typescript
+const buttonStyles = {
+  base: "px-4 py-2 rounded font-medium transition-colors",
+  primary: "bg-blue-600 text-white hover:bg-blue-700",
+  secondary: "bg-gray-200 text-gray-800 hover:bg-gray-300",
+  danger: "bg-red-600 text-white hover:bg-red-700",
+};
+
+interface ButtonProps {
+  variant?: "primary" | "secondary" | "danger";
+  children: React.ReactNode;
+  onClick?: () => void;
+}
+
+export function Button({
+  variant = "primary",
+  children,
+  onClick,
+}: ButtonProps): JSX.Element {
+  return (
+    <button
+      className={`${buttonStyles.base} ${buttonStyles[variant]}`}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  );
+}
+```
+
+## Accessibility
+
+```typescript
+// Always include ARIA labels
+<button
+  aria-label="Generate blueprint"
+  aria-busy={isLoading}
+  disabled={isLoading}
+>
+  {isLoading ? 'Generating...' : 'Generate'}
+</button>
+
+// Use semantic HTML
+<nav aria-label="Main navigation">
+  <ul>
+    <li><a href="/blueprints">Blueprints</a></li>
+  </ul>
+</nav>
+```
+
+---
+
+Author: Charley Scholz, JLIT
+Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)

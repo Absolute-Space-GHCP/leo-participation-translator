@@ -1,0 +1,14 @@
+This is a test PDF content for the Participation Translator.
+
+The Participation Framework has 9 sections:
+1. Current Cultural Context
+2. Brand Credibility
+3. The Shared Interest
+4. The Passive Trap
+5. The Participation Worthy Idea
+6. Moments and Places
+7. Mechanics of Participation
+8. First Responders
+9. The Ripple Effect
+
+This test document helps verify the parsing and chunking functionality.

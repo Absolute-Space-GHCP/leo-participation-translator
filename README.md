@@ -1,138 +1,152 @@
-# JL Dev Environment Golden Master
+# The Participation Translator
 
-Version: 1.0.0
-Last Updated: 2025-12-08
-Purpose: Reproducible AI-first development environment for Johannes Leonardo engineering team
+Version: 1.0.1
+Last Updated: 2026-02-03
+Purpose: AI-powered strategic tool that transforms passive advertising ideas into participation-worthy platforms
+
+---
 
 ## Overview
 
-This repository contains everything needed to bootstrap a standardized macOS development environment optimized for:
+The Participation Translator is an internal tool for Johannes Leonardo that applies the agency's proprietary 8-Part Participation Framework to transform traditional advertising concepts into participation-worthy platforms.
 
-- AI-assisted development (Gemini 3 Pro, Claude Opus 4.5 via Cursor)
-- Full-stack development (Node.js, Java, Python)
-- Slack bot development (DevBot-v3)
-- Enterprise tooling (Docker, Kubernetes, GCP)
+**Key Capabilities:**
+
+- **RAG-powered context** - Retrieves relevant past JL work for pattern matching
+- **Cultural intelligence** - Real-time trend analysis and subculture identification
+- **Framework application** - Systematic 8-Part Participation Framework reasoning
+- **Presentation output** - Google Slides blueprint generation
+
+**Priority:** HIGH | **Visibility:** HIGH | **Sponsor:** Leo (Founder)
+
+---
 
 ## Quick Start
 
-    # Clone the repo (get URL from team lead or company GitHub)
-    git clone <repo-url>/jl-dev-environment-gm.git
-    cd jl-dev-environment-gm
+### Prerequisites
 
-    # Run the bootstrap script
-    ./scripts/bootstrap.sh
+- Node.js 22 LTS
+- GCP account with billing enabled
+- API keys: Anthropic (Claude), Exa.ai, Perplexity
 
-    # Validate setup
-    ./scripts/validate.sh
+### Setup
+
+```bash
+# Clone the repo
+git clone https://github.com/Absolute-Space-GHCP/leo-participation-translator.git
+cd leo-participation-translator
+
+# Install dependencies
+npm install
+
+# Copy environment template
+cp .env.example .env
+
+# Configure your API keys in .env
+# See docs/GCP_SETUP.md for GCP configuration
+```
+
+### Development
+
+```bash
+# Start development server
+npm run dev
+
+# Run tests
+npm test
+
+# Type check
+npm run typecheck
+```
+
+---
 
 ## Documentation
 
-| Document        | Purpose                                         |
-| --------------- | ----------------------------------------------- |
-| QUICKSTART.md   | **Start here!** Zero-to-hero guide for new devs |
-| docs/BUILD.md   | Detailed step-by-step build guide               |
-| docs/AUTH.md    | OAuth accounts and authentication reference     |
-| docs/DOCKER.md  | Docker and dev container setup                  |
-| CONTRIBUTING.md | How to contribute to this project               |
-| SECURITY.md     | Security policy and best practices              |
-| CHANGELOG.md    | Version history and changes                     |
-| TODO.md         | Future development roadmap                      |
+| Document                 | Purpose                                           |
+| ------------------------ | ------------------------------------------------- |
+| `CLAUDE.md`              | **Start here!** Project context for AI assistants |
+| `PLAN.md`                | Implementation roadmap and phases                 |
+| `TODO.md`                | Current tasks and progress                        |
+| `docs/GCP_SETUP.md`      | GCP project configuration guide                   |
+| `docs/ARCHITECTURE-*.md` | Technical architecture details                    |
 
-## Repository Structure
+---
 
-    jl-dev-environment-gm/
-    ├── .github/workflows/    # GitHub Actions (Slack notifications)
-    ├── config/
-    │   ├── continue/         # Gemini AI assistant config
-    │   ├── cursor/           # Cursor IDE settings + extensions
-    │   ├── shell/            # .zshrc template
-    │   └── slack/            # Slack app config
-    ├── docs/                  # Documentation
-    ├── scripts/
-    │   ├── bootstrap.sh      # One-command setup
-    │   ├── validate.sh       # Environment verification
-    │   └── utils/            # Helper scripts (incl. session archiver)
-    ├── sessions/              # Archived AI chat sessions
-    ├── CHANGELOG.md          # Version history
-    ├── LICENSE               # MIT License
-    ├── README.md             # This file
-    ├── TODO.md               # Development roadmap
-    └── VERSION               # Current version number
+## Architecture
 
-## Requirements
+### Multi-Agent System
 
-- macOS 14.0+ (Sonoma) or later
-- Apple Silicon (M1/M2/M3)
-- Admin access
-- 20GB free disk space
+| Agent                      | Purpose                                   |
+| -------------------------- | ----------------------------------------- |
+| `document-analyzer`        | Parse presentations, extract JL patterns  |
+| `rag-engineer`             | Embeddings, retrieval, vector operations  |
+| `cultural-intelligence`    | Trend analysis, subculture identification |
+| `participation-strategist` | 8-Part Framework application              |
+| `presentation-generator`   | Google Slides output                      |
 
-## What Gets Installed
+### Tech Stack
 
-| Category         | Tools                                     |
-| ---------------- | ----------------------------------------- |
-| Package Managers | Homebrew 5.x, nvm, SDKMAN                 |
-| Runtimes         | Node.js 22 LTS, Java 21 LTS, Python 3.11+ |
-| IDE              | Cursor with 27 extensions                 |
-| AI Tools         | Claude Code, Continue (Gemini), Cursor AI |
-| DevOps           | Docker, kubectl, gcloud CLI, gh CLI       |
+| Layer        | Technology                                      |
+| ------------ | ----------------------------------------------- |
+| Frontend     | Next.js 14, React 18, Tailwind CSS              |
+| Backend      | Node.js 22 LTS, TypeScript                      |
+| AI/LLM       | Claude Opus 4.5 (Vertex AI), task-based routing |
+| Vector Store | Vertex AI Vector Search                         |
+| Storage      | Cloud Firestore, Cloud Storage                  |
+| Presentation | Google Slides API                               |
 
-## AI Models Available
+---
 
-| Model                | Provider  | Access                   |
-| -------------------- | --------- | ------------------------ |
-| Claude Opus 4.5      | Anthropic | Cursor Pro + Claude Code |
-| Claude Sonnet 4.5    | Anthropic | Cursor Pro               |
-| Gemini 3 Pro         | Google    | Vertex AI (global)       |
-| Gemini 2.5 Pro/Flash | Google    | Vertex AI (us-central1)  |
-| GPT-5.1 Codex Max    | OpenAI    | Cursor Pro               |
+## Project Structure
 
-## Authentication Summary
+```
+leo-participation-translator/
+├── .cursor/
+│   ├── agents/          # Specialized subagents
+│   ├── rules/           # AI guidance rules
+│   ├── skills/          # Reusable skills
+│   └── hooks/           # Session automation
+├── src/
+│   ├── lib/
+│   │   ├── memory/      # Knowledge graph
+│   │   ├── router/      # Task routing
+│   │   ├── parsers/     # Document parsing
+│   │   ├── embeddings/  # Vector operations
+│   │   └── ...
+│   └── prompts/         # System prompts
+├── docs/                # Documentation
+├── sessions/            # Session logs
+└── PLAN.md              # Implementation roadmap
+```
 
-| Service      | Account                               |
-| ------------ | ------------------------------------- |
-| GitHub       | Your GitHub account (JL org)          |
-| Google Cloud | your-email@johannesleonardo.com       |
-| Slack        | Johannes Leonardo workspace           |
+---
 
-See docs/AUTH.md for setup instructions and full authentication details.
+## Implementation Phases
 
-## Dashboard
+| Phase | Focus                 | Status            |
+| ----- | --------------------- | ----------------- |
+| 0     | Foundation Setup      | ✅ Complete       |
+| 1     | Knowledge Base & RAG  | 🔄 Ready          |
+| 2     | Framework Engine      | ⏳ Leo's guidance |
+| 3     | Cultural Intelligence | ⏳ Deferred       |
+| 4     | UI & Presentation     | ⏳ Deferred       |
+| 5     | Testing & Refinement  | ⏳ Deferred       |
+| 6     | Deployment            | ⏳ Deferred       |
 
-Launch the local status dashboard for visual monitoring:
+---
 
-    ./scripts/utils/dashboard.sh
+## Contributing
 
-Opens at http://localhost:3333 with:
-- Real-time status for runtimes, package managers, DevOps tools
-- Authentication status (GitHub, GCP, ADC)
-- Repository status with branch and clean/dirty state
-- **⚡ Verify Links** - One-click connectivity test for all Quick Links
-- Organized Quick Links by category (Repos, Cloud & AI, Dev Tools, Docs)
-- Auto-refresh every 30 seconds
+See `CONTRIBUTING.md` for guidelines.
 
-### Verify Links (CLI)
+---
 
-Test Quick Link connectivity from the command line:
+## Security
 
-    ./scripts/utils/verify-links.sh
+See `SECURITY.md` for security policy.
 
-## Validation
+---
 
-Run the validation script to verify your setup:
-
-    ./scripts/validate.sh
-
-Expected: 19 passed, 0 failed (includes workspace path check)
-
-## License
-
-MIT - See LICENSE file
-
-## Maintainers
-
-- JL Engineering Team
-
-## Repository
-
-- GitHub: Company GitHub instance (see team lead for access)
-- Status: Golden Master v1.0.0
+Author: Charley Scholz, JLIT
+Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)

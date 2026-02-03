@@ -1,0 +1,183 @@
+---
+description: Security best practices for the Participation Translator. Critical rules for handling API keys, user data, and external integrations.
+globs: ["**/*.ts", "**/*.tsx", "**/*.env*"]
+alwaysApply: true
+---
+
+# Security Guidance
+
+## Critical Rules
+
+### Never Hardcode Secrets
+
+```typescript
+// ❌ NEVER DO THIS
+const apiKey = "sk-ant-api03-xxxxx";
+const projectId = "my-gcp-project";
+
+// ✅ ALWAYS USE ENVIRONMENT VARIABLES
+const apiKey = process.env.ANTHROPIC_API_KEY;
+const projectId = process.env.GCP_PROJECT_ID;
+```
+
+### Validate All Inputs
+
+```typescript
+// ✅ Validate before processing
+export function processQuery(query: unknown): string {
+  if (typeof query !== "string") {
+    throw new Error("Query must be a string");
+  }
+  if (query.length > 10000) {
+    throw new Error("Query exceeds maximum length");
+  }
+  if (query.includes("<script>")) {
+    throw new Error("Invalid characters in query");
+  }
+  return sanitize(query);
+}
+```
+
+### Sanitize LLM Outputs
+
+```typescript
+// ✅ Don't trust LLM output for dangerous operations
+const llmResponse = await generateBlueprint(context);
+
+// Never use LLM output directly in:
+// - SQL queries
+// - Shell commands
+// - File paths
+// - Code execution
+
+// Always validate and sanitize
+const sanitized = sanitizeOutput(llmResponse);
+```
+
+## Environment Variables
+
+### Required for Production
+
+| Variable                         | Purpose         | Example                    |
+| -------------------------------- | --------------- | -------------------------- |
+| `GCP_PROJECT_ID`                 | GCP project     | `participation-translator` |
+| `ANTHROPIC_API_KEY`              | Claude API      | `sk-ant-...`               |
+| `GOOGLE_APPLICATION_CREDENTIALS` | Service account | `/path/to/key.json`        |
+
+### Never Commit
+
+Add to `.gitignore`:
+
+```
+.env
+.env.local
+.env.production
+sa-key.json
+*-credentials.json
+```
+
+## API Security
+
+### Rate Limiting
+
+```typescript
+// ✅ Implement rate limiting on public endpoints
+import { rateLimit } from "express-rate-limit";
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // 100 requests per window
+});
+
+app.use("/api/", limiter);
+```
+
+### Authentication
+
+```typescript
+// ✅ Verify auth on all sensitive endpoints
+export async function handler(req: Request): Promise<Response> {
+  const token = req.headers.get("Authorization");
+
+  if (!token || !(await verifyToken(token))) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
+  // Process authenticated request
+}
+```
+
+## Data Handling
+
+### Sensitive Data in Logs
+
+```typescript
+// ❌ Don't log sensitive data
+logger.info({ apiKey, userEmail }, "Processing request");
+
+// ✅ Redact sensitive fields
+logger.info(
+  {
+    apiKeyPresent: !!apiKey,
+    userEmailDomain: userEmail.split("@")[1],
+  },
+  "Processing request"
+);
+```
+
+### PII in Presentations
+
+```typescript
+// ✅ Warn if PII detected in output
+const piiPatterns = [
+  /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/, // email
+  /\b\d{3}[-.]?\d{3}[-.]?\d{4}\b/, // phone
+  /\b\d{3}[-]?\d{2}[-]?\d{4}\b/, // SSN
+];
+
+function checkForPII(content: string): string[] {
+  return piiPatterns
+    .filter((pattern) => pattern.test(content))
+    .map((pattern) => pattern.source);
+}
+```
+
+## Dependency Security
+
+### Keep Dependencies Updated
+
+```bash
+# Check for vulnerabilities
+npm audit
+
+# Fix automatically where possible
+npm audit fix
+
+# Check for outdated packages
+npm outdated
+```
+
+### Pin Versions
+
+```json
+{
+  "dependencies": {
+    "@google-cloud/vertexai": "1.2.3",
+    "next": "14.1.0"
+  }
+}
+```
+
+## Reporting Security Issues
+
+If you discover a security vulnerability:
+
+1. Do NOT commit the vulnerable code
+2. Document the issue privately
+3. Notify the team lead immediately
+4. Follow responsible disclosure
+
+---
+
+Author: Charley Scholz, JLIT
+Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)

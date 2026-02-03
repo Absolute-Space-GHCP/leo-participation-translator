@@ -1,8 +1,8 @@
-# CLAUDE.md - JL Dev Environment Golden Master
+# CLAUDE.md - The Participation Translator
 
-Version: 1.6.0
-Last Updated: 2026-01-22
-Purpose: Project-specific context for AI assistants working in this codebase
+Version: 1.0.1
+Last Updated: 2026-02-03
+Purpose: Project-specific context for AI assistants working on The Participation Translator
 
 ---
 
@@ -13,189 +13,244 @@ Purpose: Project-specific context for AI assistants working in this codebase
 ## ⚠️ CRITICAL: Workspace Rules
 
 **ALWAYS READ:**
+
 1. `~/.cursor/CLAUDE.md` (global standards - session protocols, coding standards, AI tooling)
 2. This file (project-specific context)
-3. `PROJECT_GUARDRAILS.md` (project constraints)
-
-### Standard Project Path Convention
-
-On ANY local device, projects should follow this folder structure:
-
-```
-~/Projects/PROJECT_NAME/
-```
-
-**Path breakdown:**
-- `~` → User home directory (e.g., `/Users/charleymm`)
-- `Projects/` → Projects folder (our working local directory)
-- `PROJECT_NAME/` → Specific project (e.g., `jl-dev-environment-gm`)
+3. `PLAN.md` (implementation roadmap)
+4. `PROJECT_GUARDRAILS.md` (project constraints)
 
 ### Current Project Path
 
 This project MUST only be worked on from:
 
 ```
-~/Projects/jl-dev-environment-gm
+~/Projects/leo-participation-translator
 ```
 
-**Full absolute path example:**
+**Full absolute path:**
+
 ```
-/Users/charleymm/Projects/jl-dev-environment-gm
+/Users/charleymm/Projects/leo-participation-translator
 ```
 
 ### First Check Before Any Session
 
-Before starting any tasks, verify you are in the correct workspace:
-
 ```bash
 # Verify workspace path
 pwd
-# Expected output should end with: /Projects/jl-dev-environment-gm
+# Expected: /Users/charleymm/Projects/leo-participation-translator
 
-# Or check with this command:
-[[ "$PWD" == *"Projects/jl-dev-environment-gm"* ]] && echo "✓ Correct workspace" || echo "✗ Wrong workspace!"
+[[ "$PWD" == *"Projects/leo-participation-translator"* ]] && echo "✓ Correct workspace" || echo "✗ Wrong workspace!"
 ```
-
-**DO NOT:**
-- Navigate to or modify files in other directories
-- Clone or work from alternative locations
-- Reference or make changes to files outside this workspace
-- Assume paths from other projects apply here
-
-**DO:**
-- Verify you are in the correct workspace before making changes
-- Use absolute paths when running scripts
-- Reference this workspace path in all file operations
 
 ---
 
 ## Project Overview
 
-This is the **JL Dev Environment Golden Master** - a reproducible, AI-first development environment for the Johannes Leonardo engineering team.
+**The Participation Translator** is an internal AI-powered strategic tool for Johannes Leonardo that transforms "passive" advertising ideas into "participation-worthy" platforms.
+
+### Project Sponsor
+
+- **Leo** (Founder) - Primary stakeholder and end user
+- **Priority:** HIGH
+- **Visibility:** HIGH
+- **Turnaround:** FAST
+
+### Core Concept
+
+The tool combines:
+
+1. **JL Institutional Memory** - Vector database of past presentations (VW, Adidas, etc.)
+2. **8-Part Participation Framework** - Strategic structure for all outputs
+3. **Real-time Cultural Intelligence** - Live API feeds (trends, subcultures)
+4. **Claude 3.5 Sonnet** - Chain-of-thought reasoning for nuanced strategy
+
+### Key Outputs
+
+**A. Participation Worthy Write-up (9 sections):**
+
+1. Current Cultural Context
+2. Brand Credibility
+3. The Shared Interest
+4. The Passive Trap
+5. The Participation Worthy Idea
+6. Moments and Places
+7. Mechanics of Participation
+8. First Responders
+9. The Ripple Effect
+
+**B. Participation Pack:**
+
+- The Big Audacious Act
+- Subculture Mini-Briefs
+- Mechanic Deep-Dives (3-5)
+- Casting & Creators
+- Trend Hijacks (72-hour opportunities)
+
+---
+
+## Technical Architecture
+
+### Multi-Agent System
+
+The Participation Translator uses specialized agents for different tasks:
+
+| Agent                      | Purpose                                  | Phase           |
+| -------------------------- | ---------------------------------------- | --------------- |
+| `document-analyzer`        | Parse presentations, extract JL patterns | 1 (Active)      |
+| `rag-engineer`             | Embeddings, retrieval, vector ops        | 1 (Active)      |
+| `cultural-intelligence`    | Trend analysis, subcultures              | 3 (Placeholder) |
+| `participation-strategist` | 8-Part Framework application             | 2 (Placeholder) |
+| `presentation-generator`   | Google Slides output                     | 4 (Placeholder) |
+
+**Agent Delegation:** See `.cursor/rules/agents.mdc`
+
+### Tech Stack
+
+| Layer                | Technology                                  |
+| -------------------- | ------------------------------------------- |
+| **Frontend**         | Next.js 14 + React 18 + Tailwind CSS        |
+| **Backend**          | Node.js 22 LTS + Next.js API Routes         |
+| **Reasoning Engine** | Claude Opus 4.5 (complex) / Sonnet (simple) |
+| **Task Routing**     | Complexity-based model selection            |
+| **Embeddings**       | Vertex AI text-embedding-005                |
+| **Vector Store**     | Vertex AI Vector Search                     |
+| **Knowledge Graph**  | Patterns, campaigns, cultural moments       |
+| **Cultural APIs**    | Exa.ai, Perplexity API (Phase 3)            |
+| **Storage**          | Cloud Firestore, Cloud Storage              |
+| **Presentation**     | Google Slides API                           |
+| **Deployment**       | Cloud Run                                   |
+
+### Architecture Flow
+
+```
+Document Upload → document-analyzer → Chunks + Patterns
+                                           ↓
+                  rag-engineer → Embeddings → Vector Store
+                                                    ↓
+                                            Knowledge Graph
+                                           (patterns, relationships)
+                                                    ↓
+Project Seed → rag-engineer → Retrieved Context
+                                    ↓
+               cultural-intelligence → Cultural Intel (Phase 3)
+                                    ↓
+               participation-strategist → 8-Part Framework (Phase 2)
+                                    ↓
+               presentation-generator → Google Slides (Phase 4)
+```
 
 ---
 
 ## Repository Structure
 
 ```
-jl-dev-environment-gm/
-├── .devcontainer/     # VS Code/Cursor dev container config
-├── .github/           # GitHub Actions, templates
-├── config/            # Tool configurations (Cursor, Continue, Slack)
-├── dashboard/         # Local status dashboard (Node.js/Express)
-├── docker/            # Docker Compose and Dockerfiles
-├── docs/              # Documentation (AUTH, BUILD, DOCKER)
-├── scripts/           # Bootstrap, validation, utilities
-├── sessions/          # Archived AI chat sessions
-├── templates/         # Configuration templates
-└── tests/             # Test files
+leo-participation-translator/
+├── .cursor/
+│   ├── agents/                 # Specialized subagents
+│   │   ├── document-analyzer.md
+│   │   ├── rag-engineer.md
+│   │   ├── cultural-intelligence.md (placeholder)
+│   │   ├── participation-strategist.md (placeholder)
+│   │   └── presentation-generator.md (placeholder)
+│   ├── rules/
+│   │   └── agents.mdc          # Agent delegation rules
+│   └── skills/
+│       ├── participation-rag/  # RAG operations skill
+│       └── document-analysis/  # Parsing skill
+├── src/
+│   ├── app/                    # Next.js App Router (Phase 4)
+│   ├── lib/
+│   │   ├── memory/             # Knowledge graph
+│   │   ├── router/             # Task routing
+│   │   ├── parsers/            # Document parsing
+│   │   ├── embeddings/         # Vector operations
+│   │   ├── cultural/           # Trend APIs (Phase 3)
+│   │   ├── generation/         # Claude integration (Phase 2)
+│   │   └── export/             # Google Slides export (Phase 4)
+│   └── prompts/                # System prompts
+├── docs/
+│   ├── GCP_SETUP.md            # GCP configuration guide
+│   └── ARCHITECTURE-*.md       # Technical architecture
+├── sessions/                   # Session logs
+├── PLAN.md                     # Implementation roadmap
+├── CLAUDE.md                   # This file
+└── TODO.md                     # Task tracking
 ```
 
 ---
 
-## Version Control & GitHub
+## Key Documentation
 
-**Repository:** https://github.com/absolute-space-ghcp/jl-dev-environment-gm.git
-
-**Authentication:**
-- Uses existing GitHub credentials (SSH keys or GitHub CLI)
-- User is authorized to use any available auth credentials (OAuth, tokens, SSH keys)
-- Check authentication: `gh auth status` or `ssh -T git@github.com`
-
-**Branch:** `main` (tracked as `origin/main`)
-
-**Common Git Operations:**
-```bash
-# Check sync status
-git status
-git fetch origin
-git log origin/main..HEAD  # Show unpushed commits
-
-# Push changes
-git push origin main
-
-# Pull updates
-git pull origin main
-```
+| Document                                        | Purpose                                              |
+| ----------------------------------------------- | ---------------------------------------------------- |
+| `PLAN.md`                                       | **Implementation roadmap** - Phases, tasks, timeline |
+| `docs/ARCHITECTURE-PARTICIPATION-TRANSLATOR.md` | Technical architecture deep-dive                     |
+| `PROJECT_GUARDRAILS.md`                         | Project constraints and rules                        |
+| `TODO.md`                                       | Current tasks and priorities                         |
 
 ---
 
-## Key Files
+## Development Phases
 
-| File | Purpose |
-|------|---------|
-| `QUICKSTART.md` | New developer setup guide |
-| `PROJECT_GUARDRAILS.md` | Project constraints and rules |
-| `scripts/bootstrap.sh` | One-command environment setup |
-| `scripts/validate.sh` | Verify all tools installed |
-| `scripts/utils/dashboard.sh` | Launch status dashboard |
-| `scripts/utils/archive-session.sh` | Archive AI chat sessions |
-| `TODO.md` | Current tasks and priorities |
-| `ACCOMPLISHMENTS.md` | Session accomplishment logs |
+| Phase       | Description                  | Status      |
+| ----------- | ---------------------------- | ----------- |
+| **Phase 0** | Foundation Setup             | IN PROGRESS |
+| **Phase 1** | Knowledge Base & RAG Core    | PENDING     |
+| **Phase 2** | 8-Part Framework Integration | PENDING     |
+| **Phase 3** | Cultural Intelligence Layer  | PENDING     |
+| **Phase 4** | User Interface               | PENDING     |
+| **Phase 5** | Testing & Refinement         | PENDING     |
+| **Phase 6** | Deployment & Training        | PENDING     |
 
 ---
 
-## Tech Stack
+## GCP Project
 
-- **Runtime**: Node.js 22 LTS, Java 21 LTS, Python 3.11+
-- **Package Managers**: Homebrew, nvm, SDKMAN
-- **IDE**: Cursor with 27 extensions
-- **AI**: Claude Opus 4.5, Gemini 3 Pro
-- **Cloud**: Google Cloud Platform (Vertex AI)
-- **DevOps**: Docker, gcloud CLI, gh CLI
+- **Project ID:** `participation-translator` (to be created)
+- **Region:** `us-central1`
+- **Services:** Cloud Run, Firestore, Cloud Storage, Vertex AI
+
+---
+
+## API Dependencies
+
+| API            | Purpose                     | Credentials              |
+| -------------- | --------------------------- | ------------------------ |
+| **Vertex AI**  | Claude 3.5, Embeddings      | GCP Service Account      |
+| **Exa.ai**     | Semantic web search         | API Key (Secret Manager) |
+| **Perplexity** | Search + summarization      | API Key (Secret Manager) |
+| **Brandwatch** | Social listening (optional) | Enterprise subscription  |
 
 ---
 
 ## Coding Standards
 
-**Full standards:** See `~/.cursor/CLAUDE.md` for JavaScript/Node.js conventions, error handling, security rules, and naming conventions.
+**Full standards:** See `~/.cursor/CLAUDE.md`
 
 **Project-specific:**
+
 - Use conventional commits: `feat:`, `fix:`, `docs:`, `chore:`
-- All files should have version headers
-- Follow existing code style and patterns
-- Update CHANGELOG.md for notable changes
-- Run `./scripts/validate.sh` before committing
-
----
-
-## Common Tasks
-
-### Run the Dashboard
-```bash
-./scripts/utils/dashboard.sh
-```
-
-### Validate Setup
-```bash
-./scripts/validate.sh
-```
-
-### Archive a Session
-```bash
-./scripts/utils/archive-session.sh "topic-name"
-```
-
-### Start Docker Services
-```bash
-./scripts/utils/docker-start.sh
-```
+- TypeScript for all new code
+- Tailwind CSS for styling
+- React Server Components where possible
+- All API keys in Secret Manager, never in code
 
 ---
 
 ## Session Workflow
 
-**Note:** Full session protocols (backup, wrap-up, git safety) are in `~/.cursor/CLAUDE.md`
+### Starting a Session
 
-### Starting a New Session
+1. **Read context:**
 
-1. **Read context files:**
-   - `~/.cursor/CLAUDE.md` (global standards)
+   - `~/.cursor/CLAUDE.md` (global)
    - This `CLAUDE.md` file
-   - `PROJECT_GUARDRAILS.md`
-   - `TODO.md` for current priorities
+   - `PLAN.md` for current phase
+   - `TODO.md` for immediate tasks
 
-2. **Create session backup** (per global protocol):
+2. **Create backup** (per global protocol):
+
    ```bash
    ARCHIVE_DIR="$HOME/Projects/ARCHIVED"
    PROJECT_NAME=$(basename $(pwd))
@@ -206,83 +261,52 @@ git pull origin main
 
 3. **Verify workspace:**
    ```bash
-   pwd  # Should be: /Users/charleymm/Projects/jl-dev-environment-gm
-   ./scripts/validate.sh
+   pwd  # Should be: /Users/charleymm/Projects/leo-participation-translator
    ```
-
-### During a Session
-
-- Update `TODO.md` as tasks are completed
-- Follow existing patterns in the codebase
-- Test changes before committing
-- Document significant changes in CHANGELOG.md
 
 ### Ending a Session
 
 - Follow **Session Wrap-Up Protocol** in `~/.cursor/CLAUDE.md`
-- Update `ACCOMPLISHMENTS.md` with session summary
-- Commit all changes with conventional commit messages
-- Archive the session if significant work was done
+- Create session log in `sessions/SESSION_YYYY-MM-DD_vX.X.X.md`
+- Update `ACCOMPLISHMENTS.md`
+- Commit all changes
 
 ---
 
 ## Notes for AI Assistants
 
-1. This is a macOS-focused environment (Apple Silicon)
-2. The dashboard runs on port 3333
-3. Sensitive data should never be committed
-4. Check `.gitignore` before creating new files
-5. Update documentation when adding features
-6. Test changes with `./scripts/validate.sh`
-7. **Always work from the designated workspace path**
-8. **Read PROJECT_GUARDRAILS.md for constraints**
-
----
-
-## Session Archives
-
-AI chat sessions are archived in `sessions/` for continuity. When starting a new session, check recent archives for context.
-
----
-
-## AI Development Tooling
-
-**Full documentation:** See `~/.cursor/CLAUDE.md` for complete AI tooling setup including:
-- Claude-Mem (Persistent Memory)
-- Code-Simplifier Plugin
-- Superpowers Plugin
-- Sequential-Thinking MCP Server
-- Context7 MCP Server
-
-**Quick Reference:**
-| Tool | Purpose |
-|------|---------|
-| Claude-Mem | Persistent memory across sessions |
-| Code-Simplifier | Refine code for clarity and maintainability |
-| Superpowers | TDD, debugging, planning workflows |
-| Sequential-Thinking | Step-by-step reasoning |
-| Context7 | Real-time library documentation |
+1. **Leo is the end user** - Keep UX simple and intuitive
+2. **High priority, high visibility** - Quality over speed
+3. This is a **strategic tool**, not just technical
+4. Outputs must sound like JL (train on past presentations)
+5. Real-time cultural data is essential for relevance
+6. Export capabilities (PDF, PPTX) are critical for Leo's workflow
+7. **Session logs required** after each session
 
 ---
 
 ## Quick Reference
 
-| Action | Command / Location |
-|--------|-------------------|
-| Validate environment | `./scripts/validate.sh` |
-| Start dashboard | `./scripts/utils/dashboard.sh` |
-| Verify quick links (CLI) | `./scripts/utils/verify-links.sh` |
-| Verify quick links (UI) | Dashboard → ⚡ Verify Links button |
-| Start Docker | `./scripts/utils/docker-start.sh` |
-| Archive session | `./scripts/utils/archive-session.sh "topic"` |
-| Send Slack notification | `./scripts/utils/slack-notify.sh "message"` |
-
-### Dashboard Features
-
-The local dashboard (port 3333) includes:
-- Real-time status monitoring for all dev tools
-- **⚡ Verify Links button** - Tests connectivity to all Quick Links
-- Organized Quick Links by category
-- Auto-refresh every 30 seconds
+| Action           | Command / Location              |
+| ---------------- | ------------------------------- |
+| Start dev server | `npm run dev` (after setup)     |
+| Run tests        | `npm test`                      |
+| Build            | `npm run build`                 |
+| Deploy           | `gcloud run deploy`             |
+| Ingest documents | `node scripts/ingest.js <file>` |
 
 ---
+
+## AI Development Tooling
+
+| Tool                | Purpose                                     |
+| ------------------- | ------------------------------------------- |
+| Claude-Mem          | Persistent memory across sessions           |
+| Code-Simplifier     | Refine code for clarity and maintainability |
+| Sequential-Thinking | Step-by-step reasoning for complex tasks    |
+
+---
+
+Author: Charley Scholz, JLIT
+Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
+Last Updated: 2026-02-03

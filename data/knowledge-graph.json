@@ -1,0 +1,252 @@
+{
+  "nodes": [
+    {
+      "id": "framework_1",
+      "type": "framework_section",
+      "label": "Current Cultural Context",
+      "data": {
+        "frameworkSection": 1
+      },
+      "createdAt": "2026-02-03T21:31:46.511Z"
+    },
+    {
+      "id": "framework_2",
+      "type": "framework_section",
+      "label": "Brand Credibility",
+      "data": {
+        "frameworkSection": 2
+      },
+      "createdAt": "2026-02-03T21:31:46.511Z"
+    },
+    {
+      "id": "framework_3",
+      "type": "framework_section",
+      "label": "The Shared Interest",
+      "data": {
+        "frameworkSection": 3
+      },
+      "createdAt": "2026-02-03T21:31:46.511Z"
+    },
+    {
+      "id": "framework_4",
+      "type": "framework_section",
+      "label": "The Passive Trap",
+      "data": {
+        "frameworkSection": 4
+      },
+      "createdAt": "2026-02-03T21:31:46.511Z"
+    },
+    {
+      "id": "framework_5",
+      "type": "framework_section",
+      "label": "The Participation Worthy Idea",
+      "data": {
+        "frameworkSection": 5
+      },
+      "createdAt": "2026-02-03T21:31:46.511Z"
+    },
+    {
+      "id": "framework_6",
+      "type": "framework_section",
+      "label": "Moments and Places",
+      "data": {
+        "frameworkSection": 6
+      },
+      "createdAt": "2026-02-03T21:31:46.511Z"
+    },
+    {
+      "id": "framework_7",
+      "type": "framework_section",
+      "label": "Mechanics of Participation",
+      "data": {
+        "frameworkSection": 7
+      },
+      "createdAt": "2026-02-03T21:31:46.511Z"
+    },
+    {
+      "id": "framework_8",
+      "type": "framework_section",
+      "label": "First Responders",
+      "data": {
+        "frameworkSection": 8
+      },
+      "createdAt": "2026-02-03T21:31:46.511Z"
+    },
+    {
+      "id": "framework_9",
+      "type": "framework_section",
+      "label": "The Ripple Effect",
+      "data": {
+        "frameworkSection": 9
+      },
+      "createdAt": "2026-02-03T21:31:46.511Z"
+    },
+    {
+      "id": "pattern_think_small",
+      "type": "pattern",
+      "label": "Think Small / Counter-Intuitive Positioning",
+      "data": {
+        "client": "Volkswagen",
+        "description": "Embrace perceived weaknesses as strengths. Turn industry norms on their head with honest, self-aware messaging.",
+        "effectiveness": 0.95,
+        "sourceDocuments": []
+      },
+      "createdAt": "2026-02-03T21:31:46.511Z"
+    },
+    {
+      "id": "pattern_cultural_hijack",
+      "type": "pattern",
+      "label": "Cultural Moment Hijacking",
+      "data": {
+        "description": "Identify trending cultural moments with 72-hour opportunity windows and insert brand relevantly.",
+        "effectiveness": 0.85,
+        "sourceDocuments": []
+      },
+      "createdAt": "2026-02-03T21:31:46.511Z"
+    },
+    {
+      "id": "pattern_unfinished_platform",
+      "type": "pattern",
+      "label": "Unfinished Platform",
+      "data": {
+        "description": "Create a platform that invites completion by the audience. The brand provides the stage, the audience writes the story.",
+        "effectiveness": 0.9,
+        "sourceDocuments": []
+      },
+      "createdAt": "2026-02-03T21:31:46.511Z"
+    },
+    {
+      "id": "pattern_first_responders",
+      "type": "pattern",
+      "label": "First Responder Strategy",
+      "data": {
+        "description": "Identify and activate niche subcultures to ignite participation before mainstream adoption.",
+        "effectiveness": 0.88,
+        "sourceDocuments": []
+      },
+      "createdAt": "2026-02-03T21:31:46.511Z"
+    },
+    {
+      "id": "pattern_credibility_bridge",
+      "type": "pattern",
+      "label": "Credibility Bridge",
+      "data": {
+        "description": "Connect brand heritage/truth to cultural relevance through authentic shared interests.",
+        "effectiveness": 0.87,
+        "sourceDocuments": []
+      },
+      "createdAt": "2026-02-03T21:31:46.511Z"
+    },
+    {
+      "id": "tactic_user_generated",
+      "type": "tactic",
+      "label": "User-Generated Content Campaign",
+      "data": {
+        "description": "Invite audience to create and share content around a brand-provided prompt or platform.",
+        "sourceDocuments": []
+      },
+      "createdAt": "2026-02-03T21:31:46.511Z"
+    },
+    {
+      "id": "tactic_creator_collab",
+      "type": "tactic",
+      "label": "Creator Collaboration",
+      "data": {
+        "description": "Partner with niche creators who have authentic audience relationships in target subcultures.",
+        "sourceDocuments": []
+      },
+      "createdAt": "2026-02-03T21:31:46.511Z"
+    },
+    {
+      "id": "tactic_realtime_response",
+      "type": "tactic",
+      "label": "Real-Time Response",
+      "data": {
+        "description": "Brand responds to cultural moments in real-time, demonstrating cultural fluency.",
+        "sourceDocuments": []
+      },
+      "createdAt": "2026-02-03T21:31:46.511Z"
+    },
+    {
+      "id": "tactic_experiential_activation",
+      "type": "tactic",
+      "label": "Experiential Activation",
+      "data": {
+        "description": "Create physical or digital experiences that audiences can participate in and share.",
+        "sourceDocuments": []
+      },
+      "createdAt": "2026-02-03T21:31:46.511Z"
+    }
+  ],
+  "edges": [
+    {
+      "from": "pattern_unfinished_platform",
+      "to": "framework_5",
+      "type": "maps_to",
+      "weight": 1,
+      "metadata": {
+        "note": "Core concept of The Participation Worthy Idea"
+      }
+    },
+    {
+      "from": "pattern_first_responders",
+      "to": "framework_8",
+      "type": "maps_to",
+      "weight": 1,
+      "metadata": {
+        "note": "Directly implements First Responders section"
+      }
+    },
+    {
+      "from": "pattern_cultural_hijack",
+      "to": "framework_1",
+      "type": "maps_to",
+      "weight": 0.9,
+      "metadata": {
+        "note": "Leverages Current Cultural Context"
+      }
+    },
+    {
+      "from": "pattern_credibility_bridge",
+      "to": "framework_2",
+      "type": "maps_to",
+      "weight": 0.95,
+      "metadata": {
+        "note": "Establishes Brand Credibility"
+      }
+    },
+    {
+      "from": "pattern_credibility_bridge",
+      "to": "framework_3",
+      "type": "maps_to",
+      "weight": 0.9,
+      "metadata": {
+        "note": "Identifies The Shared Interest"
+      }
+    },
+    {
+      "from": "tactic_user_generated",
+      "to": "pattern_unfinished_platform",
+      "type": "similar_to",
+      "weight": 0.85
+    },
+    {
+      "from": "tactic_creator_collab",
+      "to": "pattern_first_responders",
+      "type": "similar_to",
+      "weight": 0.8
+    },
+    {
+      "from": "tactic_realtime_response",
+      "to": "pattern_cultural_hijack",
+      "type": "similar_to",
+      "weight": 0.9
+    }
+  ],
+  "metadata": {
+    "exportedAt": "2026-02-03T21:31:46.511Z",
+    "nodeCount": 18,
+    "edgeCount": 8,
+    "version": "1.0.0"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "name": "participation-translator-core",
+  "version": "1.0.1",
+  "description": "Core libraries for The Participation Translator - RAG, parsers, embeddings",
+  "author": "Charley Scholz, JLIT",
+  "license": "UNLICENSED",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest",
+    "ingest": "tsx src/cli/ingest.ts",
+    "retrieve": "tsx src/cli/retrieve.ts",
+    "seed-graph": "tsx src/cli/seed-graph.ts",
+    "stats": "tsx src/cli/retrieve.ts --stats"
+  },
+  "dependencies": {
+    "@google-cloud/aiplatform": "^4.0.0",
+    "@google-cloud/firestore": "^8.0.0",
+    "@google-cloud/storage": "^7.18.0",
+    "mammoth": "^1.9.0",
+    "pdf-parse": "^1.1.1",
+    "pizzip": "^3.2.0",
+    "docxtemplater": "^3.55.0",
+    "uuid": "^11.1.0",
+    "zod": "^3.24.0",
+    "dotenv": "^16.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/pdf-parse": "^1.1.4",
+    "@types/uuid": "^10.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  }
+}

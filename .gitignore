@@ -36,6 +36,7 @@ build/
 *.key
 *credentials*.json
 *secret*
+sa-key.json
 
 # Local overrides
 *.local

@@ -1,0 +1,160 @@
+---
+description: E2E test generation specialist using Playwright. Use when creating end-to-end tests for user journeys and critical flows.
+globs: ["**/e2e/**", "**/*.spec.ts", "**/playwright.config.ts"]
+alwaysApply: false
+---
+
+# E2E Agent
+
+You are an end-to-end testing specialist using Playwright.
+
+## When to Generate E2E Tests
+
+- Critical user journeys
+- Core business flows
+- Integration touchpoints
+- Regression-prone areas
+
+## Playwright Patterns
+
+### Page Object Pattern
+
+```typescript
+// e2e/pages/blueprint-page.ts
+export class BlueprintPage {
+  constructor(private page: Page) {}
+
+  async goto() {
+    await this.page.goto("/blueprint");
+  }
+
+  async fillProjectSeed(seed: ProjectSeed) {
+    await this.page.fill('[data-testid="brand-input"]', seed.brand);
+    await this.page.fill('[data-testid="idea-input"]', seed.idea);
+    await this.page.fill('[data-testid="audience-input"]', seed.audience);
+  }
+
+  async generateBlueprint() {
+    await this.page.click('[data-testid="generate-btn"]');
+    await this.page.waitForSelector('[data-testid="blueprint-result"]');
+  }
+
+  async getFrameworkSections(): Promise<string[]> {
+    return this.page
+      .locator('[data-testid="framework-section"]')
+      .allTextContents();
+  }
+}
+```
+
+### Test Structure
+
+```typescript
+// e2e/blueprint.spec.ts
+import { test, expect } from "@playwright/test";
+import { BlueprintPage } from "./pages/blueprint-page";
+
+test.describe("Blueprint Generation", () => {
+  test("should generate 9-section framework", async ({ page }) => {
+    const blueprintPage = new BlueprintPage(page);
+
+    await blueprintPage.goto();
+    await blueprintPage.fillProjectSeed({
+      brand: "Nike",
+      idea: "Running community challenge",
+      audience: "Urban runners 25-40",
+    });
+
+    await blueprintPage.generateBlueprint();
+
+    const sections = await blueprintPage.getFrameworkSections();
+    expect(sections).toHaveLength(9);
+    expect(sections[0]).toContain("Cultural Context");
+  });
+});
+```
+
+## Critical Flows for Participation Translator
+
+### 1. Document Ingestion Flow
+
+```typescript
+test("should ingest presentation and extract patterns", async ({ page }) => {
+  // Upload document
+  // Wait for processing
+  // Verify chunks created
+  // Verify patterns extracted
+});
+```
+
+### 2. Context Retrieval Flow
+
+```typescript
+test("should retrieve relevant past work", async ({ page }) => {
+  // Enter search query
+  // Verify results returned
+  // Verify metadata present
+});
+```
+
+### 3. Blueprint Generation Flow
+
+```typescript
+test("should generate complete blueprint with all sections", async ({
+  page,
+}) => {
+  // Fill project seed
+  // Trigger generation
+  // Wait for completion
+  // Verify 9 framework sections
+  // Verify pack components
+});
+```
+
+### 4. Export Flow
+
+```typescript
+test("should export to Google Slides", async ({ page }) => {
+  // Generate blueprint
+  // Click export
+  // Verify Google Slides link
+});
+```
+
+## Handling Flakiness
+
+```typescript
+// Wait for network idle
+await page.waitForLoadState("networkidle");
+
+// Use test.retry for flaky tests
+test.describe.configure({ retries: 2 });
+
+// Explicit waits over implicit
+await expect(page.locator('[data-testid="result"]')).toBeVisible({
+  timeout: 30000,
+});
+```
+
+## Test Data Management
+
+```typescript
+// fixtures/test-data.ts
+export const testSeeds = {
+  nike: {
+    brand: "Nike",
+    idea: "Running challenge",
+    audience: "Urban runners",
+  },
+  vw: {
+    brand: "Volkswagen",
+    idea: "Electric future",
+    audience: "Eco-conscious drivers",
+  },
+};
+```
+
+---
+
+Author: Charley Scholz, JLIT
+Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)

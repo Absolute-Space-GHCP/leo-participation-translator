@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeSubmitPrompt": [
+      {
+        "command": "bash -c \"./.cursor/hooks/session-init.sh 2>/dev/null || true\""
+      }
+    ],
+    "afterFileEdit": [
+      {
+        "command": "bash -c \"./.cursor/hooks/capture-edit.sh 2>/dev/null || true\""
+      }
+    ],
+    "afterShellExecution": [
+      {
+        "command": "bash -c \"./.cursor/hooks/capture-shell.sh 2>/dev/null || true\""
+      }
+    ],
+    "stop": [
+      {
+        "command": "bash -c \"./.cursor/hooks/session-end.sh 2>/dev/null || true\""
+      }
+    ]
+  }
+}
