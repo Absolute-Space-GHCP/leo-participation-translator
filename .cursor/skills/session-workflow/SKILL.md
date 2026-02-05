@@ -11,7 +11,7 @@ description: Session management including startup, wrap-up, and handoff procedur
 Task Progress:
 - [ ] Step 1: Verify workspace
 - [ ] Step 2: Check git status
-- [ ] Step 3: Review TODO.md priorities
+- [ ] Step 3: Review TASKS.md priorities
 - [ ] Step 4: Check claude-mem status
 ```
 
@@ -23,7 +23,7 @@ pwd
 # Expected: /Users/charleymm/Projects/leo-participation-translator
 
 # Verify it's the right project
-ls CLAUDE.md PLAN.md TODO.md
+ls CLAUDE.md PLAN.md TASKS.md
 ```
 
 ### Step 2: Check Git Status
@@ -36,7 +36,7 @@ git log HEAD..origin/main --oneline  # Check if behind
 
 ### Step 3: Review Priorities
 
-Read `TODO.md` to identify current priorities and in-progress tasks.
+Read `TASKS.md` to identify current priorities and in-progress tasks.
 
 ### Step 4: Check Claude-Mem
 
@@ -51,14 +51,14 @@ curl -s http://127.0.0.1:37777/api/readiness
 
 ```
 Task Progress:
-- [ ] Step 1: Update TODO.md
+- [ ] Step 1: Update TASKS.md
 - [ ] Step 2: Create session log
 - [ ] Step 3: Commit changes
 - [ ] Step 4: Push to remote
 - [ ] Step 5: Create handoff
 ```
 
-### Step 1: Update TODO.md
+### Step 1: Update TASKS.md
 
 Mark completed tasks, update progress percentages.
 

@@ -88,7 +88,7 @@ Read these files before working on the project:
 | ----------- | ------------------------------------------------ |
 | `CLAUDE.md` | **Required** - Project context for AI assistants |
 | `PLAN.md`   | Implementation roadmap and architecture          |
-| `TODO.md`   | Current tasks and progress tracking              |
+| `TASKS.md`  | Current tasks and progress tracking              |
 
 ---
 
@@ -101,7 +101,7 @@ The project is currently focused on:
 3. **Embedding Generation** - Creating vector representations
 4. **Retrieval API** - Basic context retrieval
 
-See `TODO.md` for detailed task list.
+See `TASKS.md` for detailed task list.
 
 ---
 

@@ -31,7 +31,7 @@ The user (Charley) has pre-authorized the following:
 3. **Create backup of the project repo** (see Session Backup Protocol below)
 4. Check auth status
 5. If auth fails, trigger login via browser (pre-authorized)
-6. Review TODO.md and any priority files for current tasks
+6. Review TASKS.md and any priority files for current tasks
 
 ### AI Session Guidelines
 
@@ -103,7 +103,7 @@ echo "Backup created: $ARCHIVE_PATH"
 3. **Update Documentation:**
    - Update version numbers in README.md, CHANGELOG.md
    - Add session notes to `docs/SESSION_{date}_{version}.md`
-   - Update TODO.md with completed tasks and new items
+   - Update TASKS.md with completed tasks and new items
 
 4. **Verify No Remnants:**
    - Check documentation for references to other projects

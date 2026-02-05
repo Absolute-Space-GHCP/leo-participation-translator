@@ -175,7 +175,7 @@ leo-participation-translator/
 ├── sessions/                   # Session logs
 ├── PLAN.md                     # Implementation roadmap
 ├── CLAUDE.md                   # This file
-└── TODO.md                     # Task tracking
+└── TASKS.md                    # Task tracking
 ```
 
 ---
@@ -187,7 +187,7 @@ leo-participation-translator/
 | `PLAN.md`                                       | **Implementation roadmap** - Phases, tasks, timeline |
 | `docs/ARCHITECTURE-PARTICIPATION-TRANSLATOR.md` | Technical architecture deep-dive                     |
 | `PROJECT_GUARDRAILS.md`                         | Project constraints and rules                        |
-| `TODO.md`                                       | Current tasks and priorities                         |
+| `TASKS.md`                                      | Current tasks and priorities                         |
 
 ---
 
@@ -250,7 +250,7 @@ leo-participation-translator/
    - `~/.cursor/CLAUDE.md` (global)
    - This `CLAUDE.md` file
    - `PLAN.md` for current phase
-   - `TODO.md` for immediate tasks
+   - `TASKS.md` for immediate tasks
 
 2. **Create backup** (per global protocol):
 

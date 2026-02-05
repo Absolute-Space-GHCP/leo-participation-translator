@@ -117,7 +117,7 @@ Received project handoff for The Participation Translator. Created comprehensive
 - [x] Created `PLAN.md` with 6-phase implementation roadmap
 - [x] Created `docs/ARCHITECTURE-PARTICIPATION-TRANSLATOR.md`
 - [x] Designed RAG pipeline, cultural intelligence, generation engine
-- [x] Updated project context files (CLAUDE.md, TODO.md, .env.example)
+- [x] Updated project context files (CLAUDE.md, TASKS.md, .env.example)
 - [x] Created initial `src/` directory structure with scaffolds
 
 ---

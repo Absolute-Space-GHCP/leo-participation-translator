@@ -550,7 +550,7 @@ See `config/shell/.zshrc.template` for useful shell aliases and environment vari
 - **Build details:** `docs/BUILD.md`
 - **Auth reference:** `docs/AUTH.md`
 - **Docker setup:** `docs/DOCKER.md`
-- **Roadmap:** `TODO.md`
+- **Roadmap:** `TASKS.md`
 - **Changelog:** `CHANGELOG.md`
 
 ---

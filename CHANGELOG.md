@@ -152,7 +152,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive implementation plan (`PLAN.md`)
 - Technical architecture documentation (`docs/ARCHITECTURE-PARTICIPATION-TRANSLATOR.md`)
 - Project context file (`CLAUDE.md`)
-- Task tracking (`TODO.md`)
+- Task tracking (`TASKS.md`)
 - Core library scaffolding:
   - Document parsers (`src/lib/parsers/`)
   - Embedding operations (`src/lib/embeddings/`)

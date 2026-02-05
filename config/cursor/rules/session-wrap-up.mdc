@@ -41,7 +41,7 @@ rsync -a --exclude='node_modules' --exclude='.git' . "$ARCHIVE_PATH/"
 ### 3. Update Documentation
 - [ ] Update version numbers in README.md, CHANGELOG.md (if applicable)
 - [ ] Add session notes to `docs/SESSION_{date}_{version}.md`
-- [ ] Update TODO.md with completed tasks and new items
+- [ ] Update TASKS.md with completed tasks and new items
 
 ### 4. Verify No Remnants
 - [ ] Check documentation for references to other projects

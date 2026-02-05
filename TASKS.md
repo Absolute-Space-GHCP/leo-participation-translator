@@ -29,7 +29,7 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 | Adapt knowledge graph          | ✅ DONE | `src/lib/memory/knowledge-graph.ts` |
 | Adapt task router              | ✅ DONE | `src/lib/router/task-router.ts`     |
 | Document GCP setup             | ✅ DONE | `docs/GCP_SETUP.md`                 |
-| Update documentation           | ✅ DONE | PLAN.md, CLAUDE.md, TODO.md         |
+| Update documentation           | ✅ DONE | PLAN.md, CLAUDE.md, TASKS.md        |
 
 ---
 

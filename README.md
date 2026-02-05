@@ -67,7 +67,7 @@ npm run typecheck
 | ------------------------ | ------------------------------------------------- |
 | `CLAUDE.md`              | **Start here!** Project context for AI assistants |
 | `PLAN.md`                | Implementation roadmap and phases                 |
-| `TODO.md`                | Current tasks and progress                        |
+| `TASKS.md`               | Current tasks and progress                        |
 | `docs/GCP_SETUP.md`      | GCP project configuration guide                   |
 | `docs/ARCHITECTURE-*.md` | Technical architecture details                    |
 

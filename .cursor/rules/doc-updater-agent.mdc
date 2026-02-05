@@ -20,7 +20,7 @@ You are a documentation specialist ensuring all docs stay synchronized with code
 | File                     | Update When                        |
 | ------------------------ | ---------------------------------- |
 | `CLAUDE.md`              | Architecture changes, new patterns |
-| `TODO.md`                | Task completion, new tasks         |
+| `TASKS.md`               | Task completion, new tasks         |
 | `PLAN.md`                | Phase completion, scope changes    |
 | `CHANGELOG.md`           | Any notable changes                |
 | `docs/GCP_SETUP.md`      | Infrastructure changes             |

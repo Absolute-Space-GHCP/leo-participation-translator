@@ -201,7 +201,7 @@ chore: maintenance tasks
 | `README.md` | Major features, setup changes |
 | `QUICKSTART.md` | Onboarding process changes |
 | `CLAUDE.md` | AI assistant context changes |
-| `TODO.md` | Task completion, new priorities |
+| `TASKS.md` | Task completion, new priorities |
 | `CHANGELOG.md` | Any notable change |
 | `ACCOMPLISHMENTS.md` | End of session |
 
