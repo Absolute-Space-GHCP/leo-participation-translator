@@ -186,10 +186,48 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 6. [x] ~~Create data directories and copy files~~
 7. [x] ~~Create metadata manifest~~
 8. [x] ~~Add image-heavy detection~~
-9. [ ] Configure GCP service account key
+9. [x] ~~Configure GCP service account key~~ (sa-key.json already exists)
 10. [ ] Index presentations to vector store
 11. [ ] Demo retrieval to Leo (see `docs/DEMO_WALKTHROUGH.md`)
-12. [ ] Create Vector Search index (production performance)
+12. [ ] **Set up Reddit integration (HIGH PRIORITY - Leo's request)**
+13. [ ] Create Vector Search index (production performance)
+
+---
+
+## Phase 3: Reddit Integration - HIGH PRIORITY
+
+Leo specifically requested Reddit as the POC social platform for cultural intelligence.
+
+**Stack Decision:** PRAW (Python) + Exa.ai combo
+
+| Priority | Task | Description | Status |
+|----------|------|-------------|--------|
+| HIGH | Create Reddit app | https://reddit.com/prefs/apps | PENDING |
+| HIGH | Add Reddit credentials to .env | CLIENT_ID, SECRET, USER_AGENT | PENDING |
+| HIGH | Create PRAW microservice | `services/reddit/main.py` | PENDING |
+| HIGH | Implement /trends endpoint | Hot posts from subreddits | PENDING |
+| HIGH | Implement /search endpoint | Keyword search in subreddits | PENDING |
+| HIGH | Create Node.js client | `src/lib/cultural/reddit.ts` | PENDING |
+| HIGH | Integrate Exa.ai for Reddit | Semantic search supplement | PENDING |
+| MEDIUM | Implement sentiment analysis | Claude-based analysis | PENDING |
+| MEDIUM | Build context merger | Combine RAG + Cultural intel | PENDING |
+
+### File Structure for Reddit Service
+
+```
+services/
+└── reddit/
+    ├── main.py              # FastAPI app
+    ├── requirements.txt     # praw, fastapi, uvicorn
+    ├── Dockerfile           # Container for deployment
+    └── README.md            # Setup instructions
+
+src/lib/cultural/
+├── reddit.ts               # Node.js client for Python service
+├── exa.ts                  # Exa.ai integration
+├── merger.ts               # Context merger (RAG + Cultural)
+└── index.ts                # Exports
+```
 
 ---
 

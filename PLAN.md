@@ -759,10 +759,149 @@ The infrastructure is complete with real data:
 
 ## Next Steps (Immediate)
 
-1. **Complete GCP authentication** - Generate/configure service account key
-2. **Index presentations** - Run `npm run ingest` with real data
-3. **Demo to Leo** - Follow walkthrough script
+1. **Index presentations** - Run `npm run ingest` with real data (sa-key.json already configured)
+2. **Demo to Leo** - Follow walkthrough script
+3. **Set up Reddit integration** - PRAW microservice + Exa.ai combo (HIGH PRIORITY)
 4. **Phase 2 kickoff** - Leo guides Framework integration with real use case
+
+---
+
+## Reddit Integration Architecture (POC Priority)
+
+### Flow with Cultural Intelligence
+
+```
+User Input (Idea/Brief)
+        │
+        ├──────────────────────────────────────┐
+        │                                      │
+        ▼                                      ▼
+┌───────────────────┐              ┌───────────────────┐
+│ RAG RETRIEVAL     │              │ CULTURAL INTEL    │
+│ (JL Knowledge)    │              │ (Reddit + Exa)    │
+│                   │              │                   │
+│ • Past campaigns  │              │ • Subreddit trends│
+│ • Framework       │              │ • Sentiment       │
+│ • Patterns        │              │ • Subcultures     │
+└─────────┬─────────┘              └─────────┬─────────┘
+          │                                  │
+          └──────────────┬───────────────────┘
+                         │
+                         ▼
+              ┌─────────────────────┐
+              │ CONTEXT MERGER      │
+              │                     │
+              │ JL patterns +       │
+              │ Real-time culture = │
+              │ Grounded + Relevant │
+              └──────────┬──────────┘
+                         │
+                         ▼
+              ┌─────────────────────┐
+              │ CLAUDE GENERATION   │
+              │ (Framework applied) │
+              └─────────────────────┘
+```
+
+### Selected Stack
+
+| Component | Tool | Purpose |
+|-----------|------|---------|
+| **Reddit Scraper** | PRAW (Python) | Real-time Reddit data - posts, comments, trends |
+| **Semantic Search** | Exa.ai | Semantic search across Reddit + web content |
+| **Sentiment** | Claude Opus 4.5 | Analyze sentiment from scraped content |
+
+### Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     Node.js Backend                          │
+│  ┌─────────────────┐  ┌─────────────────┐                   │
+│  │ /api/cultural   │  │ /api/generate   │                   │
+│  └────────┬────────┘  └────────┬────────┘                   │
+│           │                    │                             │
+│           ▼                    │                             │
+│  ┌─────────────────────────────┼─────────────────────────┐  │
+│  │         Cultural Intelligence Service                  │  │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │  │
+│  │  │ Reddit       │  │ Exa.ai       │  │ Context      │ │  │
+│  │  │ Client       │  │ Client       │  │ Merger       │ │  │
+│  │  └──────┬───────┘  └──────┬───────┘  └──────────────┘ │  │
+│  └─────────┼─────────────────┼───────────────────────────┘  │
+└────────────┼─────────────────┼──────────────────────────────┘
+             │                 │
+             ▼                 ▼
+┌────────────────────┐  ┌────────────────────┐
+│ Python PRAW        │  │ Exa.ai API         │
+│ Microservice       │  │                    │
+│ (FastAPI/Flask)    │  │ Semantic search    │
+│                    │  │ across Reddit +    │
+│ • Hot posts        │  │ web content        │
+│ • Subreddit trends │  │                    │
+│ • Comments/sent.   │  │                    │
+└─────────┬──────────┘  └────────────────────┘
+          │
+          ▼
+┌────────────────────┐
+│ Reddit API         │
+│ (Official)         │
+│                    │
+│ Free: 100 req/min  │
+└────────────────────┘
+```
+
+### Implementation Tasks (Phase 3 - HIGH PRIORITY)
+
+| Task | Description | Deliverable |
+|------|-------------|-------------|
+| 3.0 | Create Python PRAW microservice | `services/reddit/` |
+| 3.1 | Reddit API credentials | `.env` config |
+| 3.2 | Subreddit trend endpoint | `/trends/{subreddit}` |
+| 3.3 | Hot posts endpoint | `/hot/{subreddit}` |
+| 3.4 | Sentiment analysis | Claude integration |
+| 3.5 | Exa.ai Reddit search | `/search/reddit` |
+| 3.6 | Context merger service | Combine RAG + Cultural |
+| 3.7 | Node.js client for Python service | `src/lib/cultural/reddit.ts` |
+
+### Reddit API Setup
+
+```bash
+# 1. Create Reddit App at https://www.reddit.com/prefs/apps
+# 2. Add to .env:
+REDDIT_CLIENT_ID=your-client-id
+REDDIT_CLIENT_SECRET=your-client-secret
+REDDIT_USER_AGENT=participation-translator/1.0
+```
+
+### Example PRAW Microservice
+
+```python
+# services/reddit/main.py
+from fastapi import FastAPI
+import praw
+
+app = FastAPI()
+reddit = praw.Reddit(
+    client_id=os.environ["REDDIT_CLIENT_ID"],
+    client_secret=os.environ["REDDIT_CLIENT_SECRET"],
+    user_agent=os.environ["REDDIT_USER_AGENT"]
+)
+
+@app.get("/trends/{subreddit}")
+def get_trends(subreddit: str, limit: int = 25):
+    """Get trending posts from a subreddit"""
+    sub = reddit.subreddit(subreddit)
+    posts = []
+    for post in sub.hot(limit=limit):
+        posts.append({
+            "title": post.title,
+            "score": post.score,
+            "url": post.url,
+            "num_comments": post.num_comments,
+            "created_utc": post.created_utc
+        })
+    return {"subreddit": subreddit, "posts": posts}
+```
 
 ---
 
