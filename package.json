@@ -19,9 +19,11 @@
     "stats": "tsx src/cli/retrieve.ts --stats",
     "convert": "tsx src/cli/convert.ts",
     "batch-ingest": "tsx src/cli/batch-ingest.ts",
-    "cultural": "tsx src/cli/cultural.ts"
+    "cultural": "tsx src/cli/cultural.ts",
+    "extract-metadata": "tsx src/cli/extract-metadata.ts"
   },
   "dependencies": {
+    "@anthropic-ai/vertex-sdk": "^0.14.3",
     "@google-cloud/aiplatform": "^4.0.0",
     "@google-cloud/firestore": "^8.0.0",
     "@google-cloud/storage": "^7.18.0",

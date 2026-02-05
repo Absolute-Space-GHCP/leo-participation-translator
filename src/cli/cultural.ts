@@ -11,6 +11,7 @@
 import * as exa from '../lib/cultural/exa';
 import * as tavily from '../lib/cultural/tavily';
 import { quickContext, formatContextForPrompt, type MergedContext } from '../lib/cultural/merger';
+import * as sentiment from '../lib/cultural/sentiment';
 
 type Provider = 'exa' | 'tavily' | 'both';
 
@@ -41,6 +42,14 @@ async function main() {
     args.splice(categoryIndex, 2);
   }
 
+  // Parse deep flag
+  let deep = false;
+  const deepIndex = args.findIndex(a => a === '--deep');
+  if (deepIndex !== -1) {
+    deep = true;
+    args.splice(deepIndex, 1);
+  }
+
   const command = args[0];
   const query = args.slice(1).join(' ');
 
@@ -58,11 +67,13 @@ Commands:
   context <brand>     Get full cultural context for a brand
   answer <question>   Get AI-generated answer (Tavily only)
   merge <query>       Merge RAG + Cultural intel (full context)
+  sentiment <query>   Analyze sentiment of search results (Claude)
 
 Options:
   --provider, -p      Search provider: exa (default), tavily, or both
   --brand <name>      Brand name for context searches
   --category <name>   Category for context searches
+  --deep              Deep sentiment analysis with topic breakdown
 
 Examples:
   npm run cultural -- search "sneaker culture Gen Z"
@@ -73,6 +84,7 @@ Examples:
   npm run cultural -- context "Adidas" "footwear"
   npm run cultural -- answer "What are the top sneaker trends for 2026?"
   npm run cultural -- merge "participation campaign for sneakers" --brand Adidas
+  npm run cultural -- sentiment "Adidas brand perception" --brand Adidas --deep
 `);
     return;
   }
@@ -215,6 +227,42 @@ Examples:
         break;
       }
 
+      case 'sentiment': {
+        if (!query) {
+          console.error('❌ Error: Please provide a query to search and analyze');
+          return;
+        }
+        console.log(`Query: "${query}"`);
+        if (brand) console.log(`Brand: ${brand}`);
+        console.log(`Mode: ${deep ? 'Deep analysis' : 'Quick analysis'}`);
+        console.log('');
+        
+        // First, search for content to analyze
+        console.log('🔍 Searching for content to analyze...');
+        const searchResults = await exa.search(query, { numResults: 10 });
+        const texts = searchResults.results
+          .map(r => r.text || r.highlights?.[0] || '')
+          .filter(t => t.length > 50);
+        
+        if (texts.length === 0) {
+          console.error('❌ No content found to analyze');
+          return;
+        }
+        
+        console.log(`📝 Found ${texts.length} texts to analyze\n`);
+        
+        if (deep) {
+          console.log('🧠 Running deep sentiment analysis with Claude...\n');
+          const analysis = await sentiment.analyzeDeep(texts, brand);
+          displayDeepSentiment(analysis);
+        } else {
+          console.log('🧠 Running batch sentiment analysis with Claude...\n');
+          const batch = await sentiment.analyzeBatch(texts);
+          displayBatchSentiment(batch);
+        }
+        break;
+      }
+
       default:
         console.error(`❌ Unknown command: ${command}`);
     }
@@ -305,6 +353,90 @@ function displayGenericResults(results: Array<{ title: string; url: string; scor
   });
   
   console.log(`\n✅ Found ${results.length} results`);
+}
+
+function displayBatchSentiment(batch: sentiment.BatchSentimentResult) {
+  console.log('═'.repeat(50));
+  console.log('📊 SENTIMENT ANALYSIS RESULTS');
+  console.log('═'.repeat(50));
+  
+  // Aggregate
+  const emoji = getSentimentEmoji(batch.aggregate.label);
+  console.log(`\n${emoji} OVERALL: ${batch.aggregate.label.toUpperCase()}`);
+  console.log(`   Score: ${batch.aggregate.score.toFixed(2)} (-1 to 1)`);
+  console.log(`   Confidence: ${(batch.aggregate.confidence * 100).toFixed(0)}%`);
+  
+  // Individual items
+  if (batch.items.length > 0 && batch.items[0].sentiment.confidence > 0) {
+    console.log('\n📝 Individual Results:');
+    console.log('─'.repeat(40));
+    batch.items.slice(0, 5).forEach((item, i) => {
+      const itemEmoji = getSentimentEmoji(item.sentiment.label);
+      console.log(`\n${i + 1}. ${itemEmoji} ${item.sentiment.label}`);
+      console.log(`   "${item.text.substring(0, 100)}..."`);
+    });
+  }
+  
+  console.log('\n' + '═'.repeat(50) + '\n');
+}
+
+function displayDeepSentiment(analysis: sentiment.SentimentAnalysis) {
+  console.log('═'.repeat(60));
+  console.log('🧠 DEEP SENTIMENT ANALYSIS');
+  console.log('═'.repeat(60));
+  
+  // Overall
+  const emoji = getSentimentEmoji(analysis.overall.label);
+  console.log(`\n${emoji} OVERALL SENTIMENT: ${analysis.overall.label.toUpperCase()}`);
+  console.log(`   Score: ${analysis.overall.score.toFixed(2)} (-1 to 1)`);
+  console.log(`   Confidence: ${(analysis.overall.confidence * 100).toFixed(0)}%`);
+  console.log(`   Emotional Tone: ${analysis.emotionalTone}`);
+  
+  // Brand Perception
+  if (analysis.brandPerception) {
+    console.log(`\n🏷️  BRAND PERCEPTION:`);
+    console.log(`   ${analysis.brandPerception}`);
+  }
+  
+  // Summary
+  console.log(`\n📋 SUMMARY:`);
+  console.log(`   ${analysis.summary}`);
+  
+  // Topics
+  if (analysis.topics.length > 0) {
+    console.log('\n🎯 TOPIC BREAKDOWN:');
+    console.log('─'.repeat(40));
+    analysis.topics.forEach((topic) => {
+      const topicEmoji = getSentimentEmoji(topic.sentiment.label);
+      console.log(`\n   ${topicEmoji} ${topic.topic}`);
+      console.log(`      Sentiment: ${topic.sentiment.label} (${topic.sentiment.score.toFixed(2)})`);
+      console.log(`      Mentions: ${topic.mentions}`);
+      if (topic.keyPhrases.length > 0) {
+        console.log(`      Key phrases: ${topic.keyPhrases.join(', ')}`);
+      }
+    });
+  }
+  
+  // Insights
+  if (analysis.insights.length > 0) {
+    console.log('\n💡 KEY INSIGHTS:');
+    console.log('─'.repeat(40));
+    analysis.insights.forEach((insight, i) => {
+      console.log(`   ${i + 1}. ${insight}`);
+    });
+  }
+  
+  console.log('\n' + '═'.repeat(60) + '\n');
+}
+
+function getSentimentEmoji(label: sentiment.SentimentLabel): string {
+  switch (label) {
+    case 'positive': return '😊';
+    case 'negative': return '😞';
+    case 'mixed': return '🤔';
+    case 'neutral': return '😐';
+    default: return '❓';
+  }
 }
 
 function displayMergedContext(context: MergedContext) {

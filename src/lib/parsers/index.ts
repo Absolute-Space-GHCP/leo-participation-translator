@@ -499,6 +499,8 @@ export function detectFileType(filename: string): 'pdf' | 'pptx' | 'docx' | 'txt
     case 'docx':
       return 'docx';
     case 'txt':
+    case 'md':
+    case 'markdown':
       return 'txt';
     default:
       return 'unknown';
@@ -506,7 +508,7 @@ export function detectFileType(filename: string): 'pdf' | 'pptx' | 'docx' | 'txt
 }
 
 /**
- * Parse a plain text file (for testing)
+ * Parse a plain text or markdown file
  */
 export async function parseTXT(
   file: Buffer | string,
@@ -522,12 +524,22 @@ export async function parseTXT(
     text = file.toString('utf-8');
   }
   
+  // For markdown files, strip YAML frontmatter
+  const ext = filename.toLowerCase().split('.').pop();
+  if (ext === 'md' || ext === 'markdown') {
+    // Remove YAML frontmatter (between --- markers)
+    text = text.replace(/^---[\s\S]*?---\n*/m, '');
+  }
+  
   // Chunk the text
   const chunks = chunkText(text, options);
   
+  // Determine file type for metadata
+  const fileType = (ext === 'md' || ext === 'markdown') ? 'markdown' : 'txt';
+  
   const metadata: DocumentMetadata = {
     filename,
-    fileType: 'docx', // Use docx as fallback type for metadata
+    fileType: fileType as DocumentMetadata['fileType'],
     client: options.client,
     campaign: options.campaign,
     documentType: options.documentType || 'other',

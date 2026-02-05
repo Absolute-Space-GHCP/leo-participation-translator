@@ -88,7 +88,7 @@ export async function search(
     throw new Error(`Exa API error: ${response.status} - ${error}`);
   }
 
-  return response.json();
+  return response.json() as Promise<ExaSearchResponse>;
 }
 
 /**

@@ -1,0 +1,506 @@
+[
+  {
+    "name": "@EthanGamer",
+    "category": "Celebrity",
+    "platforms": {
+      "instagram": "651.2K"
+    },
+    "context": "Uber"
+  },
+  {
+    "name": "@rianne.meijer",
+    "category": "Sports",
+    "platforms": {},
+    "context": "Oscar"
+  },
+  {
+    "name": "@skincarebyhyram",
+    "category": "Beauty",
+    "platforms": {},
+    "context": "Oscar"
+  },
+  {
+    "name": "@breadfaceblog",
+    "category": "Beauty",
+    "platforms": {},
+    "context": "Oscar"
+  },
+  {
+    "name": "@mollybaz",
+    "category": "Beauty",
+    "platforms": {},
+    "context": "Oscar"
+  },
+  {
+    "name": "@theannmariejohn",
+    "category": "Beauty",
+    "platforms": {},
+    "context": "Oscar"
+  },
+  {
+    "name": "@awkwafina",
+    "category": "Beauty",
+    "platforms": {},
+    "context": "Oscar"
+  },
+  {
+    "name": "@LilylouTay",
+    "category": "Food",
+    "platforms": {
+      "instagram": "211k"
+    },
+    "context": "PHILLY"
+  },
+  {
+    "name": "@giovannasulahian",
+    "category": "Food",
+    "platforms": {},
+    "context": "Philly"
+  },
+  {
+    "name": "@kaylacappiello",
+    "category": "Food",
+    "platforms": {},
+    "context": "Philly"
+  },
+  {
+    "name": "@chefkolbykash",
+    "category": "Food",
+    "platforms": {},
+    "context": "Philly"
+  },
+  {
+    "name": "@thesheyspence",
+    "category": "Food",
+    "platforms": {},
+    "context": "Philly"
+  },
+  {
+    "name": "@justaddhotsauce",
+    "category": "Food",
+    "platforms": {},
+    "context": "Philly"
+  },
+  {
+    "name": "@mommailena",
+    "category": "Food",
+    "platforms": {},
+    "context": "Philly"
+  },
+  {
+    "name": "@foodbyjenn",
+    "category": "Food",
+    "platforms": {},
+    "context": "Philly"
+  },
+  {
+    "name": "@bradleysperry",
+    "category": "Food",
+    "platforms": {},
+    "context": "Philly"
+  },
+  {
+    "name": "@wannabechefmatt",
+    "category": "Food",
+    "platforms": {},
+    "context": "Philly"
+  },
+  {
+    "name": "@leahscucina",
+    "category": "Food",
+    "platforms": {},
+    "context": "Philly"
+  },
+  {
+    "name": "@_Yes_but",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@nat.alise",
+    "category": "Parenting",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@twinsplusthree",
+    "category": "Gaming",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@nadirah.p",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@alpha.trans",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@celestial_investments",
+    "category": "Music",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@deealvarado",
+    "category": "Music",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@virghoe_xoxo",
+    "category": "Fashion",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@blacksand.surf",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@fatsdabarber",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@nicolemclaughlin",
+    "category": "Fashion",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@queerbrownvegan",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@djshu_g",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@the_object",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@macroroom",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@dnieccio",
+    "category": "Fashion",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@anthonyhaynes",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@inesisaias",
+    "category": "Fashion",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@badcatclub_",
+    "category": "Fashion",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@gmail.com",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@marathontraining.tv",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@lamarathon.com",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@cararuns.org",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@dallasrunningclub.com",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@thewrrc.com",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@arizonaroadracers.com",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@portlandfit.com",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@austinrunners.org",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@gilbertsgazelles.com",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@houstonstriders.org",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@runclubnetwork.com",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@baa.org",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@sfrrc.org",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@uka.org.uk",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@srrc",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@runinfinland.fi",
+    "category": "General",
+    "platforms": {},
+    "context": "PHILLY"
+  },
+  {
+    "name": "@Chucksflavortrain",
+    "category": "Food",
+    "platforms": {
+      "instagram": "161k"
+    },
+    "context": "PHILLY"
+  },
+  {
+    "name": "@kimmyskreations.1",
+    "category": "Food",
+    "platforms": {
+      "instagram": "1.5M"
+    },
+    "context": "PHILLY"
+  },
+  {
+    "name": "@ChefJamika",
+    "category": "Food",
+    "platforms": {
+      "instagram": "34.7k"
+    },
+    "context": "PHILLY"
+  },
+  {
+    "name": "@Cooking_with_fire__",
+    "category": "Food",
+    "platforms": {
+      "instagram": "926k"
+    },
+    "context": "PHILLY"
+  },
+  {
+    "name": "@Mattpeterson_",
+    "category": "Food",
+    "platforms": {
+      "instagram": "6M"
+    },
+    "context": "Oscar"
+  },
+  {
+    "name": "@Foodwithmichel",
+    "category": "Food",
+    "platforms": {
+      "instagram": "6M"
+    },
+    "context": "Oscar"
+  },
+  {
+    "name": "@Delaneysayshello",
+    "category": "Food",
+    "platforms": {
+      "instagram": "6M"
+    },
+    "context": "Oscar"
+  },
+  {
+    "name": "@CorporateNatalie",
+    "category": "Food",
+    "platforms": {
+      "instagram": "6M"
+    },
+    "context": "Oscar"
+  },
+  {
+    "name": "@Katstickler",
+    "category": "Lifestyle",
+    "platforms": {
+      "instagram": "8.5M"
+    },
+    "context": "Oscar"
+  },
+  {
+    "name": "@audreytrullinger",
+    "category": "Lifestyle",
+    "platforms": {
+      "instagram": "8.5M"
+    },
+    "context": "Oscar"
+  },
+  {
+    "name": "@Hannahg11",
+    "category": "Lifestyle",
+    "platforms": {
+      "instagram": "8.5M"
+    },
+    "context": "Oscar"
+  },
+  {
+    "name": "@Katieemo",
+    "category": "Lifestyle",
+    "platforms": {
+      "instagram": "8.5M"
+    },
+    "context": "Oscar"
+  },
+  {
+    "name": "@valynciapage",
+    "category": "Parenting",
+    "platforms": {
+      "instagram": "1.5M"
+    },
+    "context": "Oscar"
+  },
+  {
+    "name": "@alyssacronin13",
+    "category": "Parenting",
+    "platforms": {
+      "instagram": "1.5M"
+    },
+    "context": "Oscar"
+  },
+  {
+    "name": "@caro",
+    "category": "Parenting",
+    "platforms": {
+      "instagram": "1.5M"
+    },
+    "context": "Oscar"
+  },
+  {
+    "name": "@destoo333",
+    "category": "Parenting",
+    "platforms": {
+      "instagram": "1.5M"
+    },
+    "context": "Oscar"
+  },
+  {
+    "name": "@michipichi",
+    "category": "Parenting",
+    "platforms": {
+      "instagram": "1.5M"
+    },
+    "context": "Oscar"
+  },
+  {
+    "name": "@iofficialnadiya",
+    "category": "Parenting",
+    "platforms": {
+      "instagram": "1.5M"
+    },
+    "context": "Oscar"
+  },
+  {
+    "name": "@iamjhud",
+    "category": "Parenting",
+    "platforms": {
+      "instagram": "1.5M"
+    },
+    "context": "Oscar"
+  },
+  {
+    "name": "@ikebarinholtz",
+    "category": "Parenting",
+    "platforms": {
+      "instagram": "1.5M"
+    },
+    "context": "Oscar"
+  },
+  {
+    "name": "@daniellanartey",
+    "category": "Parenting",
+    "platforms": {
+      "instagram": "1.5M"
+    },
+    "context": "Oscar"
+  },
+  {
+    "name": "@johannes2o",
+    "category": "Parenting",
+    "platforms": {
+      "instagram": "1.5M"
+    },
+    "context": "Oscar"
+  }
+]

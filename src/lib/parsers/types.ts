@@ -38,7 +38,7 @@ export interface DocumentMetadata {
   filename: string;
   
   /** File type */
-  fileType: 'pdf' | 'pptx' | 'docx';
+  fileType: 'pdf' | 'pptx' | 'docx' | 'txt' | 'markdown';
   
   /** Client name (e.g., "Volkswagen", "Adidas") */
   client?: string;
@@ -47,7 +47,7 @@ export interface DocumentMetadata {
   campaign?: string;
   
   /** Document type */
-  documentType: 'presentation' | 'case_study' | 'framework' | 'other';
+  documentType: 'presentation' | 'case_study' | 'framework' | 'creators' | 'media_options' | 'other';
   
   /** Total pages/slides */
   pageCount?: number;
@@ -85,7 +85,7 @@ export interface ParseOptions {
   campaign?: string;
   
   /** Document type */
-  documentType?: 'presentation' | 'case_study' | 'framework' | 'other';
+  documentType?: 'presentation' | 'case_study' | 'framework' | 'creators' | 'media_options' | 'other';
   
   /** Check for image-heavy presentations (default: true for PPTX) */
   checkImageHeavy?: boolean;

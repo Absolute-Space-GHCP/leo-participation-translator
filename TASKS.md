@@ -12,8 +12,8 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 ## Current Status: Phase 2 Ready + Cultural Intel Active
 
 **Architecture:** Multi-agent with specialized subagents, knowledge graph, task routing
-**Vector Store:** 40 documents, 2,086 chunks indexed (all 19 presentations)
-**Cultural Intel:** Exa.ai integrated and tested ✅
+**Vector Store:** 42 documents, 2,153 chunks indexed (presentations + creators + media)
+**Cultural Intel:** Exa.ai + Tavily + Sentiment Analysis ✅
 **Focus:** Demo to Leo → Framework Integration
 
 ---
@@ -90,12 +90,16 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 
 ### Data Assets (2026-02-05)
 
-| Asset                       | Location                          | Count/Size     |
-| --------------------------- | --------------------------------- | -------------- |
-| Participation Presentations | `data/presentations/`             | 19 PPTX files  |
-| Collection of Creators      | `data/creators/`                  | 1 file (326MB) |
-| Collection of Media Options | `data/media/`                     | 1 file (291MB) |
-| Metadata Manifest           | `data/presentations/manifest.csv` | 19 entries     |
+| Asset                       | Location                          | Count/Size     | Indexed |
+| --------------------------- | --------------------------------- | -------------- | ------- |
+| Participation Presentations | `data/presentations/`             | 19 PPTX files  | ✅ Yes  |
+| Collection of Creators      | `data/creators/`                  | 1 file (326MB) | ✅ Yes  |
+| Collection of Media Options | `data/media/`                     | 1 file (291MB) | ✅ Yes  |
+| Metadata Manifest           | `data/presentations/manifest.csv` | 19 entries     | —       |
+| Creators Markdown           | `data/markdown/creators.md`       | 54 KB (37 chunks) | ✅ Yes  |
+| Media Options Markdown      | `data/markdown/media.md`          | 43 KB (30 chunks) | ✅ Yes  |
+| Creators Metadata           | `data/metadata/creators.json`     | 76 creators    | —       |
+| Media Ideas Metadata        | `data/metadata/media-ideas.json`  | 15 ideas       | —       |
 
 ---
 
@@ -139,14 +143,23 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 | `learning/pattern-analyzer.ts`  | ✅ Complete |
 | `learning/context-injector.ts`  | ✅ Complete |
 | `learning/index.ts`             | ✅ Complete |
+| `cultural/exa.ts`               | ✅ Complete |
+| `cultural/tavily.ts`            | ✅ Complete |
+| `cultural/merger.ts`            | ✅ Complete |
+| `cultural/sentiment.ts`         | ✅ Complete |
+| `cultural/index.ts`             | ✅ Complete |
 
 ### CLI Tools (`src/cli/`)
 
-| File            | Status      |
-| --------------- | ----------- |
-| `ingest.ts`     | ✅ Complete |
-| `retrieve.ts`   | ✅ Complete |
-| `seed-graph.ts` | ✅ Complete |
+| File                  | Status      |
+| --------------------- | ----------- |
+| `ingest.ts`           | ✅ Complete |
+| `retrieve.ts`         | ✅ Complete |
+| `seed-graph.ts`       | ✅ Complete |
+| `cultural.ts`         | ✅ Complete |
+| `convert.ts`          | ✅ Complete |
+| `batch-ingest.ts`     | ✅ Complete |
+| `extract-metadata.ts` | ✅ Complete |
 
 ### Configuration
 
@@ -205,7 +218,7 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 | 1 | Demo retrieval to Leo | Low | 15 min | PENDING |
 | 2 | ~~Add Tavily API (backup search)~~ | Low | 30 min | ✅ DONE |
 | 3 | ~~Create context merger service~~ | Medium | 1 hr | ✅ DONE |
-| 4 | Build sentiment analysis endpoint | Medium | 1 hr | PENDING |
+| 4 | ~~Build sentiment analysis endpoint~~ | Medium | 1 hr | ✅ DONE (needs model enabled) |
 
 ---
 
@@ -230,13 +243,13 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 | # | Task | Description | Complexity | Status |
 |---|------|-------------|------------|--------|
 | 3.1 | Exa.ai integration | Semantic web search | Low | ✅ DONE |
-| 3.2 | Tavily integration | Backup search | Low | PENDING |
-| 3.3 | Build result merger | Dedupe + rank results | Medium | PENDING |
-| 3.4 | Perplexity integration | Search + summarization | Low | PENDING |
-| 3.5 | Build trend aggregator | Unified trend model | Medium | PENDING |
-| 3.6 | Create subculture mapping | Audience → communities | Medium | PENDING |
-| 3.7 | Build 72-hour trend hijacks | Time-sensitive opportunities | High | PENDING |
-| 3.8 | Implement sentiment analysis | Claude-based analysis | Medium | PENDING |
+| 3.2 | Tavily integration | Backup search | Low | ✅ DONE |
+| 3.3 | Build context merger | Dedupe + rank results | Medium | ✅ DONE |
+| 3.4 | Sentiment analysis | Claude via Vertex AI | Medium | ✅ DONE (enable model) |
+| 3.5 | Perplexity integration | Search + summarization | Low | PENDING |
+| 3.6 | Build trend aggregator | Unified trend model | Medium | PENDING |
+| 3.7 | Create subculture mapping | Audience → communities | Medium | PENDING |
+| 3.8 | Build 72-hour trend hijacks | Time-sensitive opportunities | High | PENDING |
 
 ---
 
@@ -322,11 +335,35 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 |----------|------|-------------|--------|
 | MEDIUM | Integrate Tavily API | Backup semantic search | ✅ DONE |
 | MEDIUM | Build context merger | Combine RAG + Cultural intel | ✅ DONE |
+| MEDIUM | Implement sentiment analysis | Claude via Vertex AI | ✅ DONE (enable model) |
 | MEDIUM | Integrate Perplexity | Search + summarization | PENDING |
-| MEDIUM | Implement sentiment analysis | Claude-based analysis | PENDING |
 | LOW | Reddit PRAW microservice | Direct API (if needed later) | DEFERRED |
 
 **Note:** Direct Reddit API access deferred - Exa.ai provides excellent Reddit content coverage via semantic search
+
+### 3.3 Reddit App Setup (For Future Direct API Access)
+
+| Priority | Task | Description | Status |
+|----------|------|-------------|--------|
+| LOW | Create Reddit application | reddit.com/prefs/apps → "script" type | PENDING |
+| LOW | Configure PRAW credentials | client_id, client_secret, user_agent | PENDING |
+| LOW | Add Reddit env vars | REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET | PENDING |
+| LOW | Implement PRAW client | `src/lib/cultural/reddit.ts` | PENDING |
+
+**Reddit App Setup Instructions:**
+1. Go to https://www.reddit.com/prefs/apps
+2. Click "Create App" or "Create Another App"
+3. Choose "script" type (for server-side usage)
+4. Name: `participation-translator`
+5. Redirect URI: `http://localhost:8080` (required but not used for script apps)
+6. Save credentials to `.env`:
+   ```
+   REDDIT_CLIENT_ID=your_client_id
+   REDDIT_CLIENT_SECRET=your_client_secret
+   REDDIT_USER_AGENT=participation-translator/1.0 by /u/your_username
+   ```
+
+**Note:** Currently using Exa.ai for Reddit content search. Direct PRAW access provides additional capabilities like subreddit-specific queries, comment threads, and real-time monitoring.
 
 ---
 
@@ -344,6 +381,23 @@ npm run stats
 
 # Seed knowledge graph
 npm run seed-graph
+
+# Convert PPTX to Markdown
+npm run convert -- ./data/creators/file.pptx --output ./data/markdown/output.md
+npm run convert -- ./data/creators/file.pptx --analysis  # Show text density analysis
+
+# Extract structured metadata
+npm run extract-metadata  # Creates JSON + CSV from markdown files
+
+# Cultural Intelligence
+npm run cultural -- search "sneaker culture Gen Z"
+npm run cultural -- reddit "brand opinions Nike"
+npm run cultural -- trends "streetwear fashion"
+npm run cultural -- context "Adidas" "footwear"
+npm run cultural -- answer "What are top sneaker trends?" --provider tavily
+npm run cultural -- merge "participation for sneakers" --brand Adidas
+npm run cultural -- sentiment "Nike brand perception" --brand Nike
+npm run cultural -- sentiment "Nike brand" --brand Nike --deep  # Full analysis
 ```
 
 ---
