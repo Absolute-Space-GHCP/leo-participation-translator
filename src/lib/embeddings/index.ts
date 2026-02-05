@@ -209,41 +209,55 @@ export async function indexChunks(
   const texts = chunks.map(c => c.content);
   const embeddings = await generateEmbeddings(texts);
   
-  // Store in Firestore
-  const batch = firestore.batch();
-  
-  // Store document metadata
+  // Store document metadata first
   const docRef = firestore.collection('documents').doc(documentId);
-  batch.set(docRef, {
-    ...metadata,
+  const docData: Record<string, unknown> = {
+    filename: metadata.filename,
+    fileType: metadata.fileType,
+    documentType: metadata.documentType,
+    chunkCount: metadata.chunkCount,
+    fileSize: metadata.fileSize,
     ingestedAt: new Date(),
     status: 'indexed',
-  });
+  };
+  if (metadata.client) docData.client = metadata.client;
+  if (metadata.campaign) docData.campaign = metadata.campaign;
+  if (metadata.pageCount) docData.pageCount = metadata.pageCount;
+  if (metadata.createdAt) docData.createdAt = metadata.createdAt;
+  await docRef.set(docData);
+
+  // Store chunks in batches (Firestore has payload size limits)
+  const BATCH_SIZE = 50; // Safe batch size to avoid transaction limits
   
-  // Store each chunk with its embedding
-  for (let i = 0; i < chunks.length; i++) {
-    const chunk = chunks[i];
-    const embedding = embeddings[i];
+  for (let batchStart = 0; batchStart < chunks.length; batchStart += BATCH_SIZE) {
+    const batch = firestore.batch();
+    const batchEnd = Math.min(batchStart + BATCH_SIZE, chunks.length);
     
-    const chunkRef = firestore.collection('chunks').doc(chunk.id);
-    batch.set(chunkRef, {
-      documentId,
-      content: chunk.content,
-      tokenCount: chunk.tokenCount,
-      chunkIndex: chunk.chunkIndex,
-      page: chunk.page,
-      section: chunk.section,
-      embedding, // Store embedding as array
-      // Metadata for filtering
-      client: metadata.client,
-      campaign: metadata.campaign,
-      documentType: metadata.documentType,
-      filename: metadata.filename,
-      createdAt: new Date(),
-    });
+    for (let i = batchStart; i < batchEnd; i++) {
+      const chunk = chunks[i];
+      const embedding = embeddings[i];
+      
+      const chunkRef = firestore.collection('chunks').doc(chunk.id);
+      const chunkData: Record<string, unknown> = {
+        documentId,
+        content: chunk.content,
+        tokenCount: chunk.tokenCount,
+        chunkIndex: chunk.chunkIndex,
+        embedding, // Store embedding as array
+        documentType: metadata.documentType,
+        filename: metadata.filename,
+        createdAt: new Date(),
+      };
+      // Only add optional fields if they have values
+      if (chunk.page !== undefined) chunkData.page = chunk.page;
+      if (chunk.section) chunkData.section = chunk.section;
+      if (metadata.client) chunkData.client = metadata.client;
+      if (metadata.campaign) chunkData.campaign = metadata.campaign;
+      batch.set(chunkRef, chunkData);
+    }
+    
+    await batch.commit();
   }
-  
-  await batch.commit();
   
   console.log(`Indexed ${chunks.length} chunks for document: ${documentId}`);
   

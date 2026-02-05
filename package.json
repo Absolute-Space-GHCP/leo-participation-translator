@@ -17,7 +17,8 @@
     "retrieve": "tsx src/cli/retrieve.ts",
     "seed-graph": "tsx src/cli/seed-graph.ts",
     "stats": "tsx src/cli/retrieve.ts --stats",
-    "convert": "tsx src/cli/convert.ts"
+    "convert": "tsx src/cli/convert.ts",
+    "batch-ingest": "tsx src/cli/batch-ingest.ts"
   },
   "dependencies": {
     "@google-cloud/aiplatform": "^4.0.0",
