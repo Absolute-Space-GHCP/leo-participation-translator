@@ -10,6 +10,7 @@
 
 import * as exa from '../lib/cultural/exa';
 import * as tavily from '../lib/cultural/tavily';
+import { quickContext, formatContextForPrompt, type MergedContext } from '../lib/cultural/merger';
 
 type Provider = 'exa' | 'tavily' | 'both';
 
@@ -22,6 +23,22 @@ async function main() {
   if (providerIndex !== -1) {
     provider = args[providerIndex + 1] as Provider;
     args.splice(providerIndex, 2);
+  }
+
+  // Parse brand flag
+  let brand: string | undefined;
+  const brandIndex = args.findIndex(a => a === '--brand');
+  if (brandIndex !== -1) {
+    brand = args[brandIndex + 1];
+    args.splice(brandIndex, 2);
+  }
+
+  // Parse category flag
+  let category: string | undefined;
+  const categoryIndex = args.findIndex(a => a === '--category');
+  if (categoryIndex !== -1) {
+    category = args[categoryIndex + 1];
+    args.splice(categoryIndex, 2);
   }
 
   const command = args[0];
@@ -40,9 +57,12 @@ Commands:
   trends <category>   Search for trends in a category
   context <brand>     Get full cultural context for a brand
   answer <question>   Get AI-generated answer (Tavily only)
+  merge <query>       Merge RAG + Cultural intel (full context)
 
 Options:
   --provider, -p      Search provider: exa (default), tavily, or both
+  --brand <name>      Brand name for context searches
+  --category <name>   Category for context searches
 
 Examples:
   npm run cultural -- search "sneaker culture Gen Z"
@@ -52,6 +72,7 @@ Examples:
   npm run cultural -- trends "streetwear fashion"
   npm run cultural -- context "Adidas" "footwear"
   npm run cultural -- answer "What are the top sneaker trends for 2026?"
+  npm run cultural -- merge "participation campaign for sneakers" --brand Adidas
 `);
     return;
   }
@@ -179,6 +200,21 @@ Examples:
         break;
       }
 
+      case 'merge': {
+        if (!query) {
+          console.error('❌ Error: Please provide a query');
+          return;
+        }
+        console.log(`Query: "${query}"`);
+        if (brand) console.log(`Brand: ${brand}`);
+        if (category) console.log(`Category: ${category}`);
+        console.log('');
+        
+        const merged = await quickContext(query, brand, category);
+        displayMergedContext(merged);
+        break;
+      }
+
       default:
         console.error(`❌ Unknown command: ${command}`);
     }
@@ -269,6 +305,79 @@ function displayGenericResults(results: Array<{ title: string; url: string; scor
   });
   
   console.log(`\n✅ Found ${results.length} results`);
+}
+
+function displayMergedContext(context: MergedContext) {
+  console.log('\n' + '═'.repeat(60));
+  console.log('📚 MERGED CONTEXT');
+  console.log('═'.repeat(60));
+
+  // Summary
+  console.log('\n📊 SUMMARY');
+  console.log('─'.repeat(40));
+  console.log(`   Total results: ${context.summary.totalResults}`);
+  console.log(`   Institutional (RAG): ${context.summary.institutionalCount}`);
+  console.log(`   Cultural (Web): ${context.summary.culturalCount}`);
+  console.log(`   Sources: ${context.summary.sourcesUsed.join(', ')}`);
+  console.log(`   Themes: ${context.summary.primaryThemes.join(', ') || 'N/A'}`);
+
+  // Institutional
+  if (context.summary.institutionalCount > 0) {
+    console.log('\n🏢 INSTITUTIONAL KNOWLEDGE (JL)');
+    console.log('─'.repeat(40));
+    
+    if (context.institutional.relevantCases.length > 0) {
+      console.log('\n  📁 Relevant Cases:');
+      context.institutional.relevantCases.slice(0, 3).forEach((r, i) => {
+        console.log(`\n  ${i + 1}. ${r.title}`);
+        console.log(`     Score: ${(r.score * 100).toFixed(0)}%`);
+        console.log(`     ${r.content.substring(0, 150).replace(/\n/g, ' ')}...`);
+      });
+    }
+
+    if (context.institutional.patterns.length > 0) {
+      console.log('\n  🎯 Patterns:');
+      context.institutional.patterns.slice(0, 2).forEach((r, i) => {
+        console.log(`\n  ${i + 1}. ${r.content.substring(0, 200).replace(/\n/g, ' ')}...`);
+      });
+    }
+  }
+
+  // Cultural
+  if (context.summary.culturalCount > 0) {
+    console.log('\n🌍 CULTURAL INTELLIGENCE');
+    console.log('─'.repeat(40));
+    
+    if (context.cultural.trends.length > 0) {
+      console.log('\n  📈 Trends:');
+      context.cultural.trends.slice(0, 3).forEach((r, i) => {
+        console.log(`\n  ${i + 1}. ${r.title} [${r.source}]`);
+        if (r.url) console.log(`     🔗 ${r.url}`);
+        console.log(`     ${r.content.substring(0, 150).replace(/\n/g, ' ')}...`);
+      });
+    }
+
+    if (context.cultural.discussions.length > 0) {
+      console.log('\n  💬 Discussions:');
+      context.cultural.discussions.slice(0, 3).forEach((r, i) => {
+        console.log(`\n  ${i + 1}. ${r.title} [${r.source}]`);
+        if (r.url) console.log(`     🔗 ${r.url}`);
+        console.log(`     ${r.content.substring(0, 150).replace(/\n/g, ' ')}...`);
+      });
+    }
+
+    if (context.cultural.news.length > 0) {
+      console.log('\n  📰 News:');
+      context.cultural.news.slice(0, 2).forEach((r, i) => {
+        console.log(`\n  ${i + 1}. ${r.title} [${r.source}]`);
+        if (r.url) console.log(`     🔗 ${r.url}`);
+      });
+    }
+  }
+
+  console.log('\n' + '═'.repeat(60));
+  console.log(`⏱️  Generated: ${context.timestamp}`);
+  console.log('═'.repeat(60) + '\n');
 }
 
 main();

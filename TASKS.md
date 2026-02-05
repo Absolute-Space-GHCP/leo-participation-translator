@@ -204,7 +204,7 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 |---|------|------------|-----------|--------|
 | 1 | Demo retrieval to Leo | Low | 15 min | PENDING |
 | 2 | ~~Add Tavily API (backup search)~~ | Low | 30 min | ✅ DONE |
-| 3 | Create context merger service | Medium | 1 hr | PENDING |
+| 3 | ~~Create context merger service~~ | Medium | 1 hr | ✅ DONE |
 | 4 | Build sentiment analysis endpoint | Medium | 1 hr | PENDING |
 
 ---
@@ -321,10 +321,10 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 | Priority | Task | Description | Status |
 |----------|------|-------------|--------|
 | MEDIUM | Integrate Tavily API | Backup semantic search | ✅ DONE |
+| MEDIUM | Build context merger | Combine RAG + Cultural intel | ✅ DONE |
 | MEDIUM | Integrate Perplexity | Search + summarization | PENDING |
-| LOW | Reddit PRAW microservice | Direct API (if needed later) | DEFERRED |
-| MEDIUM | Build context merger | Combine RAG + Cultural intel | PENDING |
 | MEDIUM | Implement sentiment analysis | Claude-based analysis | PENDING |
+| LOW | Reddit PRAW microservice | Direct API (if needed later) | DEFERRED |
 
 **Note:** Direct Reddit API access deferred - Exa.ai provides excellent Reddit content coverage via semantic search
 

@@ -12,3 +12,6 @@ export { default as exaClient } from './exa';
 
 export * from './tavily';
 export { default as tavilyClient } from './tavily';
+
+export * from './merger';
+export { default as contextMerger } from './merger';
