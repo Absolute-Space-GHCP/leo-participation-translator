@@ -42,7 +42,7 @@ export interface RoutingResult {
 const MODELS = {
   anthropic: {
     simple: 'claude-3-haiku-20240307',
-    medium: 'claude-sonnet-4-20250514',
+    medium: 'claude-sonnet-4-5-20250514',
     complex: 'claude-opus-4-5-20250131',
   },
   google: {
@@ -57,7 +57,7 @@ const MODELS = {
  */
 const COSTS_PER_1K = {
   'claude-3-haiku-20240307': 0.00025,
-  'claude-sonnet-4-20250514': 0.003,
+  'claude-sonnet-4-5-20250514': 0.003,
   'claude-opus-4-5-20250131': 0.015,
   'gemini-2.0-flash': 0.0001,
   'gemini-2.5-pro': 0.00125,
