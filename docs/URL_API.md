@@ -55,7 +55,7 @@ Last Updated: 2026-02-05
 | Property | Value |
 |----------|-------|
 | **Purpose** | Backup semantic search, AI answers |
-| **API Key** | *(Add your key to .env)* |
+| **API Key** | `tvly-dev-1VPu2AYR...` (participation-translator-tavily) |
 | **Base URL** | `https://api.tavily.com` |
 | **Documentation** | https://docs.tavily.com |
 | **Dashboard** | https://app.tavily.com |
@@ -102,7 +102,7 @@ Last Updated: 2026-02-05
 EXA_API_KEY=5d8ea719-42c2-4732-8120-13b69538077e
 
 # Tavily (Backup)
-TAVILY_API_KEY=your-tavily-api-key
+TAVILY_API_KEY=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
 
 # GCP
 GCP_PROJECT_ID=participation-translator
