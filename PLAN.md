@@ -1,7 +1,7 @@
 # The Participation Translator - Implementation Plan
 
-Version: 1.0.1
-Last Updated: 2026-02-03
+Version: 1.0.2
+Last Updated: 2026-02-05
 Author: Charley Scholz, JLIT
 Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
 
@@ -235,18 +235,27 @@ The tool generates a **presentation-ready deck** that Leo can use directly with 
 
 The reasoning engine is **configurable** to support model upgrades:
 
-| Model                 | Use Case              | Availability             | Notes                            |
-| --------------------- | --------------------- | ------------------------ | -------------------------------- |
-| **Claude Opus 4.5**   | Primary (recommended) | Anthropic API, Vertex AI | Best strategic reasoning         |
-| **Claude Opus 4**     | Alternative           | Vertex AI                | Excellent, slightly faster       |
-| **Claude Sonnet 4**   | Development/testing   | Vertex AI                | Faster iteration, lower cost     |
-| **Claude 5** (future) | Upgrade path          | TBD                      | Configurable swap when available |
+| Model                   | Use Case                    | Availability             | Cost (MTok)      | Notes                            |
+| ----------------------- | --------------------------- | ------------------------ | ---------------- | -------------------------------- |
+| **Claude Opus 4.5**     | Primary (complex reasoning) | Anthropic API, Vertex AI | $5 in / $25 out  | Best strategic reasoning         |
+| **Claude Sonnet 4.5**   | Development/testing         | Anthropic API, Vertex AI | $3 in / $15 out  | Good balance of speed/quality    |
+| **Claude Haiku 4.5**    | Simple tasks                | Anthropic API, Vertex AI | $1 in / $5 out   | Fastest, lowest cost             |
+| **Claude Sonnet 5** 🆕  | Future primary              | Coming Soon (Feb 2026)   | ~$2.5 in (est.)  | Expected ~50% cheaper than Opus  |
+
+**Claude Sonnet 5 Status (as of 2026-02-05):**
+- **Release**: Imminent (expected Super Bowl week, Feb 3-8, 2026)
+- **Codename**: "Fennec"
+- **Performance**: Expected comparable to Opus 4.5 at ~50% cost
+- **Context**: 128k tokens
+- **Strengths**: Strong coding, math, agentic capabilities
+- **Recommendation**: Monitor Vertex AI for availability; excellent candidate for primary model once released
 
 ```typescript
 // Model configuration in .env
-AI_MODEL_PROVIDER = anthropic; // or 'vertex'
-AI_MODEL_NAME = claude - opus - 4 - 5 - 20250131; // configurable
-AI_MODEL_FALLBACK = claude - sonnet - 4 - 20250514;
+AI_MODEL_PROVIDER=vertex                          // or 'anthropic'
+AI_MODEL_NAME=claude-opus-4-5-20251101            // Current primary
+AI_MODEL_FALLBACK=claude-sonnet-4-5-20250929      // Current fallback
+// AI_MODEL_NAME=claude-sonnet-5-XXXXXXXX         // Future (when available)
 ```
 
 ### API Dependencies
@@ -662,12 +671,43 @@ timeout: 300s # Allow long generations
 
 ---
 
+## Current Status (as of 2026-02-05)
+
+### Completed ✅
+
+| Phase | Component | Status |
+|-------|-----------|--------|
+| **0** | Foundation Setup | ✅ Multi-agent architecture, rules, skills, hooks |
+| **1.1** | GCP Infrastructure | ✅ Project, APIs, service account, buckets, Firestore |
+| **1.2** | Document Parsers | ✅ PDF, PPTX, DOCX, TXT with semantic chunking |
+| **1.3** | Embeddings & Vector | ✅ Vertex AI text-embedding-005, Firestore storage |
+| **1.4** | Knowledge Graph | ✅ 9 framework sections, 5 patterns, 4 tactics seeded |
+| **1.5** | Learning System | ✅ Observation store, pattern analyzer, context injector |
+| **4** | Frontend (early) | ✅ Next.js 16, shadcn/ui, landing/wizard/history pages |
+
+### Blocked ⏸️
+
+| Item | Blocker | Owner |
+|------|---------|-------|
+| Document Ingestion | Awaiting sample presentations | Sylvia |
+| Phase 2 Kickoff | Awaiting Leo's guidance | Leo |
+
+### Ready for Phase 2 🚀
+
+The infrastructure is complete. Once sample presentations are provided:
+1. Ingest documents via CLI: `npm run ingest -- <file>`
+2. Test retrieval: `npm run retrieve -- "query"`
+3. Demo to Leo
+4. Begin 8-Part Framework integration with Leo's guidance
+
+---
+
 ## Next Steps (Immediate)
 
-1. **Review this plan with stakeholder** - Get Leo's feedback on priorities
-2. **Set up GCP project** - `participation-translator` project
-3. **Begin Phase 0** - Project scaffolding
-4. **Collect initial presentations** - VW, Adidas decks for ingestion
+1. **Get sample presentations from Sylvia** - VW, Adidas, etc.
+2. **Ingest 3-5 documents** - Populate vector store
+3. **Demo retrieval to Leo** - Show RAG in action
+4. **Phase 2 kickoff** - Leo guides Framework integration
 
 ---
 

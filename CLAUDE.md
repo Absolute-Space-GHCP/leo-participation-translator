@@ -1,7 +1,7 @@
 # CLAUDE.md - The Participation Translator
 
-Version: 1.0.1
-Last Updated: 2026-02-03
+Version: 1.0.2
+Last Updated: 2026-02-05
 Purpose: Project-specific context for AI assistants working on The Participation Translator
 
 ---
@@ -111,7 +111,7 @@ The Participation Translator uses specialized agents for different tasks:
 | -------------------- | ------------------------------------------- |
 | **Frontend**         | Next.js 14 + React 18 + Tailwind CSS        |
 | **Backend**          | Node.js 22 LTS + Next.js API Routes         |
-| **Reasoning Engine** | Claude Opus 4.5 (complex) / Sonnet (simple) |
+| **Reasoning Engine** | Claude Opus 4.5 (primary) / Sonnet 5 (when available) |
 | **Task Routing**     | Complexity-based model selection            |
 | **Embeddings**       | Vertex AI text-embedding-005                |
 | **Vector Store**     | Vertex AI Vector Search                     |
@@ -193,23 +193,26 @@ leo-participation-translator/
 
 ## Development Phases
 
-| Phase       | Description                  | Status      |
-| ----------- | ---------------------------- | ----------- |
-| **Phase 0** | Foundation Setup             | IN PROGRESS |
-| **Phase 1** | Knowledge Base & RAG Core    | PENDING     |
-| **Phase 2** | 8-Part Framework Integration | PENDING     |
-| **Phase 3** | Cultural Intelligence Layer  | PENDING     |
-| **Phase 4** | User Interface               | PENDING     |
-| **Phase 5** | Testing & Refinement         | PENDING     |
-| **Phase 6** | Deployment & Training        | PENDING     |
+| Phase         | Description                  | Status                  |
+| ------------- | ---------------------------- | ----------------------- |
+| **Phase 0**   | Foundation Setup             | ✅ COMPLETE             |
+| **Phase 1**   | Knowledge Base & RAG Core    | ✅ COMPLETE (need docs) |
+| **Phase 1.5** | Learning/Evolution System    | ✅ COMPLETE             |
+| **Phase 2**   | 8-Part Framework Integration | 🔜 READY FOR LEO        |
+| **Phase 3**   | Cultural Intelligence Layer  | 📋 RESEARCH COMPLETE    |
+| **Phase 4**   | User Interface               | ✅ SCAFFOLDED           |
+| **Phase 5**   | Testing & Refinement         | ⏳ PENDING              |
+| **Phase 6**   | Deployment & Training        | ⏳ PENDING              |
 
 ---
 
 ## GCP Project
 
-- **Project ID:** `participation-translator` (to be created)
+- **Project ID:** `participation-translator` ✅ Created
 - **Region:** `us-central1`
 - **Services:** Cloud Run, Firestore, Cloud Storage, Vertex AI
+- **Service Account:** `participation-translator-sa@participation-translator.iam.gserviceaccount.com`
+- **Buckets:** `participation-translator-documents`, `participation-translator-exports`
 
 ---
 
@@ -309,4 +312,4 @@ leo-participation-translator/
 
 Author: Charley Scholz, JLIT
 Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
-Last Updated: 2026-02-03
+Last Updated: 2026-02-05
