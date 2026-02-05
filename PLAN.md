@@ -1,6 +1,6 @@
 # The Participation Translator - Implementation Plan
 
-Version: 1.0.3
+Version: 1.0.4
 Last Updated: 2026-02-05
 Author: Charley Scholz, JLIT
 Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
@@ -727,15 +727,18 @@ See full details in [docs/LEOS_REQUIREMENTS.md](/docs/LEOS_REQUIREMENTS.md)
 | **2**   | Data Organization       | ✅ 19 presentations + Creator/Media collections copied   |
 | **2**   | Manifest                | ✅ CSV metadata for all presentations                    |
 | **2**   | Image-Heavy Detection   | ✅ Skill created, parser updated with detection logic    |
+| **1.5** | Vector Indexing         | ✅ **40 documents, 2,086 chunks indexed**                |
+| **3.1** | Exa.ai Integration      | ✅ Semantic search + Reddit via `npm run cultural`       |
 | **Docs**| Leo's Requirements      | ✅ Full founder input captured                           |
 | **Docs**| Demo Walkthrough        | ✅ Session script created for Leo demo                   |
+| **Docs**| API Documentation       | ✅ `docs/URL_API.md` with keys and endpoints             |
 
 ### In Progress 🔄
 
-| Item                      | Status                          | Next Action           |
-| ------------------------- | ------------------------------- | --------------------- |
-| GCP Authentication        | Configured but needs SA key     | Generate service key  |
-| Vector Store Indexing     | Dry-run tested, awaiting auth   | Run with live indexing|
+| Item                      | Status                          | Next Action              |
+| ------------------------- | ------------------------------- | ------------------------ |
+| Phase 2: Framework        | Ready to start with Leo         | Document framework specs |
+| Phase 3: Cultural Intel   | Exa.ai done, others pending     | Add Tavily, merger       |
 
 ### Data Assets
 
@@ -759,10 +762,11 @@ The infrastructure is complete with real data:
 
 ## Next Steps (Immediate)
 
-1. **Index presentations** - Run `npm run ingest` with real data (sa-key.json already configured)
-2. **Demo to Leo** - Follow walkthrough script
-3. **Set up Reddit integration** - PRAW microservice + Exa.ai combo (HIGH PRIORITY)
-4. **Phase 2 kickoff** - Leo guides Framework integration with real use case
+1. ✅ ~~**Index presentations**~~ - 40 docs, 2,086 chunks indexed
+2. ✅ ~~**Set up cultural intelligence**~~ - Exa.ai integrated (`npm run cultural`)
+3. **Demo to Leo** - Follow walkthrough script (`docs/DEMO_WALKTHROUGH.md`)
+4. **Add Tavily + context merger** - Backup search + combine RAG + cultural
+5. **Phase 2 kickoff** - Leo guides Framework integration with real use case
 
 ---
 

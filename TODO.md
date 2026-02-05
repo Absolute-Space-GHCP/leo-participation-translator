@@ -1,18 +1,20 @@
 # TODO - The Participation Translator
 
-Version: 1.0.2
+Version: 1.0.4
 Last Updated: 2026-02-05
-Purpose: Tracks implementation progress (Phase 0-1 focus)
+Purpose: Tracks implementation progress across all phases
 
 Priority Legend: HIGH | MEDIUM | LOW
 Status Legend: PENDING | IN_PROGRESS | DONE
 
 ---
 
-## Current Status: Phase 2 Ready
+## Current Status: Phase 2 Ready + Cultural Intel Active
 
 **Architecture:** Multi-agent with specialized subagents, knowledge graph, task routing
-**Focus:** Data ingested, ready for live indexing and demo to Leo
+**Vector Store:** 40 documents, 2,086 chunks indexed (all 19 presentations)
+**Cultural Intel:** Exa.ai integrated and tested ✅
+**Focus:** Demo to Leo → Framework Integration
 
 ---
 
@@ -75,7 +77,7 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 | MEDIUM   | Create graph persistence | JSON export to data/ | ✅ DONE |
 | MEDIUM   | Build pattern extractor  | Identify JL patterns | PENDING |
 
-### 1.5 Initial Document Ingestion - ✅ DATA READY
+### 1.5 Initial Document Ingestion - ✅ COMPLETE
 
 | Priority | Task                              | Notes                        | Status  |
 | -------- | --------------------------------- | ---------------------------- | ------- |
@@ -83,8 +85,8 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 | HIGH     | Copy to data directories          | presentations/creators/media | ✅ DONE |
 | HIGH     | Create metadata manifest          | manifest.csv with metadata   | ✅ DONE |
 | HIGH     | Image-heavy detection             | Skill + parser updated       | ✅ DONE |
-| HIGH     | Index to vector store             | Needs GCP auth               | PENDING |
-| HIGH     | Validate retrieval quality        | Manual testing after index   | PENDING |
+| HIGH     | Index to vector store             | 40 docs, 2,086 chunks        | ✅ DONE |
+| HIGH     | Validate retrieval quality        | Tested with queries          | ✅ DONE |
 
 ### Data Assets (2026-02-05)
 
@@ -176,58 +178,155 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 
 ---
 
-## Next Immediate Steps
+## ═══════════════════════════════════════════════════════════════
+## COMPREHENSIVE NEXT STEPS - All Remaining Phases
+## ═══════════════════════════════════════════════════════════════
 
-1. [x] ~~Create GCP project `participation-translator`~~
-2. [x] ~~Implement parsers (PDF, PPTX, DOCX)~~
-3. [x] ~~Implement embeddings~~
-4. [x] ~~Seed knowledge graph~~
-5. [x] ~~Get sample presentations from Sylvia~~ (19 files)
-6. [x] ~~Create data directories and copy files~~
-7. [x] ~~Create metadata manifest~~
-8. [x] ~~Add image-heavy detection~~
-9. [x] ~~Configure GCP service account key~~ (sa-key.json already exists)
-10. [ ] Index presentations to vector store
-11. [ ] Demo retrieval to Leo (see `docs/DEMO_WALKTHROUGH.md`)
-12. [ ] **Set up Reddit integration (HIGH PRIORITY - Leo's request)**
-13. [ ] Create Vector Search index (production performance)
+### ✅ COMPLETED (Phase 0 + 1)
+
+1. [x] Create GCP project `participation-translator`
+2. [x] Implement parsers (PDF, PPTX, DOCX)
+3. [x] Implement embeddings
+4. [x] Seed knowledge graph
+5. [x] Get sample presentations from Sylvia (19 files)
+6. [x] Create data directories and copy files
+7. [x] Create metadata manifest
+8. [x] Add image-heavy detection
+9. [x] Configure GCP service account key
+10. [x] Index presentations to vector store (40 docs, 2,086 chunks)
+11. [x] Integrate Exa.ai for cultural intelligence
 
 ---
 
-## Phase 3: Reddit Integration - HIGH PRIORITY
+### 🎯 IMMEDIATE (Easy Wins)
 
-Leo specifically requested Reddit as the POC social platform for cultural intelligence.
+| # | Task | Complexity | Est. Time |
+|---|------|------------|-----------|
+| 1 | Demo retrieval to Leo | Low | 15 min |
+| 2 | Add Tavily API (backup search) | Low | 30 min |
+| 3 | Create context merger service | Medium | 1 hr |
+| 4 | Build sentiment analysis endpoint | Medium | 1 hr |
 
-**Stack Decision:** PRAW (Python) + Exa.ai combo
+---
+
+### 📋 PHASE 2: 8-Part Framework Integration
+
+| # | Task | Description | Complexity | Status |
+|---|------|-------------|------------|--------|
+| 2.1 | Document framework sections | Detailed spec per section | Medium | PENDING |
+| 2.2 | Create system prompt templates | `/prompts/` directory | Medium | PENDING |
+| 2.3 | Build prompt assembly service | Dynamic prompt construction | Medium | PENDING |
+| 2.4 | Implement Claude integration | Vertex AI Claude calls | Medium | PENDING |
+| 2.5 | Create output formatters | Structured JSON → display | Low | PENDING |
+| 2.6 | Test with sample inputs | Validation outputs | Low | PENDING |
+| 2.7 | Integrate evolution context | Context injection before gen | Medium | PENDING |
+
+**Dependency:** Requires Leo's input on framework nuances
+
+---
+
+### 📋 PHASE 3: Cultural Intelligence (Continued)
+
+| # | Task | Description | Complexity | Status |
+|---|------|-------------|------------|--------|
+| 3.1 | Exa.ai integration | Semantic web search | Low | ✅ DONE |
+| 3.2 | Tavily integration | Backup search | Low | PENDING |
+| 3.3 | Build result merger | Dedupe + rank results | Medium | PENDING |
+| 3.4 | Perplexity integration | Search + summarization | Low | PENDING |
+| 3.5 | Build trend aggregator | Unified trend model | Medium | PENDING |
+| 3.6 | Create subculture mapping | Audience → communities | Medium | PENDING |
+| 3.7 | Build 72-hour trend hijacks | Time-sensitive opportunities | High | PENDING |
+| 3.8 | Implement sentiment analysis | Claude-based analysis | Medium | PENDING |
+
+---
+
+### 📋 PHASE 4: User Interface & Presentation
+
+| # | Task | Description | Complexity | Status |
+|---|------|-------------|------------|--------|
+| 4.1 | Connect frontend to backend | API route integration | Medium | PENDING |
+| 4.2 | Build generation progress UI | Real-time streaming | Medium | PENDING |
+| 4.3 | Create JL presentation template | Branded PPTX master | High | PENDING |
+| 4.4 | Build PPTX generation engine | PptxGenJS integration | High | PENDING |
+| 4.5 | Build slide preview components | In-browser deck view | Medium | PENDING |
+| 4.6 | Add export functionality | PPTX, PDF, Google Slides | Medium | PENDING |
+| 4.7 | Implement history/saved outputs | User sessions with preview | Medium | PENDING |
+| 4.8 | Create feedback dashboard | Ratings, corrections, suggestions | High | PENDING |
+
+---
+
+### 📋 PHASE 5: Testing & Refinement
+
+| # | Task | Description | Complexity | Status |
+|---|------|-------------|------------|--------|
+| 5.1 | End-to-end testing | Full pipeline test suite | Medium | PENDING |
+| 5.2 | Prompt engineering refinement | Improved outputs | High | PENDING |
+| 5.3 | Retrieval quality tuning | Better context selection | Medium | PENDING |
+| 5.4 | Performance optimization | Sub-30s generation | Medium | PENDING |
+| 5.5 | Security audit | Auth, data protection | Medium | PENDING |
+
+---
+
+### 📋 PHASE 6: Deployment & Training
+
+| # | Task | Description | Complexity | Status |
+|---|------|-------------|------------|--------|
+| 6.1 | Production deployment | Live Cloud Run service | Medium | PENDING |
+| 6.2 | Create user documentation | User guide for Leo | Low | PENDING |
+| 6.3 | Training session | 1:1 walkthrough | Low | PENDING |
+| 6.4 | Feedback collection | Iteration backlog | Low | PENDING |
+| 6.5 | Handoff documentation | Maintenance guide | Low | PENDING |
+
+---
+
+### 🏆 PRIORITY ORDER (Recommended Sequence)
+
+**Week 1 (Current):**
+1. ✅ Vector indexing - DONE
+2. ✅ Exa.ai integration - DONE
+3. Demo to Leo
+4. Tavily + context merger
+
+**Week 2:**
+5. Phase 2: Framework prompts (with Leo)
+6. Claude generation integration
+7. Basic output formatters
+
+**Week 3:**
+8. Phase 4: PPTX generation
+9. Connect frontend APIs
+10. Slide preview
+
+**Week 4:**
+11. Testing & refinement
+12. Feedback dashboard
+13. Production deployment
+
+---
+
+## Phase 3: Cultural Intelligence - IN PROGRESS
+
+### 3.1 Exa.ai Integration - ✅ COMPLETE
 
 | Priority | Task | Description | Status |
 |----------|------|-------------|--------|
-| HIGH | Create Reddit app | https://reddit.com/prefs/apps | PENDING |
-| HIGH | Add Reddit credentials to .env | CLIENT_ID, SECRET, USER_AGENT | PENDING |
-| HIGH | Create PRAW microservice | `services/reddit/main.py` | PENDING |
-| HIGH | Implement /trends endpoint | Hot posts from subreddits | PENDING |
-| HIGH | Implement /search endpoint | Keyword search in subreddits | PENDING |
-| HIGH | Create Node.js client | `src/lib/cultural/reddit.ts` | PENDING |
-| HIGH | Integrate Exa.ai for Reddit | Semantic search supplement | PENDING |
-| MEDIUM | Implement sentiment analysis | Claude-based analysis | PENDING |
+| HIGH | Create Exa.ai client | `src/lib/cultural/exa.ts` | ✅ DONE |
+| HIGH | Add API key to .env | EXA_API_KEY configured | ✅ DONE |
+| HIGH | Test semantic search | General + Reddit queries | ✅ DONE |
+| HIGH | Create CLI tool | `npm run cultural` | ✅ DONE |
+| HIGH | Document API | `docs/URL_API.md` | ✅ DONE |
+
+### 3.2 Additional Cultural Sources - PENDING
+
+| Priority | Task | Description | Status |
+|----------|------|-------------|--------|
+| MEDIUM | Integrate Tavily API | Backup semantic search | PENDING |
+| MEDIUM | Integrate Perplexity | Search + summarization | PENDING |
+| LOW | Reddit PRAW microservice | Direct API (if needed later) | DEFERRED |
 | MEDIUM | Build context merger | Combine RAG + Cultural intel | PENDING |
+| MEDIUM | Implement sentiment analysis | Claude-based analysis | PENDING |
 
-### File Structure for Reddit Service
-
-```
-services/
-└── reddit/
-    ├── main.py              # FastAPI app
-    ├── requirements.txt     # praw, fastapi, uvicorn
-    ├── Dockerfile           # Container for deployment
-    └── README.md            # Setup instructions
-
-src/lib/cultural/
-├── reddit.ts               # Node.js client for Python service
-├── exa.ts                  # Exa.ai integration
-├── merger.ts               # Context merger (RAG + Cultural)
-└── index.ts                # Exports
-```
+**Note:** Direct Reddit API access deferred - Exa.ai provides excellent Reddit content coverage via semantic search
 
 ---
 
