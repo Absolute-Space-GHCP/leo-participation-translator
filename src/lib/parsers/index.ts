@@ -8,10 +8,22 @@
  */
 
 import { v4 as uuidv4 } from 'uuid';
-import type { DocumentChunk, DocumentMetadata, ParseOptions } from './types.js';
+import type { 
+  DocumentChunk, 
+  DocumentMetadata, 
+  ParseOptions,
+  SlideAnalysis,
+  PresentationAnalysis,
+  ImageHeavyAlert 
+} from './types.js';
 
 // Re-export types
 export * from './types.js';
+
+// Image-heavy detection thresholds
+const IMAGE_HEAVY_AVG_TEXT_THRESHOLD = 100; // chars per slide
+const IMAGE_HEAVY_LOW_TEXT_RATIO_THRESHOLD = 0.5; // 50% of slides
+const LOW_TEXT_THRESHOLD = 50; // chars per slide for "low" classification
 
 /**
  * Parse a document and extract text chunks with metadata
@@ -111,13 +123,18 @@ export async function parsePDF(
 }
 
 /**
- * Parse a PowerPoint document
+ * Parse a PowerPoint document with image-heavy detection
  */
 export async function parsePPTX(
   file: Buffer | string,
   filename: string,
   options: ParseOptions = {}
-): Promise<{ chunks: DocumentChunk[]; metadata: DocumentMetadata }> {
+): Promise<{ 
+  chunks: DocumentChunk[]; 
+  metadata: DocumentMetadata;
+  analysis?: PresentationAnalysis;
+  alert?: ImageHeavyAlert;
+}> {
   const PizZip = (await import('pizzip')).default;
   
   // Get buffer
@@ -133,7 +150,7 @@ export async function parsePPTX(
   const zip = new PizZip(buffer);
   
   // Extract text from slides
-  const slides: { slideNumber: number; text: string }[] = [];
+  const slides: { slideNumber: number; text: string; speakerNotes?: string }[] = [];
   
   // PPTX stores slides in ppt/slides/slide{n}.xml
   let slideNum = 1;
@@ -146,11 +163,38 @@ export async function parsePPTX(
     const slideXml = slideFile.asText();
     const text = extractTextFromPPTXSlide(slideXml);
     
-    if (text.trim()) {
-      slides.push({ slideNumber: slideNum, text: text.trim() });
+    // Extract speaker notes if enabled
+    let speakerNotes: string | undefined;
+    if (options.includeSpeakerNotes !== false) {
+      const notesPath = `ppt/notesSlides/notesSlide${slideNum}.xml`;
+      const notesFile = zip.file(notesPath);
+      if (notesFile) {
+        const notesXml = notesFile.asText();
+        speakerNotes = extractTextFromPPTXSlide(notesXml);
+      }
     }
     
+    slides.push({ 
+      slideNumber: slideNum, 
+      text: text.trim(),
+      speakerNotes: speakerNotes?.trim()
+    });
+    
     slideNum++;
+  }
+  
+  const totalSlides = slideNum - 1;
+  
+  // Analyze for image-heavy presentations
+  let analysis: PresentationAnalysis | undefined;
+  let alert: ImageHeavyAlert | undefined;
+  
+  if (options.checkImageHeavy !== false && totalSlides > 0) {
+    analysis = analyzePresentationForImageHeavy(slides);
+    
+    if (analysis.isImageHeavy) {
+      alert = createImageHeavyAlert(filename, analysis, slides);
+    }
   }
   
   // Create chunks (one per slide if preserveStructure, otherwise chunk all text)
@@ -160,7 +204,15 @@ export async function parsePPTX(
     // One chunk per slide (or split large slides)
     chunks = [];
     for (const slide of slides) {
-      const slideChunks = chunkText(slide.text, {
+      // Combine slide text with speaker notes if available
+      let combinedText = slide.text;
+      if (slide.speakerNotes && options.includeSpeakerNotes !== false) {
+        combinedText += '\n\n[Speaker Notes]\n' + slide.speakerNotes;
+      }
+      
+      if (!combinedText.trim()) continue;
+      
+      const slideChunks = chunkText(combinedText, {
         ...options,
         // Keep slide context together if possible
         chunkSize: options.chunkSize || 1024,
@@ -176,7 +228,13 @@ export async function parsePPTX(
     }
   } else {
     // Combine all text and chunk
-    const allText = slides.map(s => s.text).join('\n\n');
+    const allText = slides.map(s => {
+      let text = s.text;
+      if (s.speakerNotes && options.includeSpeakerNotes !== false) {
+        text += '\n\n[Speaker Notes]\n' + s.speakerNotes;
+      }
+      return text;
+    }).join('\n\n');
     chunks = chunkText(allText, options);
   }
   
@@ -192,13 +250,84 @@ export async function parsePPTX(
     client: options.client,
     campaign: options.campaign,
     documentType: options.documentType || 'presentation',
-    pageCount: slideNum - 1,
+    pageCount: totalSlides,
     chunkCount: chunks.length,
     fileSize: buffer.length,
     ingestedAt: new Date(),
   };
   
-  return { chunks, metadata };
+  return { chunks, metadata, analysis, alert };
+}
+
+/**
+ * Analyze presentation slides for image-heavy content
+ */
+function analyzePresentationForImageHeavy(
+  slides: { slideNumber: number; text: string; speakerNotes?: string }[]
+): PresentationAnalysis {
+  const slideAnalyses: SlideAnalysis[] = slides.map(slide => ({
+    slideNumber: slide.slideNumber,
+    textLength: slide.text.length,
+    textDensity: categorizeTextDensity(slide.text.length),
+    hasSpeakerNotes: !!slide.speakerNotes && slide.speakerNotes.length > 10
+  }));
+  
+  const totalText = slides.reduce((sum, s) => sum + s.text.length, 0);
+  const avgTextPerSlide = slides.length > 0 ? totalText / slides.length : 0;
+  const lowTextSlides = slideAnalyses.filter(a => a.textDensity === 'low').length;
+  const lowTextRatio = slides.length > 0 ? lowTextSlides / slides.length : 0;
+  
+  return {
+    totalSlides: slides.length,
+    avgTextPerSlide,
+    lowTextRatio,
+    isImageHeavy: avgTextPerSlide < IMAGE_HEAVY_AVG_TEXT_THRESHOLD || lowTextRatio > IMAGE_HEAVY_LOW_TEXT_RATIO_THRESHOLD,
+    slideAnalyses
+  };
+}
+
+/**
+ * Categorize text density for a slide
+ */
+function categorizeTextDensity(textLength: number): 'low' | 'medium' | 'high' {
+  if (textLength < LOW_TEXT_THRESHOLD) return 'low';
+  if (textLength < 200) return 'medium';
+  return 'high';
+}
+
+/**
+ * Create an alert for image-heavy presentations
+ */
+function createImageHeavyAlert(
+  filename: string, 
+  analysis: PresentationAnalysis,
+  slides: { slideNumber: number; text: string; speakerNotes?: string }[]
+): ImageHeavyAlert {
+  const speakerNotesFound = slides.some(s => s.speakerNotes && s.speakerNotes.length > 10);
+  
+  let recommendation: string;
+  if (analysis.lowTextRatio > 0.7) {
+    recommendation = 'CRITICAL: This presentation requires manual enrichment. Consider creating a companion summary document.';
+  } else if (analysis.lowTextRatio > 0.5) {
+    recommendation = 'WARNING: Many slides lack text. Check speaker notes or add metadata.';
+  } else {
+    recommendation = 'NOTICE: Some slides may need text enrichment for optimal retrieval.';
+  }
+  
+  if (speakerNotesFound) {
+    recommendation += ' Speaker notes were found and included.';
+  }
+  
+  return {
+    filename,
+    avgTextPerSlide: Math.round(analysis.avgTextPerSlide),
+    lowTextRatio: Math.round(analysis.lowTextRatio * 100) / 100,
+    recommendation,
+    affectedSlides: analysis.slideAnalyses
+      .filter(s => s.textDensity === 'low')
+      .map(s => s.slideNumber),
+    speakerNotesFound
+  };
 }
 
 /**

@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **GCP Infrastructure** (Phase 1.1)
+
   - Project `participation-translator` created and configured
   - APIs enabled: Vertex AI, Firestore, Storage, Slides, Drive, Secret Manager
   - Service account with IAM roles
@@ -22,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Firestore database (Native mode, us-central1)
 
 - **Document Parsers** (Phase 1.2)
+
   - PDF parser (pdf-parse)
   - PPTX parser (PizZip XML extraction)
   - DOCX parser (mammoth)
@@ -29,24 +31,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Semantic chunking with overlap
 
 - **Embeddings & Vector Storage** (Phase 1.3)
+
   - Vertex AI text-embedding-005 integration
   - Firestore vector storage (temporary, upgradeable to Vector Search)
   - Cosine similarity search
   - Metadata filtering
 
 - **CLI Tools**
+
   - `npm run ingest` - Document ingestion
   - `npm run retrieve` - RAG retrieval testing
   - `npm run stats` - Vector store statistics
   - `npm run seed-graph` - Knowledge graph seeding
 
 - **Learning System** (Phase 1.5)
+
   - Observation store (`src/lib/learning/observation-store.ts`)
   - Pattern analyzer (`src/lib/learning/pattern-analyzer.ts`)
   - Context injector (`src/lib/learning/context-injector.ts`)
   - Evolution architecture documentation (`docs/EVOLUTION.md`)
 
 - **Frontend** (Phase 4 early start)
+
   - Next.js 16 with App Router
   - shadcn/ui components (14 installed)
   - Landing page, generation wizard, history page

@@ -48,3 +48,13 @@ coverage/
 
 # Local backups
 backups/
+
+# Data files (large PPTX files, not tracked in git)
+data/presentations/*.pptx
+data/presentations/*.pdf
+data/creators/*.pptx
+data/creators/*.pdf
+data/media/*.pptx
+data/media/*.pdf
+!data/presentations/manifest.csv
+!data/**/.gitkeep

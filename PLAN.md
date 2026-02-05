@@ -235,14 +235,15 @@ The tool generates a **presentation-ready deck** that Leo can use directly with 
 
 The reasoning engine is **configurable** to support model upgrades:
 
-| Model                   | Use Case                    | Availability             | Cost (MTok)      | Notes                            |
-| ----------------------- | --------------------------- | ------------------------ | ---------------- | -------------------------------- |
-| **Claude Opus 4.5**     | Primary (complex reasoning) | Anthropic API, Vertex AI | $5 in / $25 out  | Best strategic reasoning         |
-| **Claude Sonnet 4.5**   | Development/testing         | Anthropic API, Vertex AI | $3 in / $15 out  | Good balance of speed/quality    |
-| **Claude Haiku 4.5**    | Simple tasks                | Anthropic API, Vertex AI | $1 in / $5 out   | Fastest, lowest cost             |
-| **Claude Sonnet 5** 🆕  | Future primary              | Coming Soon (Feb 2026)   | ~$2.5 in (est.)  | Expected ~50% cheaper than Opus  |
+| Model                  | Use Case                    | Availability             | Cost (MTok)     | Notes                           |
+| ---------------------- | --------------------------- | ------------------------ | --------------- | ------------------------------- |
+| **Claude Opus 4.5**    | Primary (complex reasoning) | Anthropic API, Vertex AI | $5 in / $25 out | Best strategic reasoning        |
+| **Claude Sonnet 4.5**  | Development/testing         | Anthropic API, Vertex AI | $3 in / $15 out | Good balance of speed/quality   |
+| **Claude Haiku 4.5**   | Simple tasks                | Anthropic API, Vertex AI | $1 in / $5 out  | Fastest, lowest cost            |
+| **Claude Sonnet 5** 🆕 | Future primary              | Coming Soon (Feb 2026)   | ~$2.5 in (est.) | Expected ~50% cheaper than Opus |
 
 **Claude Sonnet 5 Status (as of 2026-02-05):**
+
 - **Release**: Imminent (expected Super Bowl week, Feb 3-8, 2026)
 - **Codename**: "Fennec"
 - **Performance**: Expected comparable to Opus 4.5 at ~50% cost
@@ -252,9 +253,9 @@ The reasoning engine is **configurable** to support model upgrades:
 
 ```typescript
 // Model configuration in .env
-AI_MODEL_PROVIDER=vertex                          // or 'anthropic'
-AI_MODEL_NAME=claude-opus-4-5-20251101            // Current primary
-AI_MODEL_FALLBACK=claude-sonnet-4-5-20250929      // Current fallback
+AI_MODEL_PROVIDER = vertex; // or 'anthropic'
+AI_MODEL_NAME = claude - opus - 4 - 5 - 20251101; // Current primary
+AI_MODEL_FALLBACK = claude - sonnet - 4 - 5 - 20250929; // Current fallback
 // AI_MODEL_NAME=claude-sonnet-5-XXXXXXXX         // Future (when available)
 ```
 
@@ -671,43 +672,97 @@ timeout: 300s # Allow long generations
 
 ---
 
+## Leo's Requirements (Founder Session - 2026-02-05)
+
+See full details in [docs/LEOS_REQUIREMENTS.md](/docs/LEOS_REQUIREMENTS.md)
+
+### Core Design Decisions
+
+| Decision                  | Specification                                         |
+| ------------------------- | ----------------------------------------------------- |
+| Framework visibility      | **INVISIBLE** in output - seamless flow               |
+| Input format              | Manifesto-style, few paragraphs, single page          |
+| Strategy deck key element | Extract the "Shared Interest" reframe                 |
+| Executional flexibility   | Not every suggestion needs creative + media + creator |
+| Social platform for POC   | Reddit first (official API)                           |
+| Initial access            | Leo + Charley only                                    |
+| Feedback approach         | Dashboard with ratings, corrections, text suggestions |
+
+### Output Tiers
+
+**Tier A: High-Level Summary**
+- Participation Worthy Idea Write-up (transformed manifesto, seamless flow)
+- Overall Creative Approach
+- Media Strategy Overview
+- Creator/Influencer Strategy Overview
+
+**Tier B: Specific Executional Recommendations**
+- Each MAY combine: Creative idea + Media choice + Creator choice
+- NOT every suggestion needs all three elements
+
+### Rollout Plan
+
+| Phase | Scope                             | Feedback By          |
+| ----- | --------------------------------- | -------------------- |
+| 1     | Single specific assignment        | Leo + Charley        |
+| 2     | Same client, different assignment | Leo + Charley        |
+| 3     | Same internal client team         | Leo + Charley + Team |
+| 4+    | Broader rollout                   | Internal teams       |
+
+---
+
 ## Current Status (as of 2026-02-05)
 
 ### Completed ✅
 
-| Phase | Component | Status |
-|-------|-----------|--------|
-| **0** | Foundation Setup | ✅ Multi-agent architecture, rules, skills, hooks |
-| **1.1** | GCP Infrastructure | ✅ Project, APIs, service account, buckets, Firestore |
-| **1.2** | Document Parsers | ✅ PDF, PPTX, DOCX, TXT with semantic chunking |
-| **1.3** | Embeddings & Vector | ✅ Vertex AI text-embedding-005, Firestore storage |
-| **1.4** | Knowledge Graph | ✅ 9 framework sections, 5 patterns, 4 tactics seeded |
-| **1.5** | Learning System | ✅ Observation store, pattern analyzer, context injector |
-| **4** | Frontend (early) | ✅ Next.js 16, shadcn/ui, landing/wizard/history pages |
+| Phase   | Component               | Status                                                   |
+| ------- | ----------------------- | -------------------------------------------------------- |
+| **0**   | Foundation Setup        | ✅ Multi-agent architecture, rules, skills, hooks        |
+| **1.1** | GCP Infrastructure      | ✅ Project, APIs, service account, buckets, Firestore    |
+| **1.2** | Document Parsers        | ✅ PDF, PPTX, DOCX, TXT with semantic chunking           |
+| **1.3** | Embeddings & Vector     | ✅ Vertex AI text-embedding-005, Firestore storage       |
+| **1.4** | Knowledge Graph         | ✅ 9 framework sections, 5 patterns, 4 tactics seeded    |
+| **1.5** | Learning System         | ✅ Observation store, pattern analyzer, context injector |
+| **4**   | Frontend (early)        | ✅ Next.js 16, shadcn/ui, landing/wizard/history pages   |
+| **2**   | Data Organization       | ✅ 19 presentations + Creator/Media collections copied   |
+| **2**   | Manifest                | ✅ CSV metadata for all presentations                    |
+| **2**   | Image-Heavy Detection   | ✅ Skill created, parser updated with detection logic    |
+| **Docs**| Leo's Requirements      | ✅ Full founder input captured                           |
+| **Docs**| Demo Walkthrough        | ✅ Session script created for Leo demo                   |
 
-### Blocked ⏸️
+### In Progress 🔄
 
-| Item | Blocker | Owner |
-|------|---------|-------|
-| Document Ingestion | Awaiting sample presentations | Sylvia |
-| Phase 2 Kickoff | Awaiting Leo's guidance | Leo |
+| Item                      | Status                          | Next Action           |
+| ------------------------- | ------------------------------- | --------------------- |
+| GCP Authentication        | Configured but needs SA key     | Generate service key  |
+| Vector Store Indexing     | Dry-run tested, awaiting auth   | Run with live indexing|
+
+### Data Assets
+
+| Asset                     | Location                   | Count/Size   |
+| ------------------------- | -------------------------- | ------------ |
+| Participation Presentations| `data/presentations/`     | 19 PPTX files|
+| Collection of Creators    | `data/creators/`           | 1 file (326MB)|
+| Collection of Media Options| `data/media/`             | 1 file (291MB)|
+| Metadata Manifest         | `data/presentations/manifest.csv` | 19 entries |
 
 ### Ready for Phase 2 🚀
 
-The infrastructure is complete. Once sample presentations are provided:
-1. Ingest documents via CLI: `npm run ingest -- <file>`
-2. Test retrieval: `npm run retrieve -- "query"`
-3. Demo to Leo
+The infrastructure is complete with real data:
+
+1. Ingest documents via CLI: `npm run ingest -- <file> --client "Name" --type presentation`
+2. Test retrieval: `npm run retrieve -- "query" --top-k 5`
+3. Demo to Leo (see `docs/DEMO_WALKTHROUGH.md`)
 4. Begin 8-Part Framework integration with Leo's guidance
 
 ---
 
 ## Next Steps (Immediate)
 
-1. **Get sample presentations from Sylvia** - VW, Adidas, etc.
-2. **Ingest 3-5 documents** - Populate vector store
-3. **Demo retrieval to Leo** - Show RAG in action
-4. **Phase 2 kickoff** - Leo guides Framework integration
+1. **Complete GCP authentication** - Generate/configure service account key
+2. **Index presentations** - Run `npm run ingest` with real data
+3. **Demo to Leo** - Follow walkthrough script
+4. **Phase 2 kickoff** - Leo guides Framework integration with real use case
 
 ---
 

@@ -107,19 +107,19 @@ The Participation Translator uses specialized agents for different tasks:
 
 ### Tech Stack
 
-| Layer                | Technology                                  |
-| -------------------- | ------------------------------------------- |
-| **Frontend**         | Next.js 14 + React 18 + Tailwind CSS        |
-| **Backend**          | Node.js 22 LTS + Next.js API Routes         |
+| Layer                | Technology                                            |
+| -------------------- | ----------------------------------------------------- |
+| **Frontend**         | Next.js 14 + React 18 + Tailwind CSS                  |
+| **Backend**          | Node.js 22 LTS + Next.js API Routes                   |
 | **Reasoning Engine** | Claude Opus 4.5 (primary) / Sonnet 5 (when available) |
-| **Task Routing**     | Complexity-based model selection            |
-| **Embeddings**       | Vertex AI text-embedding-005                |
-| **Vector Store**     | Vertex AI Vector Search                     |
-| **Knowledge Graph**  | Patterns, campaigns, cultural moments       |
-| **Cultural APIs**    | Exa.ai, Perplexity API (Phase 3)            |
-| **Storage**          | Cloud Firestore, Cloud Storage              |
-| **Presentation**     | Google Slides API                           |
-| **Deployment**       | Cloud Run                                   |
+| **Task Routing**     | Complexity-based model selection                      |
+| **Embeddings**       | Vertex AI text-embedding-005                          |
+| **Vector Store**     | Vertex AI Vector Search                               |
+| **Knowledge Graph**  | Patterns, campaigns, cultural moments                 |
+| **Cultural APIs**    | Exa.ai, Perplexity API (Phase 3)                      |
+| **Storage**          | Cloud Firestore, Cloud Storage                        |
+| **Presentation**     | Google Slides API                                     |
+| **Deployment**       | Cloud Run                                             |
 
 ### Architecture Flow
 

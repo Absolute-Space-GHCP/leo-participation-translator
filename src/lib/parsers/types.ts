@@ -86,4 +86,43 @@ export interface ParseOptions {
   
   /** Document type */
   documentType?: 'presentation' | 'case_study' | 'framework' | 'other';
+  
+  /** Check for image-heavy presentations (default: true for PPTX) */
+  checkImageHeavy?: boolean;
+  
+  /** Include speaker notes if available (default: true) */
+  includeSpeakerNotes?: boolean;
+}
+
+/**
+ * Analysis of a single slide's text density
+ */
+export interface SlideAnalysis {
+  slideNumber: number;
+  textLength: number;
+  textDensity: 'low' | 'medium' | 'high';
+  hasSpeakerNotes: boolean;
+}
+
+/**
+ * Overall presentation analysis for image-heavy detection
+ */
+export interface PresentationAnalysis {
+  totalSlides: number;
+  avgTextPerSlide: number;
+  lowTextRatio: number;
+  isImageHeavy: boolean;
+  slideAnalyses: SlideAnalysis[];
+}
+
+/**
+ * Alert for image-heavy presentations
+ */
+export interface ImageHeavyAlert {
+  filename: string;
+  avgTextPerSlide: number;
+  lowTextRatio: number;
+  recommendation: string;
+  affectedSlides: number[];
+  speakerNotesFound: boolean;
 }

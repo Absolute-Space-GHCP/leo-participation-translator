@@ -9,10 +9,10 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 
 ---
 
-## Current Status: Phase 1 In Progress
+## Current Status: Phase 2 Ready
 
 **Architecture:** Multi-agent with specialized subagents, knowledge graph, task routing
-**Focus:** RAG Core + Knowledge Base (ready for Leo to guide Phase 2)
+**Focus:** Data ingested, ready for live indexing and demo to Leo
 
 ---
 
@@ -75,13 +75,25 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 | MEDIUM   | Create graph persistence | JSON export to data/ | ✅ DONE |
 | MEDIUM   | Build pattern extractor  | Identify JL patterns | PENDING |
 
-### 1.5 Initial Document Ingestion - PENDING
+### 1.5 Initial Document Ingestion - ✅ DATA READY
 
-| Priority | Task                              | Notes            | Status  |
-| -------- | --------------------------------- | ---------------- | ------- |
-| HIGH     | Get sample presentations from Leo | VW, Adidas, etc. | PENDING |
-| HIGH     | Ingest 3-5 documents              | Test pipeline    | PENDING |
-| HIGH     | Validate retrieval quality        | Manual testing   | PENDING |
+| Priority | Task                              | Notes                        | Status  |
+| -------- | --------------------------------- | ---------------------------- | ------- |
+| HIGH     | Get sample presentations          | 19 PPTX files from Sylvia    | ✅ DONE |
+| HIGH     | Copy to data directories          | presentations/creators/media | ✅ DONE |
+| HIGH     | Create metadata manifest          | manifest.csv with metadata   | ✅ DONE |
+| HIGH     | Image-heavy detection             | Skill + parser updated       | ✅ DONE |
+| HIGH     | Index to vector store             | Needs GCP auth               | PENDING |
+| HIGH     | Validate retrieval quality        | Manual testing after index   | PENDING |
+
+### Data Assets (2026-02-05)
+
+| Asset                       | Location                          | Count/Size     |
+| --------------------------- | --------------------------------- | -------------- |
+| Participation Presentations | `data/presentations/`             | 19 PPTX files  |
+| Collection of Creators      | `data/creators/`                  | 1 file (326MB) |
+| Collection of Media Options | `data/media/`                     | 1 file (291MB) |
+| Metadata Manifest           | `data/presentations/manifest.csv` | 19 entries     |
 
 ---
 
@@ -149,6 +161,18 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 | ------------------------------- | ---------- |
 | `docs/CULTURAL_INTELLIGENCE.md` | ✅ Created |
 | `docs/EVOLUTION.md`             | ✅ Created |
+| `docs/LEOS_REQUIREMENTS.md`     | ✅ Created |
+| `docs/DEMO_WALKTHROUGH.md`      | ✅ Created |
+
+### Skills & Data
+
+| File/Directory                                     | Status     |
+| -------------------------------------------------- | ---------- |
+| `.cursor/skills/image-heavy-detection/SKILL.md`    | ✅ Created |
+| `data/presentations/` (19 PPTX files)              | ✅ Copied  |
+| `data/creators/Collection of Creators.pptx`        | ✅ Copied  |
+| `data/media/Collection of Media Options.pptx`      | ✅ Copied  |
+| `data/presentations/manifest.csv`                  | ✅ Created |
 
 ---
 
@@ -158,10 +182,14 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 2. [x] ~~Implement parsers (PDF, PPTX, DOCX)~~
 3. [x] ~~Implement embeddings~~
 4. [x] ~~Seed knowledge graph~~
-5. [ ] Create Vector Search index (optional, Firestore works for now)
-6. [ ] Get sample presentations from Sylvia
-7. [ ] Ingest first documents
-8. [ ] Demo retrieval to Leo
+5. [x] ~~Get sample presentations from Sylvia~~ (19 files)
+6. [x] ~~Create data directories and copy files~~
+7. [x] ~~Create metadata manifest~~
+8. [x] ~~Add image-heavy detection~~
+9. [ ] Configure GCP service account key
+10. [ ] Index presentations to vector store
+11. [ ] Demo retrieval to Leo (see `docs/DEMO_WALKTHROUGH.md`)
+12. [ ] Create Vector Search index (production performance)
 
 ---
 

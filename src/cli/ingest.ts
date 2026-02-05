@@ -126,16 +126,34 @@ async function main() {
     chunkSize: options.chunkSize || 512,
     chunkOverlap: 64,
     preserveStructure: true,
+    checkImageHeavy: true,
+    includeSpeakerNotes: true,
   };
   
   const startParse = Date.now();
-  const { chunks, metadata } = await parseDocument(filePath, filename, parseOptions);
+  const result = await parseDocument(filePath, filename, parseOptions);
+  const { chunks, metadata } = result;
+  // TypeScript: analysis and alert may exist on PPTX results
+  const analysis = (result as { analysis?: unknown }).analysis;
+  const alert = (result as { alert?: { recommendation: string; avgTextPerSlide: number; lowTextRatio: number; affectedSlides: number[]; speakerNotesFound: boolean } }).alert;
   const parseTime = Date.now() - startParse;
   
   console.log(`✅ Parsed in ${parseTime}ms`);
   console.log(`   - Chunks: ${chunks.length}`);
   console.log(`   - Pages/Slides: ${metadata.pageCount || 'N/A'}`);
   console.log(`   - File size: ${(metadata.fileSize / 1024).toFixed(1)} KB`);
+  
+  // Show image-heavy alert if present
+  if (alert) {
+    console.log('\n⚠️  IMAGE-HEAVY PRESENTATION DETECTED');
+    console.log('─'.repeat(50));
+    console.log(`   Avg text per slide: ${alert.avgTextPerSlide} chars`);
+    console.log(`   Low-text slide ratio: ${(alert.lowTextRatio * 100).toFixed(0)}%`);
+    console.log(`   Affected slides: ${alert.affectedSlides.join(', ')}`);
+    console.log(`   Speaker notes found: ${alert.speakerNotesFound ? 'Yes (included)' : 'No'}`);
+    console.log(`\n   📋 ${alert.recommendation}`);
+    console.log('─'.repeat(50));
+  }
   
   // Show sample chunks
   console.log('\n📝 Sample chunks:');
