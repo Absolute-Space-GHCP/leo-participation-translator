@@ -25,13 +25,14 @@
     "@google-cloud/aiplatform": "^4.0.0",
     "@google-cloud/firestore": "^8.0.0",
     "@google-cloud/storage": "^7.18.0",
+    "@tavily/core": "^0.7.1",
+    "docxtemplater": "^3.55.0",
+    "dotenv": "^16.5.0",
     "mammoth": "^1.9.0",
     "pdf-parse": "^1.1.1",
     "pizzip": "^3.2.0",
-    "docxtemplater": "^3.55.0",
     "uuid": "^11.1.0",
-    "zod": "^3.24.0",
-    "dotenv": "^16.5.0"
+    "zod": "^3.24.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

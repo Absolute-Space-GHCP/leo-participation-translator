@@ -50,11 +50,37 @@ Last Updated: 2026-02-05
 
 ---
 
-### Future Integrations (Pending)
+#### Tavily (Backup Semantic Search)
+
+| Property | Value |
+|----------|-------|
+| **Purpose** | Backup semantic search, AI answers |
+| **API Key** | *(Add your key to .env)* |
+| **Base URL** | `https://api.tavily.com` |
+| **Documentation** | https://docs.tavily.com |
+| **Dashboard** | https://app.tavily.com |
+| **Pricing** | Free tier: 1000 searches/month |
+
+#### Endpoints Used
+
+| Endpoint | Purpose |
+|----------|---------|
+| `POST /search` | Web search with semantic understanding |
+| Answer feature | AI-generated answers from search |
+
+#### Features
+
+- Search depth: basic or advanced
+- Topic filtering: general or news
+- Date range filtering for news
+- AI-generated answers included
+
+---
+
+## Future Integrations (Pending)
 
 | Service | Purpose | Status |
 |---------|---------|--------|
-| Tavily | Backup semantic search | Not configured |
 | Gemini Grounding | Search/summarization | Planned |
 | Perplexity | Failover summarization | Planned |
 
@@ -72,8 +98,11 @@ Last Updated: 2026-02-05
 ## Environment Variables
 
 ```bash
-# Exa.ai
+# Exa.ai (Primary)
 EXA_API_KEY=5d8ea719-42c2-4732-8120-13b69538077e
+
+# Tavily (Backup)
+TAVILY_API_KEY=your-tavily-api-key
 
 # GCP
 GCP_PROJECT_ID=participation-translator
@@ -81,7 +110,6 @@ GCP_REGION=us-central1
 GOOGLE_APPLICATION_CREDENTIALS=./sa-key.json
 
 # Future
-# TAVILY_API_KEY=
 # PERPLEXITY_API_KEY=
 ```
 

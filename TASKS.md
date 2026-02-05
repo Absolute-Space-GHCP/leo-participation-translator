@@ -200,12 +200,12 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 
 ### 🎯 IMMEDIATE (Easy Wins)
 
-| # | Task | Complexity | Est. Time |
-|---|------|------------|-----------|
-| 1 | Demo retrieval to Leo | Low | 15 min |
-| 2 | Add Tavily API (backup search) | Low | 30 min |
-| 3 | Create context merger service | Medium | 1 hr |
-| 4 | Build sentiment analysis endpoint | Medium | 1 hr |
+| # | Task | Complexity | Est. Time | Status |
+|---|------|------------|-----------|--------|
+| 1 | Demo retrieval to Leo | Low | 15 min | PENDING |
+| 2 | ~~Add Tavily API (backup search)~~ | Low | 30 min | ✅ DONE |
+| 3 | Create context merger service | Medium | 1 hr | PENDING |
+| 4 | Build sentiment analysis endpoint | Medium | 1 hr | PENDING |
 
 ---
 
@@ -316,11 +316,11 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 | HIGH | Create CLI tool | `npm run cultural` | ✅ DONE |
 | HIGH | Document API | `docs/URL_API.md` | ✅ DONE |
 
-### 3.2 Additional Cultural Sources - PENDING
+### 3.2 Additional Cultural Sources - IN PROGRESS
 
 | Priority | Task | Description | Status |
 |----------|------|-------------|--------|
-| MEDIUM | Integrate Tavily API | Backup semantic search | PENDING |
+| MEDIUM | Integrate Tavily API | Backup semantic search | ✅ DONE |
 | MEDIUM | Integrate Perplexity | Search + summarization | PENDING |
 | LOW | Reddit PRAW microservice | Direct API (if needed later) | DEFERRED |
 | MEDIUM | Build context merger | Combine RAG + Cultural intel | PENDING |

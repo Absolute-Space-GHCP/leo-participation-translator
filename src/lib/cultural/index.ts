@@ -9,3 +9,6 @@
 
 export * from './exa';
 export { default as exaClient } from './exa';
+
+export * from './tavily';
+export { default as tavilyClient } from './tavily';
