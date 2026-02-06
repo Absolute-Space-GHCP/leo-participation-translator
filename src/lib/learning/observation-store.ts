@@ -16,7 +16,7 @@ import type {
   FeedbackQuery,
   ObservationType,
   ObservationOutcome,
-} from './types';
+} from './types.js';
 
 // ===========================================
 // Observation Store Class

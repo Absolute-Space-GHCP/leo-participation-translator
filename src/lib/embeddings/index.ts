@@ -165,20 +165,26 @@ export async function generateQueryEmbedding(query: string): Promise<number[]> {
     },
   }];
   
-  const [response] = await client.predict({
-    endpoint,
-    instances,
-  });
-  
-  if (response.predictions && response.predictions[0]) {
-    const prediction = response.predictions[0];
-    if (prediction.structValue?.fields?.embeddings?.structValue?.fields?.values?.listValue?.values) {
-      return prediction.structValue.fields.embeddings.structValue.fields.values.listValue.values
-        .map((v: { numberValue?: number }) => v.numberValue || 0);
+  try {
+    const [response] = await client.predict({
+      endpoint,
+      instances,
+    });
+    
+    if (response.predictions && response.predictions[0]) {
+      const prediction = response.predictions[0];
+      if (prediction.structValue?.fields?.embeddings?.structValue?.fields?.values?.listValue?.values) {
+        return prediction.structValue.fields.embeddings.structValue.fields.values.listValue.values
+          .map((v: { numberValue?: number }) => v.numberValue || 0);
+      }
     }
+    
+    throw new Error('Failed to generate query embedding: no predictions returned');
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(`[embeddings] Query embedding generation failed: ${message}`);
+    throw new Error(`Query embedding generation failed: ${message}`);
   }
-  
-  throw new Error('Failed to generate query embedding');
 }
 
 /**

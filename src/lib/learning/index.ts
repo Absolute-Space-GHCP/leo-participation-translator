@@ -8,37 +8,37 @@
  */
 
 // Types
-export * from './types';
+export * from './types.js';
 
 // Observation Store
 export {
   ObservationStore,
   getObservationStore,
   createObservationStore,
-} from './observation-store';
+} from './observation-store.js';
 
 // Pattern Analyzer
 export {
   PatternAnalyzer,
   getPatternAnalyzer,
   createPatternAnalyzer,
-} from './pattern-analyzer';
+} from './pattern-analyzer.js';
 
 // Context Injector
 export {
   ContextInjector,
   getContextInjector,
   createContextInjector,
-} from './context-injector';
+} from './context-injector.js';
 
 // ===========================================
 // Convenience Functions
 // ===========================================
 
-import { getObservationStore } from './observation-store';
-import { getPatternAnalyzer } from './pattern-analyzer';
-import { getContextInjector } from './context-injector';
-import type { SessionObservation, OutputFeedback, EvolutionContext } from './types';
+import { getObservationStore } from './observation-store.js';
+import { getPatternAnalyzer } from './pattern-analyzer.js';
+import { getContextInjector } from './context-injector.js';
+import type { SessionObservation, OutputFeedback, EvolutionContext } from './types.js';
 
 /**
  * Record a session observation
@@ -60,12 +60,12 @@ export async function recordFeedback(feedback: OutputFeedback): Promise<void> {
  * Track an error occurrence
  */
 export async function trackError(
-  errorType: SessionObservation['type'],
+  errorType: 'generation' | 'retrieval' | 'api' | 'parsing' | 'export' | 'validation',
   errorMessage: string,
   context: Record<string, unknown> = {}
 ): Promise<void> {
   await getObservationStore().trackError({
-    errorType: errorType as 'generation' | 'retrieval' | 'api' | 'parsing' | 'export' | 'validation',
+    errorType,
     errorMessage,
     context,
     timestamp: new Date(),

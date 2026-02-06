@@ -7,7 +7,7 @@
  * @updated 2026-02-03
  */
 
-export * from './pptx';
+export * from './pptx.js';
 
 import type { ParticipationBlueprint } from '../generation';
 

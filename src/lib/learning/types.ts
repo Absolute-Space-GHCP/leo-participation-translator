@@ -45,7 +45,7 @@ export interface SessionObservation {
 // ===========================================
 
 export type EditIntensity = 'minor' | 'major' | 'rewrite';
-export type ExportFormat = 'pptx' | 'pdf' | 'slides' | 'none';
+export type ExportFormat = 'pptx' | 'pdf' | 'google-slides' | 'none';
 
 export interface OutputEdit {
   section: string;

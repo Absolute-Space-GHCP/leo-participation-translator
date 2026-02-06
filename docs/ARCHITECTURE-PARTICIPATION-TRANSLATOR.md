@@ -98,7 +98,7 @@ This document details the technical architecture for The Participation Translato
 
 ### 3. RAG Pipeline
 
-**Technology:** LangChain.js, Vertex AI Embeddings, Pinecone/Vertex AI Vector Search
+**Technology:** Vertex AI Embeddings, Firestore Vector Search
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -118,8 +118,8 @@ This document details the technical architecture for The Participation Translato
 │                                               ▼                  │
 │  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐          │
 │  │ Vector DB   │ ◄─ │ Vertex AI   │ ◄─ │ Text        │          │
-│  │ (Pinecone   │    │ Embeddings  │    │ Chunks      │          │
-│  │ or Vertex)  │    │ (768-dim)   │    │ + Metadata  │          │
+│  │ (Firestore) │    │ Embeddings  │    │ Chunks      │          │
+│  │             │    │ (768-dim)   │    │ + Metadata  │          │
 │  └─────────────┘    └─────────────┘    └─────────────┘          │
 │                                                                  │
 │  RETRIEVAL FLOW                                                  │
@@ -276,7 +276,7 @@ interface CulturalContext {
 
 ### 5. Generation Engine
 
-**Technology:** Vertex AI Claude 3.5 Sonnet, LangChain.js
+**Technology:** Claude Opus 4.6 via Vertex AI, Prompt Assembly Service
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -323,8 +323,8 @@ interface CulturalContext {
 │                         │                                        │
 │                         ▼                                        │
 │                 ┌─────────────┐                                  │
-│                 │ Claude 3.5  │                                  │
-│                 │ Sonnet      │                                  │
+│                 │ Claude      │                                  │
+│                 │ Opus 4.6    │                                  │
 │                 │ (Vertex AI) │                                  │
 │                 └──────┬──────┘                                  │
 │                        │                                         │
@@ -463,7 +463,7 @@ const generateBlueprint = async (input: GenerationInput) => {
 │  │  ┌─────────────┐         ┌─────────────┐         ┌─────────────┐       │    │
 │  │  │ Firestore   │         │ Cloud       │         │ Vertex AI   │       │    │
 │  │  │ (Native)    │         │ Storage     │         │             │       │    │
-│  │  │             │         │             │         │ • Claude 3.5│       │    │
+│  │  │             │         │             │         │ • Claude 4.6│       │    │
 │  │  │ • Sessions  │         │ • Documents │         │ • Embeddings│       │    │
 │  │  │ • Outputs   │         │ • Exports   │         │ • Vector    │       │    │
 │  │  │ • Cache     │         │             │         │   Search    │       │    │
@@ -600,8 +600,8 @@ const log = {
 ## Related Documents
 
 - [PLAN.md](/PLAN.md) - Implementation phases and timeline
-- [docs/SETUP.md](/docs/SETUP.md) - Developer setup guide (TBD)
-- [docs/USER_GUIDE.md](/docs/USER_GUIDE.md) - End-user documentation (TBD)
+- [docs/QUICKSTART.md](/docs/QUICKSTART.md) - Developer quickstart guide
+- [docs/BUILD.md](/docs/BUILD.md) - Build and development guide
 
 ---
 

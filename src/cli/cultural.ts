@@ -196,7 +196,7 @@ Examples:
         }
         console.log(`Question: "${query}"\n`);
         
-        if (!tavily.isConfigured()) {
+        if (!(await tavily.isConfigured())) {
           console.error('❌ Error: Tavily API key not configured (required for answer)');
           return;
         }

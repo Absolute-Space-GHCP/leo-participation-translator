@@ -1,0 +1,134 @@
+---
+alwaysApply: true
+description: "MANDATORY: Archive, backup, and safety checks on EVERY git operation (commit, push, pull). This rule MUST be followed — no exceptions."
+---
+
+# Git Operations Protocol
+
+**This rule applies to EVERY git commit, push, and pull operation. No exceptions.**
+
+---
+
+## On Every Commit + Push
+
+Execute these steps **in order** before and after committing:
+
+### Step 1: Pre-Commit Backup
+
+Create a local backup of the current project state before committing:
+
+```bash
+ARCHIVE_DIR="$HOME/Projects/ARCHIVED"
+PROJECT_NAME=$(basename $(pwd))
+TIMESTAMP=$(date +%Y-%m-%d_%H%M%S)
+ARCHIVE_PATH="$ARCHIVE_DIR/${PROJECT_NAME}_pre-commit_${TIMESTAMP}"
+
+mkdir -p "$ARCHIVE_DIR"
+rsync -a --exclude='node_modules' --exclude='.git' \
+  --exclude='data/presentations/*.pptx' \
+  --exclude='data/creators/*.pptx' \
+  --exclude='data/media/*.pptx' \
+  . "$ARCHIVE_PATH/"
+echo "✅ Pre-commit backup: $ARCHIVE_PATH"
+```
+
+### Step 2: Commit
+
+```bash
+git add -A
+git commit -m "descriptive message"
+```
+
+### Step 3: Pre-Push Safety Check
+
+Before pushing, fetch remote and check for divergence:
+
+```bash
+git fetch origin main
+git log HEAD..origin/main --oneline
+```
+
+**If remote has commits not in local** → Archive the remote state FIRST:
+
+```bash
+ARCHIVE="$HOME/Projects/ARCHIVED/$(basename $(pwd))_remote_$(date +%Y-%m-%d_%H%M%S)"
+mkdir -p "$HOME/Projects/ARCHIVED"
+git clone --depth 1 $(git remote get-url origin) "$ARCHIVE"
+echo "✅ Remote archived: $ARCHIVE"
+```
+
+**If remote is clean (no extra commits)** → Safe to push directly.
+
+### Step 4: Push
+
+```bash
+git push origin main
+```
+
+### Step 5: Verify
+
+```bash
+git status  # Should show: "nothing to commit, working tree clean"
+```
+
+---
+
+## On Every Pull / Fetch
+
+Before pulling remote changes into local:
+
+### Step 1: Pre-Pull Backup
+
+```bash
+ARCHIVE_DIR="$HOME/Projects/ARCHIVED"
+PROJECT_NAME=$(basename $(pwd))
+TIMESTAMP=$(date +%Y-%m-%d_%H%M%S)
+ARCHIVE_PATH="$ARCHIVE_DIR/${PROJECT_NAME}_pre-pull_${TIMESTAMP}"
+
+mkdir -p "$ARCHIVE_DIR"
+rsync -a --exclude='node_modules' --exclude='.git' \
+  --exclude='data/presentations/*.pptx' \
+  --exclude='data/creators/*.pptx' \
+  --exclude='data/media/*.pptx' \
+  . "$ARCHIVE_PATH/"
+echo "✅ Pre-pull backup: $ARCHIVE_PATH"
+```
+
+### Step 2: Pull
+
+```bash
+git pull origin main
+```
+
+### Step 3: Verify
+
+```bash
+git status
+git log --oneline -3
+```
+
+---
+
+## Quick Reference
+
+| Operation | Required Steps |
+|-----------|---------------|
+| `git commit` + `git push` | Backup → Commit → Fetch/Compare → Archive remote if diverged → Push → Verify |
+| `git pull` | Backup → Pull → Verify |
+| `git push --force` | **ALWAYS** archive remote first, no exceptions |
+| First push to new repo | No archive needed (nothing to overwrite) |
+
+## Archive Location
+
+- **Path:** `~/Projects/ARCHIVED/`
+- **Naming:** `{project}_pre-commit_{timestamp}`, `{project}_pre-pull_{timestamp}`, `{project}_remote_{timestamp}`
+- **Excludes:** `node_modules/`, `.git/`, large binary files (PPTX in data/)
+- **Purpose:** Instant rollback if anything goes wrong
+
+---
+
+*This protocol is NON-NEGOTIABLE. Execute it on every git operation.*
+
+Author: Charley Scholz, JLIT
+Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
+Created: 2026-02-06

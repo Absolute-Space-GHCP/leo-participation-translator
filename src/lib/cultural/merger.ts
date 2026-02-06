@@ -186,8 +186,8 @@ async function getCulturalContext(
 
   // Build search queries
   const trendQuery = brand 
-    ? `${brand} ${category || ''} trends 2026`
-    : `${query} trends 2026`;
+    ? `${brand} ${category || ''} trends ${new Date().getFullYear()}`
+    : `${query} trends ${new Date().getFullYear()}`;
   
   const discussionQuery = brand
     ? `${brand} ${category || ''} discussion opinions`
@@ -204,7 +204,7 @@ async function getCulturalContext(
     discussions.push(...exaDiscussions.results.map(r => exaToUnified(r, 'reddit')));
 
     // Tavily searches (backup/supplement)
-    if (includeTavily && tavily.isConfigured()) {
+    if (includeTavily && (await tavily.isConfigured())) {
       const [tavilyTrends, tavilyDiscussions] = await Promise.all([
         tavily.searchTrends(category || query, { maxResults: culturalTopK }),
         tavily.searchReddit(discussionQuery, { maxResults: culturalTopK }),

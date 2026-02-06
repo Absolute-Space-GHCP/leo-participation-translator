@@ -12,8 +12,8 @@ import type {
   SimilarCampaign,
   UserPreference,
   LearnedPattern,
-} from './types';
-import { getPatternAnalyzer } from './pattern-analyzer';
+} from './types.js';
+import { getPatternAnalyzer } from './pattern-analyzer.js';
 import { KnowledgeGraph, createKnowledgeGraph } from '../memory/knowledge-graph';
 
 // ===========================================

@@ -1,6 +1,6 @@
 # The Participation Translator - Implementation Plan
 
-Version: 1.2.0
+Version: 1.1.0
 Last Updated: 2026-02-06
 Author: Charley Scholz, JLIT
 Co-authored: Claude Opus 4.6, Claude Code (coding assistant), Cursor (IDE)
@@ -190,7 +190,7 @@ The tool generates a **presentation-ready deck** that Leo can use directly with 
 │  1. DOCUMENT INGESTION                                               │
 │  ┌──────────────────────────────────────────────────────────────┐   │
 │  │  Past Presentations    →   Document Parser    →   Chunking   │   │
-│  │  (PDF, PPTX, DOCX)         (LangChain)            Strategy   │   │
+│  │  (PDF, PPTX, DOCX)         (Custom)               Strategy   │   │
 │  └───────────────────────────────────┬──────────────────────────┘   │
 │                                      │                               │
 │  2. EMBEDDING GENERATION             ▼                               │

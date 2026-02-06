@@ -1,244 +1,182 @@
-# JL Dev Environment Golden Master - Build Guide
+# Build & Development Guide
 
 Version: 1.0.0
-Last Updated: 2025-12-08
-Purpose: Complete step-by-step guide to build the Golden Master dev environment
-Target: Johannes Leonardo engineering team (macOS Apple Silicon)
-
----
-
-## Build Summary
-
-| Phase | Description | Status |
-|-------|-------------|--------|
-| 1 | Foundation (Homebrew, nvm, SDKMAN, Java) | COMPLETE |
-| 2 | Cursor IDE + 27 Extensions | COMPLETE |
-| 3 | GCP Auth + Gemini Models | COMPLETE |
-| 4 | Slack Integration | COMPLETE |
-| 5 | GitHub Repository | COMPLETE |
-| 6 | Validation (18 checks) | COMPLETE |
+Last Updated: 2026-02-06
 
 ---
 
 ## Prerequisites
 
-| Requirement | Minimum | Verified |
-|-------------|---------|----------|
-| macOS | 14.0+ (Sonoma) | 26.1 (Tahoe) |
-| Apple Silicon | M1/M2/M3 | M2 Pro |
-| Admin Access | Required | Yes |
-| Disk Space | 20GB free | Yes |
-| RAM | 16GB+ | 32GB |
+| Requirement | Version | Check |
+|---|---|---|
+| Node.js | 22 LTS | `node --version` |
+| npm | 10+ | `npm --version` |
+| gcloud CLI | Latest | `gcloud --version` |
+| GCP Project | `participation-translator` | `gcloud config get-value project` |
 
 ---
 
-## Phase 1: Foundation
+## Initial Setup
 
-### 1.1 Xcode CLI Tools
-Already installed at: /Library/Developer/CommandLineTools
+```bash
+# Clone
+git clone https://github.com/Absolute-Space-GHCP/leo-participation-translator.git
+cd leo-participation-translator
 
-    xcode-select --install
-    xcode-select -p
+# Install dependencies
+npm install
 
-### 1.2 Homebrew
-Version: 5.0.5
+# Copy environment template
+cp .env.example .env
 
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-    brew --version
+# Authenticate with GCP (opens browser)
+gcloud auth login --update-adc
+gcloud config set project participation-translator
+```
 
-### 1.3 Node.js via nvm
-Version: Node v22.16.0 LTS, npm 11.6.0
-
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
-    source ~/.zshrc
-    nvm install --lts
-    nvm alias default lts/*
-    node -v && npm -v
-
-### 1.4 fnm (backup)
-Version: 1.38.1
-
-    brew install fnm
-
-### 1.5 Java via SDKMAN
-Version: Java 21.0.7 LTS (Eclipse Temurin)
-
-    curl -s "https://get.sdkman.io" | bash
-    source "$HOME/.sdkman/bin/sdkman-init.sh"
-    sdk install java 21.0.7-tem
-    java -version
+> **API Keys:** Exa.ai and Tavily keys are stored in GCP Secret Manager. The app reads them automatically at runtime. For local dev without Secret Manager access, set `EXA_API_KEY` and `TAVILY_API_KEY` in your `.env` file.
 
 ---
 
-## Phase 2: Cursor IDE and Extensions
+## Development Scripts
 
-### 2.1 Install Cursor
-Download from: https://cursor.sh
-Or: brew install --cask cursor
-
-### 2.2 Install Extensions (27 total)
-See config/cursor/extensions.txt for full list.
-
-    cursor --install-extension Continue.continue
-    cursor --install-extension anthropic.claude-code
-    cursor --install-extension ms-python.python
-    cursor --install-extension vscjava.vscode-java-pack
-    cursor --install-extension dbaeumer.vscode-eslint
-    cursor --install-extension eamodio.gitlens
-
-### 2.3 Verify Extensions
-
-    cursor --list-extensions | wc -l
-    # Expected: 27
-
-### 2.4 Configure Claude Code
-In Cursor Settings, search "Claude Code":
-- Selected Model: Opus 4.6
+| Command | Purpose |
+|---|---|
+| `npm run build` | Compile TypeScript to `dist/` |
+| `npm run dev` | Watch mode — recompiles on change |
+| `npm test` | Run tests (Vitest) |
+| `npm run ingest -- <file>` | Ingest a PPTX/PDF into vector store |
+| `npm run convert -- -i <file> -o <out>` | Convert PPTX to Markdown |
+| `npm run retrieve -- <query>` | Test RAG retrieval |
+| `npm run stats` | View vector store statistics |
+| `npm run cultural -- <command>` | Cultural intelligence CLI |
+| `npm run seed-graph` | Seed knowledge graph |
+| `npm run batch-ingest -- <dir>` | Bulk ingest a folder |
+| `npm run extract-metadata -- <file>` | Extract metadata from a document |
+| `npm run dashboard` | Launch monitoring dashboard |
 
 ---
 
-## Phase 3: GCP Auth and Gemini Models
+## Project Structure
 
-### 3.1 User Authentication
-
-    gcloud auth login
-    # Account: charleys@johannesleonardo.com
-
-### 3.2 Application Default Credentials
-
-    gcloud auth application-default login --project=jlai-gm-v3
-    # Creates: ~/.config/gcloud/application_default_credentials.json
-
-### 3.3 Set Default Project
-
-    gcloud config set project jlai-gm-v3
-
-### 3.4 Verify Gemini Access
-Test Gemini 3 Pro (global endpoint):
-
-    curl -X POST "https://aiplatform.googleapis.com/v1/projects/jlai-gm-v3/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent" \
-      -H "Authorization: Bearer $(gcloud auth print-access-token)" \
-      -H "Content-Type: application/json" \
-      -d '{"contents":[{"role":"user","parts":[{"text":"Hello"}]}]}'
-
-### 3.5 Available Models
-
-| Model | ID | Region |
-|-------|-----|--------|
-| Gemini 3 Pro | gemini-3-pro-preview | global |
-| Gemini 2.5 Pro | gemini-2.5-pro | us-central1 |
-| Gemini 2.5 Flash | gemini-2.5-flash | us-central1 |
-
-### 3.6 Configure Continue
-
-    mkdir -p ~/.continue
-    cp config/continue/config.json.template ~/.continue/config.json
-    # Edit and replace YOUR_PROJECT_ID with jlai-gm-v3
+```
+leo-participation-translator/
+├── src/
+│   ├── lib/
+│   │   ├── cultural/       # Exa.ai, Tavily, sentiment, merger
+│   │   ├── embeddings/     # Vertex AI embedding generation
+│   │   ├── export/         # PPTX/PDF/Slides export (Phase 4)
+│   │   ├── generation/     # Claude client, prompt assembly, formatters
+│   │   ├── learning/       # Evolution system (observations, patterns)
+│   │   ├── memory/         # Knowledge graph
+│   │   ├── parsers/        # PPTX/PDF/DOCX parsing
+│   │   ├── router/         # Task-based model routing
+│   │   └── secrets/        # GCP Secret Manager client
+│   ├── prompts/            # System prompts, framework sections
+│   └── cli/                # CLI tools (ingest, retrieve, cultural, etc.)
+├── app/                    # Next.js 14 frontend (Phase 4)
+│   └── src/app/            # App Router pages
+├── data/
+│   ├── presentations/      # Source PPTX files (gitignored)
+│   ├── markdown/           # Converted markdown versions
+│   └── creators/           # Creator briefs
+├── docs/                   # Project documentation
+├── sessions/               # Session logs
+├── dashboard/              # Monitoring dashboard
+└── config/                 # IDE/tool configuration templates
+```
 
 ---
 
-## Phase 4: Slack Integration
+## Build Process
 
-### 4.1 Slack App Details
+```bash
+# Full build
+npm run build
 
-| Item | Value |
-|------|-------|
-| App Name | DevBot-v3 |
-| App ID | A09SYTY3YHL |
-| Workspace ID | T7QD38DKM |
-| Test Channel | #ai-v3-sandbox |
-| App URL | https://api.slack.com/apps/A09SYTY3YHL |
+# Output goes to dist/ (not committed)
+# TypeScript config: tsconfig.json
+# Module system: ESM (type: "module" in package.json)
+```
 
-### 4.2 Configure Webhook
+### Important: ESM Module System
 
-    export SLACK_WEBHOOK_AI_SANDBOX="https://hooks.slack.com/services/T7QD38DKM/B0A1UBPAZ1D/..."
+This project uses ES Modules. All import paths in source code must include `.js` extensions:
 
-### 4.3 Test Webhook
+```typescript
+// ✅ Correct
+import { search } from '../cultural/exa.js';
 
-    curl -X POST -H 'Content-type: application/json' \
-      --data '{"text":"Test"}' \
-      "$SLACK_WEBHOOK_AI_SANDBOX"
-
----
-
-## Phase 5: GitHub Repository
-
-### 5.1 GitHub CLI Auth
-
-    gh auth login
-    # Account: cmscholz222
-    # Organization: Absolute-Space-GHCP
-
-### 5.2 Verify Access
-
-    gh auth status
-    gh api user/orgs --jq '.[].login'
-
-### 5.3 Repository URL
-https://github.com/Absolute-Space-GHCP/jl-dev-environment-gm
-
-### 5.4 Clone (Other Team Members)
-
-    gh repo clone Absolute-Space-GHCP/jl-dev-environment-gm
-    cd jl-dev-environment-gm
-    ./scripts/bootstrap.sh
+// ❌ Will fail
+import { search } from '../cultural/exa';
+```
 
 ---
 
-## Phase 6: Validation
+## Environment Configuration
 
-### 6.1 Run Validation Script
+See `.env.example` for the full template. Key variables:
 
-    ./scripts/validate.sh
+| Variable | Required | Purpose |
+|---|---|---|
+| `GCP_PROJECT_ID` | Yes | GCP project for all services |
+| `GCP_REGION` | Yes | Default: `us-central1` |
+| `VERTEX_AI_CLAUDE_REGION` | Yes | Claude on Vertex: `us-east5` |
+| `NODE_ENV` | No | `development` (default) or `production` |
+| `LOG_LEVEL` | No | `debug`, `info`, `warn`, `error` |
 
-### 6.2 Expected Results
-18 passed, 0 failed
+> **Secret Manager keys** (EXA_API_KEY, TAVILY_API_KEY) are fetched automatically in production. See `src/lib/secrets/index.ts`.
 
-### 6.3 Checks Performed
+---
 
-| Category | Checks |
-|----------|--------|
-| System | macOS, Architecture, Xcode CLI |
-| Package Managers | Homebrew, nvm, SDKMAN |
-| Runtimes | Node.js, npm, Java, Python |
-| Dev Tools | Git, Cursor, Docker, gcloud, gh |
-| Configuration | Continue, GCP ADC, GCP project |
+## Testing
+
+```bash
+# Run all tests
+npm test
+
+# Watch mode
+npm test -- --watch
+
+# Coverage
+npm test -- --coverage
+```
+
+Test framework: **Vitest**
+
+---
+
+## Deployment
+
+Production deployment uses Google Cloud Run:
+
+```bash
+# Build container
+gcloud builds submit --tag gcr.io/participation-translator/app
+
+# Deploy
+gcloud run deploy participation-translator \
+  --image gcr.io/participation-translator/app \
+  --region us-central1 \
+  --platform managed \
+  --allow-unauthenticated
+```
+
+See `docs/GCP_SETUP.md` for full infrastructure setup.
 
 ---
 
 ## Troubleshooting
 
-### Homebrew: Command not found
-
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-
-### Java: JAVA_HOME not set
-
-    source "$HOME/.sdkman/bin/sdkman-init.sh"
-
-### GCP: Authentication errors
-
-    gcloud auth revoke --all
-    gcloud auth login
-    gcloud auth application-default login --project=jlai-gm-v3
-
-### Claude Code: Not showing in Cursor
-
-    Cmd+Shift+P -> "Claude Code: Open in Side Bar"
-
-### Gemini 3: Model not found
-Use global endpoint, not us-central1
+| Issue | Solution |
+|---|---|
+| `Secret Manager fallback` debug messages | Normal in local dev — keys fall back to `.env` |
+| `GOOGLE_APPLICATION_CREDENTIALS` errors | Run `gcloud auth login --update-adc` |
+| Import errors (ERR_MODULE_NOT_FOUND) | Ensure `.js` extensions on all imports |
+| Firestore permission denied | Check service account roles in GCP Console |
 
 ---
 
-## Version History
-
-| Date | Version | Changes |
-|------|---------|---------|
-| 2025-12-08 | 1.0.0 | Initial complete build |
-
----
-
-Maintained by: Charley (@charleymm)
+Author: Charley Scholz, JLIT
+Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
+Last Updated: 2026-02-06

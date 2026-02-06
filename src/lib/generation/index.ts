@@ -7,8 +7,7 @@
  * @updated 2026-02-06
  */
 
-import type { CulturalContext } from '../cultural';
-import type { SearchResult } from '../embeddings';
+import type { CulturalContext } from '../cultural/index.js';
 
 /**
  * Project seed - initial input from user
@@ -40,6 +39,9 @@ export interface ProjectSeed {
   
   /** Additional context */
   additionalContext?: string;
+  
+  /** The Shared Interest reframe from JL strategy team (if available) */
+  sharedInterest?: string;
 }
 
 /**
@@ -57,11 +59,74 @@ export interface FrameworkSection {
 }
 
 /**
- * The Participation Worthy Write-up
+ * Tier A: High-level strategic output
+ */
+export interface TierAOutput {
+  /** The seamless participation-worthy narrative */
+  writeup: string;
+  
+  /** Overall creative direction */
+  creativeApproach: string;
+  
+  /** Channel/platform strategy */
+  mediaStrategy: string;
+  
+  /** Talent/influencer approach */
+  creatorStrategy: string;
+}
+
+/**
+ * Tier B: Specific executional recommendation
+ */
+export interface TierBRecommendation {
+  /** Compelling title */
+  title: string;
+  
+  /** Execution description */
+  description: string;
+  
+  /** Includes creative element */
+  hasCreative: boolean;
+  
+  /** Includes media element */
+  hasMedia: boolean;
+  
+  /** Includes creator element */
+  hasCreator: boolean;
+  
+  /** Why this works for participation */
+  participationRationale: string;
+  
+  /** Estimated effort */
+  effort: 'low' | 'medium' | 'high';
+  
+  /** Media details if applicable */
+  mediaDetails: string | null;
+  
+  /** Creator details if applicable */
+  creatorDetails: string | null;
+}
+
+/**
+ * Tier B: Executional recommendations output
+ */
+export interface TierBOutput {
+  /** List of specific recommendations */
+  recommendations: TierBRecommendation[];
+}
+
+/**
+ * The Participation Worthy Write-up (combines both tiers)
  */
 export interface ParticipationWriteup {
-  /** All 9 framework sections */
-  sections: FrameworkSection[];
+  /** Tier A: Strategic narrative */
+  tierA: TierAOutput;
+  
+  /** Tier B: Executional recommendations */
+  tierB: TierBOutput;
+  
+  /** Legacy: framework sections (for internal tracking) */
+  sections?: FrameworkSection[];
   
   /** Generated at timestamp */
   generatedAt: Date;
@@ -188,75 +253,234 @@ export interface ParticipationBlueprint {
 /**
  * Generate a complete Participation Blueprint
  * 
- * Uses Chain of Thought reasoning with Claude Opus 4.6:
- * 1. Research phase - analyze retrieved context
- * 2. Framework application - generate 9-section write-up
- * 3. Pack generation - create tactical components
+ * This is the main entry point for the entire system. It:
+ * 1. Assembles context (RAG + cultural + evolution) via the assembly service
+ * 2. Calls Claude Opus 4.6 to generate the Tier A/B write-up
+ * 3. Calls Claude again to generate the Participation Pack
+ * 4. Parses and validates all outputs
+ * 5. Returns a complete, typed ParticipationBlueprint
  * 
- * @param seed - Project seed from user
- * @param retrievedContext - RAG results from vector store
- * @param culturalContext - Real-time cultural intelligence
+ * @param seed - Project seed from the creative team
+ * @param options - Generation options (streaming, model override, etc.)
  * @returns Complete Participation Blueprint
  */
 export async function generateBlueprint(
   seed: ProjectSeed,
-  retrievedContext: SearchResult[],
-  culturalContext: CulturalContext
+  options?: {
+    stream?: boolean;
+    onChunk?: (chunk: string) => void;
+    onProgress?: (stage: string, progress: number) => void;
+    skipCultural?: boolean;
+    skipEvolution?: boolean;
+  }
 ): Promise<ParticipationBlueprint> {
-  // TODO: Implement full generation pipeline
-  // Phase 2, Tasks 2.1-2.6
-  //
-  // 1. Build system prompt with 8-Part Framework
-  // 2. Assemble context (retrieved + cultural + seed)
-  // 3. Generate write-up with Chain of Thought
-  // 4. Generate pack components
-  // 5. Format and validate output
-  
-  throw new Error('Not implemented: generateBlueprint');
+  const startTime = Date.now();
+
+  console.log('\n🚀 Generating Participation Blueprint...');
+  console.log(`   Brand: ${seed.brand}`);
+  console.log(`   Category: ${seed.category}`);
+  console.log(`   Target: ${seed.targetAudience}`);
+
+  // Step 1: Assemble the write-up prompt (gathers all context)
+  options?.onProgress?.('Gathering context...', 0.1);
+
+  const writeupPrompt = await assembleWriteupPrompt(seed, {
+    tier: 'both',
+    includePack: false,
+    skipCultural: options?.skipCultural,
+    skipEvolution: options?.skipEvolution,
+  });
+
+  // Step 2: Generate the Tier A/B write-up
+  options?.onProgress?.('Generating write-up...', 0.3);
+
+  const writeupResponse = await callClaudeForBlueprint(
+    writeupPrompt.systemPrompt,
+    writeupPrompt.userPrompt,
+    {
+      stream: options?.stream,
+      onChunk: options?.onChunk,
+    }
+  );
+
+  const writeupResult = parseClaudeResponse<{ tierA: TierAOutput; tierB: TierBOutput }>(writeupResponse);
+
+  // Step 3: Generate the Participation Pack
+  options?.onProgress?.('Generating pack...', 0.6);
+
+  const writeupText = writeupResult.success
+    ? writeupResult.data.tierA.writeup
+    : writeupResponse.content;
+
+  const packPrompt = await assemblePackPrompt(writeupText, seed, {
+    skipCultural: options?.skipCultural,
+    skipEvolution: options?.skipEvolution,
+  });
+
+  const packResponse = await callClaudeForBlueprint(
+    packPrompt.systemPrompt,
+    packPrompt.userPrompt,
+    {
+      stream: options?.stream,
+      onChunk: options?.onChunk,
+    }
+  );
+
+  const packResult = parseClaudeResponse<ParticipationPack>(packResponse);
+
+  // Step 4: Assemble the final blueprint
+  options?.onProgress?.('Assembling blueprint...', 0.9);
+
+  const durationMs = Date.now() - startTime;
+  const totalTokens = writeupResponse.usage.totalTokens + packResponse.usage.totalTokens;
+
+  const blueprint: ParticipationBlueprint = {
+    seed,
+    writeup: {
+      tierA: writeupResult.success
+        ? writeupResult.data.tierA
+        : { writeup: writeupResponse.content, creativeApproach: '', mediaStrategy: '', creatorStrategy: '' },
+      tierB: writeupResult.success
+        ? writeupResult.data.tierB
+        : { recommendations: [] },
+      generatedAt: new Date(),
+    },
+    pack: packResult.success
+      ? packResult.data
+      : {
+          bigAudaciousAct: { title: 'Parse Error', description: packResponse.content, riskLevel: 'high', potentialImpact: '' },
+          subcultureBriefs: [],
+          mechanics: [],
+          creators: [],
+          trendHijacks: [],
+        },
+    retrievedContext: {
+      documentCount: writeupPrompt.assembly.ragResultCount,
+      sources: writeupPrompt.assembly.sourcesUsed,
+    },
+    culturalContext: {
+      trendsUsed: writeupPrompt.assembly.culturalResultCount,
+      subculturesIdentified: 0, // Counted from pack output
+    },
+    metadata: {
+      generatedAt: new Date(),
+      durationMs,
+      tokensUsed: totalTokens,
+      modelVersion: writeupResponse.model,
+    },
+  };
+
+  options?.onProgress?.('Complete!', 1.0);
+
+  console.log(`\n✨ Blueprint generated in ${(durationMs / 1000).toFixed(1)}s`);
+  console.log(`   Total tokens: ${totalTokens.toLocaleString()}`);
+  console.log(`   Estimated cost: $${(writeupResponse.estimatedCost + packResponse.estimatedCost).toFixed(4)}`);
+
+  return blueprint;
 }
 
 /**
- * Generate just the Participation Write-up
+ * Generate just the Participation Write-up (Tier A + B, no pack)
  */
 export async function generateWriteup(
   seed: ProjectSeed,
-  retrievedContext: SearchResult[],
-  culturalContext: CulturalContext
+  options?: {
+    stream?: boolean;
+    onChunk?: (chunk: string) => void;
+    skipCultural?: boolean;
+    skipEvolution?: boolean;
+  }
 ): Promise<ParticipationWriteup> {
-  // TODO: Implement write-up generation
-  throw new Error('Not implemented: generateWriteup');
+  const prompt = await assembleWriteupPrompt(seed, {
+    tier: 'both',
+    skipCultural: options?.skipCultural,
+    skipEvolution: options?.skipEvolution,
+  });
+
+  const response = await callClaudeForBlueprint(
+    prompt.systemPrompt,
+    prompt.userPrompt,
+    { stream: options?.stream, onChunk: options?.onChunk }
+  );
+
+  const result = parseClaudeResponse<{ tierA: TierAOutput; tierB: TierBOutput }>(response);
+
+  return {
+    tierA: result.success
+      ? result.data.tierA
+      : { writeup: response.content, creativeApproach: '', mediaStrategy: '', creatorStrategy: '' },
+    tierB: result.success
+      ? result.data.tierB
+      : { recommendations: [] },
+    generatedAt: new Date(),
+  };
 }
 
 /**
- * Generate just the Participation Pack
+ * Generate just the Participation Pack (requires existing write-up)
  */
 export async function generatePack(
   seed: ProjectSeed,
-  writeup: ParticipationWriteup,
-  culturalContext: CulturalContext
+  writeupText: string,
+  options?: {
+    stream?: boolean;
+    onChunk?: (chunk: string) => void;
+    skipCultural?: boolean;
+    skipEvolution?: boolean;
+  }
 ): Promise<ParticipationPack> {
-  // TODO: Implement pack generation
-  throw new Error('Not implemented: generatePack');
+  const prompt = await assemblePackPrompt(writeupText, seed, {
+    skipCultural: options?.skipCultural,
+    skipEvolution: options?.skipEvolution,
+  });
+
+  const response = await callClaudeForBlueprint(
+    prompt.systemPrompt,
+    prompt.userPrompt,
+    { stream: options?.stream, onChunk: options?.onChunk }
+  );
+
+  const result = parseClaudeResponse<ParticipationPack>(response);
+
+  if (result.success) {
+    return result.data;
+  }
+
+  // Return a shell with raw text so the output isn't lost
+  return {
+    bigAudaciousAct: { title: 'Parse Error', description: response.content, riskLevel: 'high', potentialImpact: '' },
+    subcultureBriefs: [],
+    mechanics: [],
+    creators: [],
+    trendHijacks: [],
+  };
 }
 
-/**
- * Call Claude Opus 4.6 via Vertex AI
- */
-export async function callClaude(
-  systemPrompt: string,
-  userPrompt: string,
-  options?: {
-    maxTokens?: number;
-    temperature?: number;
-    stream?: boolean;
-  }
-): Promise<string> {
-  // TODO: Implement Vertex AI Claude API call
-  // Phase 2, Task 2.4
-  //
-  // Uses @anthropic-ai/vertex-sdk
-  // Model: claude-opus-4-6
-  // Region: us-east5 (Claude on Vertex)
-  
-  throw new Error('Not implemented: callClaude');
-}
+// Re-export prompt assembly service
+export {
+  assembleWriteupPrompt,
+  assemblePackPrompt,
+  type AssembledPrompt,
+  type AssemblyOptions,
+} from './prompt-assembly.js';
+
+// Re-export Claude client
+export {
+  callClaude,
+  callClaudeForBlueprint,
+  callClaudeForTask,
+  parseClaudeResponse,
+  type ClaudeCallOptions,
+  type ClaudeResponse,
+} from './claude-client.js';
+
+// Re-export output formatters
+export {
+  formatBlueprint,
+  formatAsMarkdown,
+  formatAsHtml,
+  formatAsPlainText,
+  formatAsSlides,
+  type FormattedBlueprint,
+  type SlideData,
+} from './formatters.js';

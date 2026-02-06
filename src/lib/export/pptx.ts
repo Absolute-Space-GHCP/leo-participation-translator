@@ -4,7 +4,7 @@
  * @author Charley Scholz, JLIT
  * @coauthor Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
  * @created 2026-02-03
- * @updated 2026-02-03
+ * @updated 2026-02-06
  */
 
 import type { ParticipationBlueprint, ParticipationWriteup, ParticipationPack } from '../generation';
@@ -165,13 +165,43 @@ export function blueprintToSlides(blueprint: ParticipationBlueprint): SlideConte
     subtitle: 'Participation Blueprint',
   });
   
-  // Write-up slides
-  for (const section of blueprint.writeup.sections) {
+  // Write-up slides — use Tier A narrative if available, fall back to legacy sections
+  if (blueprint.writeup.tierA?.writeup) {
     slides.push({
       layout: 'section',
-      title: section.title,
-      body: [section.content],
+      title: 'The Participation Worthy Idea',
+      body: [blueprint.writeup.tierA.writeup],
     });
+    if (blueprint.writeup.tierA.creativeApproach) {
+      slides.push({
+        layout: 'section',
+        title: 'Creative Approach',
+        body: [blueprint.writeup.tierA.creativeApproach],
+      });
+    }
+    if (blueprint.writeup.tierA.mediaStrategy) {
+      slides.push({
+        layout: 'section',
+        title: 'Media Strategy',
+        body: [blueprint.writeup.tierA.mediaStrategy],
+      });
+    }
+    if (blueprint.writeup.tierA.creatorStrategy) {
+      slides.push({
+        layout: 'section',
+        title: 'Creator Strategy',
+        body: [blueprint.writeup.tierA.creatorStrategy],
+      });
+    }
+  } else if (blueprint.writeup.sections) {
+    // Legacy path: framework sections (if populated)
+    for (const section of blueprint.writeup.sections) {
+      slides.push({
+        layout: 'section',
+        title: section.title,
+        body: [section.content],
+      });
+    }
   }
   
   // Pack slides - Big Audacious Act

@@ -1,6 +1,6 @@
 # Cultural Intelligence Architecture
 
-Version: 1.0.2
+Version: 1.1.0
 Last Updated: 2026-02-05
 Author: Charley Scholz, JLIT
 Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
@@ -26,7 +26,7 @@ The Cultural Intelligence layer provides real-time trend discovery, sentiment an
 │  │  │      Exa.ai          │    │      Tavily          │               │   │
 │  │  │  ─────────────────   │    │  ─────────────────   │               │   │
 │  │  │  • Neural search     │    │  • LLM-optimized     │               │   │
-│  │  │  • 94.9% accuracy    │    │  • LangChain native  │               │   │
+│  │  │  • 94.9% accuracy    │    │  • API-native SDK     │               │   │
 │  │  │  • Semantic intent   │    │  • Structured JSON   │               │   │
 │  │  │  • $49/mo starter    │    │  • $50/mo starter    │               │   │
 │  │  └──────────┬───────────┘    └──────────┬───────────┘               │   │

@@ -1,0 +1,11 @@
+{
+  "created": "2026-02-06T16:33:51.937Z",
+  "decisions": [
+    {
+      "type": "credentials_skipped",
+      "item": "LLM_API_KEY",
+      "action": "running_without_llm",
+      "timestamp": "2026-02-06T16:33:51.992Z"
+    }
+  ]
+}

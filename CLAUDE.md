@@ -1,6 +1,6 @@
 # CLAUDE.md - The Participation Translator
 
-Version: 1.0.2
+Version: 1.1.0
 Last Updated: 2026-02-05
 Purpose: Project-specific context for AI assistants working on The Participation Translator
 
@@ -63,7 +63,7 @@ The tool combines:
 1. **JL Institutional Memory** - Vector database of past presentations (VW, Adidas, etc.)
 2. **8-Part Participation Framework** - Strategic structure for all outputs
 3. **Real-time Cultural Intelligence** - Live API feeds (trends, subcultures)
-4. **Claude 3.5 Sonnet** - Chain-of-thought reasoning for nuanced strategy
+4. **Claude Opus 4.6** - Chain-of-thought reasoning for nuanced strategy
 
 ### Key Outputs
 
@@ -118,7 +118,7 @@ The Participation Translator uses specialized agents for different tasks:
 | **Knowledge Graph**  | Patterns, campaigns, cultural moments                 |
 | **Cultural APIs**    | Exa.ai, Perplexity API (Phase 3)                      |
 | **Storage**          | Cloud Firestore, Cloud Storage                        |
-| **Presentation**     | Google Slides API                                     |
+| **Presentation**     | PptxGenJS (PPTX), Google Slides API (future)          |
 | **Deployment**       | Cloud Run                                             |
 
 ### Architecture Flow
@@ -199,7 +199,7 @@ leo-participation-translator/
 | **Phase 1**   | Knowledge Base & RAG Core    | ✅ COMPLETE (need docs) |
 | **Phase 1.5** | Learning/Evolution System    | ✅ COMPLETE             |
 | **Phase 2**   | 8-Part Framework Integration | 🔜 READY FOR LEO        |
-| **Phase 3**   | Cultural Intelligence Layer  | 📋 RESEARCH COMPLETE    |
+| **Phase 3**   | Cultural Intelligence Layer  | 🔄 ~55% (APIs integrated) |
 | **Phase 4**   | User Interface               | ✅ SCAFFOLDED           |
 | **Phase 5**   | Testing & Refinement         | ⏳ PENDING              |
 | **Phase 6**   | Deployment & Training        | ⏳ PENDING              |
@@ -220,7 +220,7 @@ leo-participation-translator/
 
 | API            | Purpose                     | Credentials              |
 | -------------- | --------------------------- | ------------------------ |
-| **Vertex AI**  | Claude 3.5, Embeddings      | GCP Service Account      |
+| **Vertex AI**  | Claude Opus 4.6, Embeddings | GCP Service Account      |
 | **Exa.ai**     | Semantic web search         | API Key (Secret Manager) |
 | **Perplexity** | Search + summarization      | API Key (Secret Manager) |
 | **Brandwatch** | Social listening (optional) | Enterprise subscription  |
@@ -296,7 +296,7 @@ leo-participation-translator/
 | Run tests        | `npm test`                      |
 | Build            | `npm run build`                 |
 | Deploy           | `gcloud run deploy`             |
-| Ingest documents | `node scripts/ingest.js <file>` |
+| Ingest documents | `npm run ingest -- <file>`      |
 
 ---
 

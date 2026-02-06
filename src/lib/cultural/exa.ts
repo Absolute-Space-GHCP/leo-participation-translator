@@ -1,17 +1,27 @@
 /**
  * @file exa.ts
- * @description Exa.ai client for semantic web search and Reddit content
+ * @description Exa.ai client for semantic web search and Reddit content.
+ *              API key is retrieved from Google Cloud Secret Manager (encrypted)
+ *              with env-var fallback for local development.
  * @author Charley Scholz, JLIT
  * @coauthor Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
  * @created 2026-02-05
- * @updated 2026-02-05
+ * @updated 2026-02-06
  */
 
-import { config } from 'dotenv';
-config();
+import { requireSecret } from '../secrets/index.js';
 
-const EXA_API_KEY = process.env.EXA_API_KEY;
 const EXA_BASE_URL = 'https://api.exa.ai';
+
+/** Lazily resolved API key — fetched once from Secret Manager then cached. */
+let _exaApiKey: string | null = null;
+
+async function getExaApiKey(): Promise<string> {
+  if (!_exaApiKey) {
+    _exaApiKey = await requireSecret('EXA_API_KEY');
+  }
+  return _exaApiKey;
+}
 
 export interface ExaSearchResult {
   title: string;
@@ -49,9 +59,7 @@ export async function search(
   query: string,
   options: ExaSearchOptions = {}
 ): Promise<ExaSearchResponse> {
-  if (!EXA_API_KEY) {
-    throw new Error('EXA_API_KEY not configured in environment');
-  }
+  const apiKey = await getExaApiKey();
 
   const {
     numResults = 10,
@@ -68,7 +76,7 @@ export async function search(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': EXA_API_KEY,
+      'x-api-key': apiKey,
     },
     body: JSON.stringify({
       query,
@@ -116,7 +124,7 @@ export async function searchTrends(
   category: string,
   options: ExaSearchOptions = {}
 ): Promise<ExaSearchResponse> {
-  const trendQuery = `${category} trends 2026 viral popular`;
+  const trendQuery = `${category} trends ${new Date().getFullYear()} viral popular`;
   return search(trendQuery, {
     ...options,
     numResults: options.numResults || 15,
@@ -155,13 +163,19 @@ export async function getCulturalContext(
   reddit: ExaSearchResponse;
   subcultures: ExaSearchResponse;
 }> {
-  const [trends, reddit, subcultures] = await Promise.all([
+  const emptyResponse: ExaSearchResponse = { results: [] };
+
+  const [trendsResult, redditResult, subculturesResult] = await Promise.allSettled([
     searchTrends(`${category} ${brand}`),
     searchReddit(`${brand} ${category} opinions`),
     searchSubculture(targetAudience || category, brand),
   ]);
 
-  return { trends, reddit, subcultures };
+  return {
+    trends: trendsResult.status === 'fulfilled' ? trendsResult.value : emptyResponse,
+    reddit: redditResult.status === 'fulfilled' ? redditResult.value : emptyResponse,
+    subcultures: subculturesResult.status === 'fulfilled' ? subculturesResult.value : emptyResponse,
+  };
 }
 
 // Export default client

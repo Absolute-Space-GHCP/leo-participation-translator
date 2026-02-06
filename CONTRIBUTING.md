@@ -1,176 +1,151 @@
-# Contributing to JL Dev Environment
+# Contributing to The Participation Translator
 
 Version: 1.0.0
-Last Updated: 2025-12-08
-Purpose: Guidelines for contributing to this repository
+Last Updated: 2026-02-06
 
 ---
 
-## Welcome
+## Overview
 
-Thank you for considering contributing to the JL Dev Environment Golden Master! This document provides guidelines for contributing.
-
----
-
-## Code of Conduct
-
-- Be respectful and inclusive
-- Provide constructive feedback
-- Focus on the work, not the person
-- Help others learn and grow
+The Participation Translator is an internal JL tool. Contributions come from the development team and AI coding assistants (Claude, Cursor).
 
 ---
 
-## How to Contribute
+## Getting Started
 
-### Reporting Issues
-
-1. Check existing issues first to avoid duplicates
-2. Use the issue templates provided
-3. Include:
-   - Clear description of the problem
-   - Steps to reproduce
-   - Expected vs actual behavior
-   - macOS version and hardware
-   - Relevant logs or screenshots
-
-### Suggesting Enhancements
-
-1. Open an issue with the "Feature Request" template
-2. Describe the use case and benefit
-3. Consider backward compatibility
-
-### Submitting Changes
-
-1. Fork the repository (external contributors) or create a branch (team members)
-2. Make your changes
-3. Test thoroughly
-4. Submit a pull request
+1. Read `CLAUDE.md` — project context and conventions
+2. Read `PLAN.md` — implementation roadmap and current phase
+3. Read `TASKS.md` — immediate priorities
+4. Set up your environment per `docs/QUICKSTART.md`
 
 ---
 
-## Branch Naming
+## Development Workflow
 
-Use descriptive branch names:
-
-```
-feature/add-terraform-support
-fix/bootstrap-java-path
-docs/update-quickstart
-chore/update-extensions
-```
-
----
-
-## Commit Messages
-
-Follow conventional commits:
-
-```
-type(scope): description
-
-[optional body]
-
-[optional footer]
-```
-
-**Types:**
-- `feat`: New feature
-- `fix`: Bug fix
-- `docs`: Documentation only
-- `chore`: Maintenance tasks
-- `refactor`: Code refactoring
-- `test`: Adding tests
-
-**Examples:**
-```
-feat(bootstrap): add Python 3.12 installation
-fix(validate): correct gcloud project check
-docs(quickstart): add GCP authentication steps
-chore(extensions): update to latest versions
-```
-
----
-
-## Pull Request Process
-
-1. **Title:** Use conventional commit format
-2. **Description:** Fill out the PR template completely
-3. **Tests:** Run `./scripts/validate.sh` and confirm all pass
-4. **Review:** Request review from maintainers
-5. **Merge:** Squash and merge after approval
-
-### PR Checklist
-
-- [ ] Code follows existing style
-- [ ] Documentation updated if needed
-- [ ] CHANGELOG.md updated
-- [ ] VERSION bumped if applicable
-- [ ] All validation checks pass
-
----
-
-## Version Numbering
-
-We use Semantic Versioning (SemVer):
-
-- **MAJOR** (1.x.x): Breaking changes
-- **MINOR** (x.1.x): New features, backward compatible
-- **PATCH** (x.x.1): Bug fixes, backward compatible
-
----
-
-## File Standards
-
-All files should include a header:
+### Branch Strategy
 
 ```bash
-# ============================================================================
-# File Name - Brief Description
-# ============================================================================
-# Version:     1.0.0
-# Updated:     YYYY-MM-DD
-# Purpose:     What this file does
-# ============================================================================
+# Feature work
+git checkout -b feat/description
+
+# Bug fixes
+git checkout -b fix/description
+
+# Documentation
+git checkout -b docs/description
 ```
 
-For Markdown files:
-```markdown
-# Title
+### Commit Conventions
 
-Version: 1.0.0
-Last Updated: YYYY-MM-DD
-Purpose: What this document covers
+Use conventional commits:
+
+| Prefix | Use |
+|---|---|
+| `feat:` | New feature |
+| `fix:` | Bug fix |
+| `docs:` | Documentation only |
+| `chore:` | Build, config, tooling |
+| `refactor:` | Code restructuring (no behavior change) |
+| `test:` | Tests only |
+
+**Examples:**
+
+```
+feat: add Secret Manager integration for API keys
+fix: resolve ESM import extension errors in learning module
+docs: replace wrong-project docs with participation-translator content
+chore: update dependencies and model references
 ```
 
 ---
 
-## Testing Changes
+## Code Standards
 
-Before submitting:
+### TypeScript
 
-1. Run the bootstrap script on a clean environment (if possible)
-2. Run validation: `./scripts/validate.sh`
-3. Test any affected functionality manually
-4. Verify documentation accuracy
+- **ES Modules** — all imports use `.js` extensions
+- **Explicit return types** on all exports
+- **No `any`** — use `unknown` and narrow
+- **Top-level `function`** declarations (not arrow functions)
+- **kebab-case** filenames, **PascalCase** classes, **camelCase** functions
+
+### File Headers
+
+Every file needs an authorship header:
+
+```typescript
+/**
+ * @file filename.ts
+ * @description Brief description
+ * @author Charley Scholz, JLIT
+ * @coauthor Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
+ * @created YYYY-MM-DD
+ * @updated YYYY-MM-DD
+ */
+```
+
+### Import Order
+
+```typescript
+// 1. Node built-ins
+import { readFile } from 'fs/promises';
+
+// 2. External packages
+import { Firestore } from '@google-cloud/firestore';
+
+// 3. Internal (absolute)
+import { KnowledgeGraph } from '@/lib/memory/knowledge-graph.js';
+
+// 4. Relative
+import { parseDocument } from './parsers.js';
+import type { ChunkMetadata } from './types.js';
+```
+
+See `.cursor/rules/coding-standards.mdc` for the complete reference.
 
 ---
 
-## Getting Help
+## API Keys & Secrets
 
-- Open an issue for questions
-- Tag @charleymm for urgent matters
-- Check existing docs first
-
----
-
-## Recognition
-
-Contributors will be recognized in:
-- CHANGELOG.md (for specific contributions)
-- README.md (for significant contributions)
+- **Never hardcode API keys** in source code or documentation
+- All external keys go in **GCP Secret Manager**
+- Add the mapping to `src/lib/secrets/index.ts` → `SECRET_MAP`
+- `.env` is for local dev fallbacks only (and is gitignored)
 
 ---
 
-Thank you for contributing!
+## Documentation
 
+- Keep docs in `docs/` for technical references
+- Session logs go in `sessions/`
+- Update `TASKS.md` when completing work
+- Update `PLAN.md` when phase status changes
+
+---
+
+## Testing
+
+```bash
+npm test              # Run all tests
+npm test -- --watch   # Watch mode
+npm test -- --coverage # With coverage
+```
+
+Framework: **Vitest**
+
+---
+
+## Before Submitting
+
+- [ ] Code compiles: `npm run build`
+- [ ] Tests pass: `npm test`
+- [ ] No hardcoded keys or secrets
+- [ ] Authorship header on new files
+- [ ] Import paths include `.js` extensions
+- [ ] `TASKS.md` updated if applicable
+
+---
+
+Author: Charley Scholz, JLIT
+Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
+Last Updated: 2026-02-06

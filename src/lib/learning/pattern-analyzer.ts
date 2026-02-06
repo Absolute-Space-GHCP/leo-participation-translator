@@ -13,8 +13,8 @@ import type {
   OutputFeedback,
   ErrorObservation,
   PatternType,
-} from './types';
-import { getObservationStore } from './observation-store';
+} from './types.js';
+import { getObservationStore } from './observation-store.js';
 
 // ===========================================
 // Pattern Analyzer

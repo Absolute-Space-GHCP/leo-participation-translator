@@ -1,6 +1,6 @@
 # The Participation Translator
 
-Version: 1.0.2
+Version: 1.1.0
 Last Updated: 2026-02-05
 Purpose: AI-powered strategic tool that transforms passive advertising ideas into participation-worthy platforms
 
@@ -54,9 +54,6 @@ npm run dev
 
 # Run tests
 npm test
-
-# Type check
-npm run typecheck
 ```
 
 ---
@@ -94,7 +91,7 @@ npm run typecheck
 | AI/LLM       | Claude Opus 4.6 (Vertex AI), task-based routing |
 | Vector Store | Vertex AI Vector Search                         |
 | Storage      | Cloud Firestore, Cloud Storage                  |
-| Presentation | Google Slides API                               |
+| Presentation | PptxGenJS, Google Slides API (future)           |
 
 ---
 

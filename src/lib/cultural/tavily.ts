@@ -1,27 +1,24 @@
 /**
  * @file tavily.ts
- * @description Tavily client for semantic web search (backup to Exa.ai)
+ * @description Tavily client for semantic web search (backup to Exa.ai).
+ *              API key is retrieved from Google Cloud Secret Manager (encrypted)
+ *              with env-var fallback for local development.
  * @author Charley Scholz, JLIT
  * @coauthor Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
  * @created 2026-02-05
- * @updated 2026-02-05
+ * @updated 2026-02-06
  */
 
 import { tavily } from '@tavily/core';
-import { config } from 'dotenv';
-config();
+import { requireSecret } from '../secrets/index.js';
 
-const TAVILY_API_KEY = process.env.TAVILY_API_KEY;
-
-// Initialize Tavily client (lazy)
+// Initialize Tavily client (lazy, async — key from Secret Manager)
 let tavilyClient: ReturnType<typeof tavily> | null = null;
 
-function getClient() {
-  if (!TAVILY_API_KEY) {
-    throw new Error('TAVILY_API_KEY not configured in environment');
-  }
+async function getClient(): Promise<ReturnType<typeof tavily>> {
   if (!tavilyClient) {
-    tavilyClient = tavily({ apiKey: TAVILY_API_KEY });
+    const apiKey = await requireSecret('TAVILY_API_KEY');
+    tavilyClient = tavily({ apiKey });
   }
   return tavilyClient;
 }
@@ -61,7 +58,7 @@ export async function search(
   query: string,
   options: TavilySearchOptions = {}
 ): Promise<TavilySearchResponse> {
-  const client = getClient();
+  const client = await getClient();
 
   const {
     searchDepth = 'basic',
@@ -130,7 +127,7 @@ export async function searchTrends(
   category: string,
   options: TavilySearchOptions = {}
 ): Promise<TavilySearchResponse> {
-  const trendQuery = `${category} trends 2026 viral popular`;
+  const trendQuery = `${category} trends ${new Date().getFullYear()} viral popular`;
   return search(trendQuery, {
     ...options,
     topic: 'news',
@@ -166,32 +163,49 @@ export async function getCulturalContext(
   reddit: TavilySearchResponse;
   subcultures: TavilySearchResponse;
 }> {
-  const [trends, reddit, subcultures] = await Promise.all([
+  const emptyResponse: TavilySearchResponse = { results: [], query: '', responseTime: 0 };
+
+  const [trendsResult, redditResult, subculturesResult] = await Promise.allSettled([
     searchTrends(`${category} ${brand}`),
     searchReddit(`${brand} ${category} opinions`),
     searchSubculture(targetAudience || category, brand),
   ]);
 
-  return { trends, reddit, subcultures };
+  return {
+    trends: trendsResult.status === 'fulfilled' ? trendsResult.value : emptyResponse,
+    reddit: redditResult.status === 'fulfilled' ? redditResult.value : emptyResponse,
+    subcultures: subculturesResult.status === 'fulfilled' ? subculturesResult.value : emptyResponse,
+  };
 }
 
 /**
  * Get an AI-generated answer for a question (uses Tavily's answer feature)
  */
 export async function getAnswer(query: string): Promise<string | undefined> {
-  const response = await search(query, {
-    includeAnswer: true,
-    searchDepth: 'advanced',
-    maxResults: 5,
-  });
-  return response.answer;
+  try {
+    const response = await search(query, {
+      includeAnswer: true,
+      searchDepth: 'advanced',
+      maxResults: 5,
+    });
+    return response.answer;
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(`[tavily] getAnswer failed: ${message}`);
+    return undefined;
+  }
 }
 
 /**
- * Check if Tavily is configured
+ * Check if Tavily is configured (Secret Manager or env var)
  */
-export function isConfigured(): boolean {
-  return !!TAVILY_API_KEY;
+export async function isConfigured(): Promise<boolean> {
+  try {
+    await getClient();
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 // Export default client

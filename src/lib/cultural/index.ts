@@ -8,16 +8,16 @@
  */
 
 // Re-export types from each module
-export type { ExaSearchOptions, ExaSearchResult, ExaSearchResponse } from './exa';
-export type { TavilySearchOptions, TavilySearchResult, TavilySearchResponse } from './tavily';
-export type { CulturalContext, InstitutionalContext, MergedContext, MergeOptions, ContextSummary } from './merger';
-export type { SentimentLabel, SentimentScore, TopicSentiment, SentimentAnalysis, BatchSentimentResult } from './sentiment';
+export type { ExaSearchOptions, ExaSearchResult, ExaSearchResponse } from './exa.js';
+export type { TavilySearchOptions, TavilySearchResult, TavilySearchResponse } from './tavily.js';
+export type { CulturalContext, InstitutionalContext, MergedContext, MergeOptions, ContextSummary } from './merger.js';
+export type { SentimentLabel, SentimentScore, TopicSentiment, SentimentAnalysis, BatchSentimentResult } from './sentiment.js';
 
 // Export default clients/services with unique names
-export { default as exaClient } from './exa';
-export { default as tavilyClient } from './tavily';
-export { default as contextMerger } from './merger';
-export { default as sentimentAnalyzer } from './sentiment';
+export { default as exaClient } from './exa.js';
+export { default as tavilyClient } from './tavily.js';
+export { default as contextMerger } from './merger.js';
+export { default as sentimentAnalyzer } from './sentiment.js';
 
 // Named exports from merger (these don't conflict)
-export { quickContext, formatContextForPrompt, mergeContext } from './merger';
+export { quickContext, formatContextForPrompt, mergeContext } from './merger.js';

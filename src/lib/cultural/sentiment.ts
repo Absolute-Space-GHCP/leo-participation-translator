@@ -7,9 +7,7 @@
  * @updated 2026-02-06
  */
 
-import { AnthropicVertex } from '@anthropic-ai/vertex-sdk';
-import { config } from 'dotenv';
-config();
+import { callClaudeForTask, type ClaudeResponse } from '../generation/claude-client.js';
 
 /**
  * Sentiment classification
@@ -58,54 +56,20 @@ export interface BatchSentimentResult {
   aggregate: SentimentScore;
 }
 
-// Lazy-initialized Claude client
-let claudeClient: AnthropicVertex | null = null;
-
 /**
- * Get or create Claude client
- */
-function getClaudeClient(): AnthropicVertex {
-  if (!claudeClient) {
-    const region = process.env.VERTEX_AI_CLAUDE_REGION || 'us-east5';
-    const projectId = process.env.GCP_PROJECT_ID;
-    
-    if (!projectId) {
-      throw new Error('GCP_PROJECT_ID environment variable not set');
-    }
-    
-    claudeClient = new AnthropicVertex({
-      region,
-      projectId,
-    });
-  }
-  return claudeClient;
-}
-
-/**
- * Call Claude for sentiment analysis
+ * Call Claude for sentiment analysis using the shared client.
+ * Routes via task router (sentiment uses Sonnet by default for cost efficiency).
  */
 async function callClaude(prompt: string, maxTokens: number = 1024): Promise<string> {
-  const client = getClaudeClient();
-  const model = process.env.VERTEX_AI_CLAUDE_MODEL || 'claude-sonnet-4-5-20250929';
-  
-  const response = await client.messages.create({
-    model,
-    max_tokens: maxTokens,
-    messages: [
-      {
-        role: 'user',
-        content: prompt,
-      },
-    ],
-  });
-  
-  // Extract text from response
-  const textBlock = response.content.find(block => block.type === 'text');
-  if (!textBlock || textBlock.type !== 'text') {
-    throw new Error('No text response from Claude');
-  }
-  
-  return textBlock.text;
+  const response: ClaudeResponse = await callClaudeForTask(
+    'You are a sentiment analysis expert. Respond only with valid JSON.',
+    prompt,
+    {
+      maxTokens,
+      taskType: 'sentiment_analysis',
+    }
+  );
+  return response.content;
 }
 
 /**
@@ -375,8 +339,8 @@ Sentiment:`;
  */
 export async function isConfigured(): Promise<boolean> {
   try {
-    getClaudeClient();
-    return true;
+    // Test that Claude is reachable by checking env vars
+    return !!(process.env.GCP_PROJECT_ID);
   } catch {
     return false;
   }
