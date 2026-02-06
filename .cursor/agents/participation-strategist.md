@@ -41,7 +41,7 @@ Apply the 9-section Participation Framework:
 
 ## Model Requirement
 
-**This agent MUST use Claude Opus 4.5** for:
+**This agent MUST use Claude Opus 4.6** for:
 
 - Nuanced strategic reasoning
 - Cultural intelligence synthesis

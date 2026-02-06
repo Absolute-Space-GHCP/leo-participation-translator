@@ -67,7 +67,7 @@ Dependencies flow inward:
 Use the task router for model selection:
 
 - Simple tasks → Fast/cheap models (Gemini Flash, Haiku)
-- Complex tasks → Powerful models (Claude Opus 4.5)
+- Complex tasks → Powerful models (Claude Opus 4.6)
 - Don't hardcode model choices
 
 ## Decision Framework

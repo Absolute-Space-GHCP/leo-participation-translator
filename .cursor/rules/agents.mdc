@@ -100,7 +100,7 @@ User Request
 
 ## Remember
 
-- **Complex reasoning requires Opus** - Framework application uses Claude Opus 4.5
+- **Complex reasoning requires Opus** - Framework application uses Claude Opus 4.6
 - **Simple tasks can use faster models** - Parsing, formatting use Sonnet/Haiku
 - **Delegate early** - Don't try to do everything in one agent
 - **Chain agents** - Results from one feed into the next

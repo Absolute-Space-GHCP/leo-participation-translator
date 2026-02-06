@@ -4,15 +4,15 @@
   "_purpose": "Continue AI assistant configuration for Claude and Gemini models",
   "models": [
     {
-      "title": "Claude Opus 4.5",
+      "title": "Claude Opus 4.6",
       "provider": "anthropic",
-      "model": "claude-opus-4-20250514",
+      "model": "claude-opus-4-6",
       "apiKey": "${ANTHROPIC_API_KEY}"
     },
     {
       "title": "Claude Sonnet 4.5",
       "provider": "anthropic",
-      "model": "claude-sonnet-4-20250514",
+      "model": "claude-sonnet-4-5-20250929",
       "apiKey": "${ANTHROPIC_API_KEY}"
     },
     {

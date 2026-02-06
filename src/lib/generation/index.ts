@@ -1,10 +1,10 @@
 /**
  * @file index.ts
- * @description Generation engine using Claude 3.5 Sonnet via Vertex AI
+ * @description Generation engine using Claude Opus 4.6 via Vertex AI
  * @author Charley Scholz, JLIT
- * @coauthor Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
+ * @coauthor Claude Opus 4.6, Claude Code (coding assistant), Cursor (IDE)
  * @created 2026-02-03
- * @updated 2026-02-03
+ * @updated 2026-02-06
  */
 
 import type { CulturalContext } from '../cultural';
@@ -188,7 +188,7 @@ export interface ParticipationBlueprint {
 /**
  * Generate a complete Participation Blueprint
  * 
- * Uses Chain of Thought reasoning with Claude 3.5 Sonnet:
+ * Uses Chain of Thought reasoning with Claude Opus 4.6:
  * 1. Research phase - analyze retrieved context
  * 2. Framework application - generate 9-section write-up
  * 3. Pack generation - create tactical components
@@ -240,7 +240,7 @@ export async function generatePack(
 }
 
 /**
- * Call Claude 3.5 Sonnet via Vertex AI
+ * Call Claude Opus 4.6 via Vertex AI
  */
 export async function callClaude(
   systemPrompt: string,
@@ -255,7 +255,7 @@ export async function callClaude(
   // Phase 2, Task 2.4
   //
   // Uses @anthropic-ai/vertex-sdk
-  // Model: claude-3-5-sonnet@20241022
+  // Model: claude-opus-4-6
   // Region: us-east5 (Claude on Vertex)
   
   throw new Error('Not implemented: callClaude');

@@ -152,7 +152,7 @@ gh auth status
 
 ### 1.6 Install IDE: Cursor (Recommended) or VS Code
 
-> **💡 Recommendation:** After testing 5+ different workflows, we recommend **Cursor with Claude Opus 4.5** for the optimal development experience. However, VS Code is fully supported if you prefer it.
+> **💡 Recommendation:** After testing 5+ different workflows, we recommend **Cursor with Claude Opus 4.6** for the optimal development experience. However, VS Code is fully supported if you prefer it.
 
 **Option A: Cursor (Recommended)**
 
@@ -165,7 +165,7 @@ Or download from: https://cursor.sh
 **After install:**
 - Launch Cursor
 - Sign up / Sign in
-- **Upgrade to Pro tier** ($20/mo) - required for Claude Opus 4.5 access
+- **Upgrade to Pro tier** ($20/mo) - required for Claude Opus 4.6 access
 
 **Verify:**
 
@@ -508,7 +508,7 @@ Cursor will launch with both projects loaded.
 
 1. Press `Cmd+L` to open AI chat
 2. Type: "Hello, what files are in this project?"
-3. Claude Opus 4.5 should respond with project contents
+3. Claude Opus 4.6 should respond with project contents
 
 ### Test Gemini (via Continue - Optional)
 
@@ -527,7 +527,7 @@ If you prefer a fully containerized development environment, see `docs/DOCKER.md
 Your environment now includes:
 
 - **IDE:** Cursor with 17+ extensions
-- **AI:** Claude Opus 4.5 (primary), Gemini models (via Continue)
+- **AI:** Claude Opus 4.6 (primary), Gemini models (via Continue)
 - **Runtimes:** Node.js 22+ LTS, Java 21 LTS, Python 3.9+
 - **DevOps:** Docker, kubectl, gcloud, gh CLI
 - **Projects:** jl-dev-environment-gm, ai-agents-gmaster-build

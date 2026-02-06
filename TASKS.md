@@ -1,7 +1,7 @@
 # TODO - The Participation Translator
 
 Version: 1.0.4
-Last Updated: 2026-02-05
+Last Updated: 2026-02-06
 Purpose: Tracks implementation progress across all phases
 
 Priority Legend: HIGH | MEDIUM | LOW
@@ -219,6 +219,44 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 | 2 | ~~Add Tavily API (backup search)~~ | Low | 30 min | ✅ DONE |
 | 3 | ~~Create context merger service~~ | Medium | 1 hr | ✅ DONE |
 | 4 | ~~Build sentiment analysis endpoint~~ | Medium | 1 hr | ✅ DONE (needs model enabled) |
+| 5 | Opus 4.6 compatibility audit | Low | 30 min | ✅ DONE |
+| 6 | Evaluate Agent Teams feature for project | Medium | 1 hr | PENDING |
+
+### 🔧 MAINTENANCE: Opus 4.6 Compatibility Audit
+
+| # | Area | Description | Status |
+|---|------|-------------|--------|
+| M.1 | Services | Check all GCP/Vertex AI service configs for model version references | ✅ DONE |
+| M.2 | Code | Audit `src/lib/` for hardcoded model identifiers or Opus-specific assumptions | ✅ DONE |
+| M.3 | Skills | Review `.cursor/skills/` for outdated model references or capabilities | ✅ DONE |
+| M.4 | Tools/CLI | Check CLI tools (`src/cli/`) for model-specific logic | ✅ DONE |
+| M.5 | Rules | Review `.cursor/rules/` for Opus 4.5-specific guidance that needs updating | ✅ DONE |
+| M.6 | Task Router | Update `src/lib/router/task-router.ts` model identifiers if needed | ✅ DONE |
+| M.7 | Environment | Check `.env.example` and config for model version strings | ✅ DONE |
+| M.8 | Prompts | Review `src/prompts/` for model-specific prompt tuning | ✅ DONE |
+
+### 🎨 JL BRANDING TOOLKIT
+
+| # | Task | Description | Priority | Status |
+|---|------|-------------|----------|--------|
+| B.1 | Ingest branding toolkit | Receive file, convert, index to vector store | HIGH | PENDING (awaiting file) |
+| B.2 | Extract brand elements | Colors, typography, spacing, logo usage, tone | HIGH | PENDING |
+| B.3 | Create JL Branding Skill | `.cursor/skills/jl-branding/SKILL.md` | HIGH | PENDING |
+| B.4 | Apply to frontend | Tailwind theme, component styling per guidelines | MEDIUM | PENDING |
+| B.5 | Apply to PPTX template | Branded slide master for presentation export | MEDIUM | PENDING |
+
+**Note:** Branding Skill will be referenced by frontend, UI/UX, and presentation generation tasks.
+
+---
+
+### 🧪 EXPLORATION: Agent Teams Feature Viability
+
+| # | Task | Description | Status |
+|---|------|-------------|--------|
+| E.1 | Research Agent Teams | Understand Cursor Agent Teams capabilities and constraints | PENDING |
+| E.2 | Map to architecture | Evaluate fit with existing multi-agent delegation pattern | PENDING |
+| E.3 | Prototype feasibility | Determine if Agent Teams can replace/enhance current subagent system | PENDING |
+| E.4 | Document findings | Write up recommendation with pros/cons | PENDING |
 
 ---
 

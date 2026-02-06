@@ -220,7 +220,7 @@ See [CULTURAL_INTELLIGENCE.md](./CULTURAL_INTELLIGENCE.md) for full research, al
 │  ═══════════════                                                 │
 │                  │                                               │
 │  ┌───────────────▼───────────────────────────────────────┐      │
-│  │ Claude Opus 4.5 - Sentiment & Trend Analysis          │      │
+│  │ Claude Opus 4.6 - Sentiment & Trend Analysis          │      │
 │  │ • Cultural moment identification                      │      │
 │  │ • 72-hour opportunity window detection                │      │
 │  │ • Subculture mapping                                  │      │

@@ -2,9 +2,9 @@
  * @file sentiment.ts
  * @description Sentiment analysis using Claude via Vertex AI
  * @author Charley Scholz, JLIT
- * @coauthor Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
+ * @coauthor Claude Opus 4.6, Claude Code (coding assistant), Cursor (IDE)
  * @created 2026-02-05
- * @updated 2026-02-05
+ * @updated 2026-02-06
  */
 
 import { AnthropicVertex } from '@anthropic-ai/vertex-sdk';
@@ -86,7 +86,7 @@ function getClaudeClient(): AnthropicVertex {
  */
 async function callClaude(prompt: string, maxTokens: number = 1024): Promise<string> {
   const client = getClaudeClient();
-  const model = process.env.VERTEX_AI_CLAUDE_MODEL || 'claude-sonnet-4-5-20250514';
+  const model = process.env.VERTEX_AI_CLAUDE_MODEL || 'claude-sonnet-4-5-20250929';
   
   const response = await client.messages.create({
     model,

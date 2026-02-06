@@ -69,7 +69,7 @@ The Cultural Intelligence layer provides real-time trend discovery, sentiment an
 │  │                    SENTIMENT & ANALYSIS                               │   │
 │  │                                                                       │   │
 │  │  ┌──────────────────────────────────────────────────────────────┐    │   │
-│  │  │              Claude Opus 4.5 (Analysis Layer)                 │    │   │
+│  │  │              Claude Opus 4.6 (Analysis Layer)                 │    │   │
 │  │  │  ──────────────────────────────────────────────────────────   │    │   │
 │  │  │  • Sentiment analysis on aggregated content                   │    │   │
 │  │  │  • Trend velocity detection                                   │    │   │

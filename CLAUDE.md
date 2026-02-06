@@ -111,7 +111,7 @@ The Participation Translator uses specialized agents for different tasks:
 | -------------------- | ----------------------------------------------------- |
 | **Frontend**         | Next.js 14 + React 18 + Tailwind CSS                  |
 | **Backend**          | Node.js 22 LTS + Next.js API Routes                   |
-| **Reasoning Engine** | Claude Opus 4.5 (primary) / Sonnet 5 (when available) |
+| **Reasoning Engine** | Claude Opus 4.6 (primary) / Sonnet 4.5 (fallback)     |
 | **Task Routing**     | Complexity-based model selection                      |
 | **Embeddings**       | Vertex AI text-embedding-005                          |
 | **Vector Store**     | Vertex AI Vector Search                               |

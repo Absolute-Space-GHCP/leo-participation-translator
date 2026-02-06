@@ -91,7 +91,7 @@ npm run typecheck
 | ------------ | ----------------------------------------------- |
 | Frontend     | Next.js 14, React 18, Tailwind CSS              |
 | Backend      | Node.js 22 LTS, TypeScript                      |
-| AI/LLM       | Claude Opus 4.5 (Vertex AI), task-based routing |
+| AI/LLM       | Claude Opus 4.6 (Vertex AI), task-based routing |
 | Vector Store | Vertex AI Vector Search                         |
 | Storage      | Cloud Firestore, Cloud Storage                  |
 | Presentation | Google Slides API                               |

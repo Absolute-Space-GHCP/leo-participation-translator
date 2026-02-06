@@ -2,9 +2,9 @@
  * @file task-router.ts
  * @description Route tasks to optimal LLM based on complexity for cost optimization
  * @author Charley Scholz, JLIT
- * @coauthor Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
+ * @coauthor Claude Opus 4.6, Claude Code (coding assistant), Cursor (IDE)
  * @created 2026-02-03
- * @updated 2026-02-03
+ * @updated 2026-02-06
  */
 
 // ===========================================
@@ -41,9 +41,9 @@ export interface RoutingResult {
  */
 const MODELS = {
   anthropic: {
-    simple: 'claude-3-haiku-20240307',
-    medium: 'claude-sonnet-4-5-20250514',
-    complex: 'claude-opus-4-5-20250131',
+    simple: 'claude-haiku-4-5-20251001',
+    medium: 'claude-sonnet-4-5-20250929',
+    complex: 'claude-opus-4-6',
   },
   google: {
     simple: 'gemini-2.0-flash',
@@ -56,9 +56,9 @@ const MODELS = {
  * Cost per 1K tokens (approximate, for estimation)
  */
 const COSTS_PER_1K = {
-  'claude-3-haiku-20240307': 0.00025,
-  'claude-sonnet-4-5-20250514': 0.003,
-  'claude-opus-4-5-20250131': 0.015,
+  'claude-haiku-4-5-20251001': 0.001,
+  'claude-sonnet-4-5-20250929': 0.003,
+  'claude-opus-4-6': 0.005,
   'gemini-2.0-flash': 0.0001,
   'gemini-2.5-pro': 0.00125,
 } as const;

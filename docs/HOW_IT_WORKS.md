@@ -20,7 +20,7 @@ You have access to multiple AI models, each optimized for different tasks:
 
 | Assistant | Best For | How to Access |
 |-----------|----------|---------------|
-| **Claude Opus 4.5** | Complex reasoning, architecture, debugging | Cursor chat (`Cmd+L`) |
+| **Claude Opus 4.6** | Complex reasoning, architecture, debugging | Cursor chat (`Cmd+L`) |
 | **Gemini 2.5 Pro** | Code completion, quick questions | Continue sidebar |
 | **Gemini CLI** | Terminal tasks, file operations | `gemini` command |
 

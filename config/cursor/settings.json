@@ -64,5 +64,5 @@
   "continue.enableTabAutocomplete": true,
   "continue.showInlineTip": false,
 
-  "claude-code.selectedModel": "Opus 4.5"
+  "claude-code.selectedModel": "Opus 4.6"
 }

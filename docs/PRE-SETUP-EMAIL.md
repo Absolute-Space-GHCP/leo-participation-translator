@@ -14,7 +14,7 @@ Welcome to the team! Before your dev environment setup session on **[DATE]**, pl
 
 ## 1. IDE: Cursor (Recommended) or VS Code
 
-> **💡 We recommend Cursor with Pro tier** for the best AI-assisted development experience (Claude Opus 4.5). VS Code is supported if you prefer it.
+> **💡 We recommend Cursor with Pro tier** for the best AI-assisted development experience (Claude Opus 4.6). VS Code is supported if you prefer it.
 
 **Option A: Cursor (Recommended)**
 
@@ -23,7 +23,7 @@ https://cursor.sh
 
 **Create Account & Upgrade to Pro:**
 - Sign up for a Cursor account
-- Upgrade to **Pro tier** ($20/month) - required for Claude Opus 4.5 access
+- Upgrade to **Pro tier** ($20/month) - required for Claude Opus 4.6 access
 - Expense this to IT/Engineering
 
 **Verify:** Open Cursor → Press `Cmd+L` → Confirm you see the AI chat panel

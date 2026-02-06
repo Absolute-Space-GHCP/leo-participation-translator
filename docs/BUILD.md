@@ -95,7 +95,7 @@ See config/cursor/extensions.txt for full list.
 
 ### 2.4 Configure Claude Code
 In Cursor Settings, search "Claude Code":
-- Selected Model: Opus 4.5
+- Selected Model: Opus 4.6
 
 ---
 

@@ -1,9 +1,9 @@
 # The Participation Translator - Implementation Plan
 
-Version: 1.0.4
-Last Updated: 2026-02-05
+Version: 1.2.0
+Last Updated: 2026-02-06
 Author: Charley Scholz, JLIT
-Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
+Co-authored: Claude Opus 4.6, Claude Code (coding assistant), Cursor (IDE)
 
 ---
 
@@ -17,16 +17,37 @@ The Participation Translator is an internal AI-powered strategic tool that trans
 
 ## Table of Contents
 
-1. [System Overview](#system-overview)
-2. [Architecture](#architecture)
-3. [Technology Stack](#technology-stack)
-4. [Implementation Phases](#implementation-phases)
-5. [Component Specifications](#component-specifications)
-6. [Integration Points](#integration-points)
-7. [Data Pipeline](#data-pipeline)
-8. [Deployment Strategy](#deployment-strategy)
-9. [Success Criteria](#success-criteria)
-10. [Risk Assessment](#risk-assessment)
+1. [Progress at a Glance](#progress-at-a-glance)
+2. [System Overview](#system-overview)
+3. [Architecture](#architecture)
+4. [Technology Stack](#technology-stack)
+5. [Implementation Phases](#implementation-phases)
+6. [Component Specifications](#component-specifications)
+7. [Integration Points](#integration-points)
+8. [Data Pipeline](#data-pipeline)
+9. [Deployment Strategy](#deployment-strategy)
+10. [Success Criteria](#success-criteria)
+11. [Risk Assessment](#risk-assessment)
+
+---
+
+## Progress at a Glance
+
+| Phase | Name | Status | Completion |
+|-------|------|--------|------------|
+| **0** | Foundation Setup | ✅ COMPLETE | 100% |
+| **1** | Knowledge Base & RAG Core | ✅ COMPLETE | ~95% (Vector Search upgrade pending) |
+| **1.5** | Learning/Evolution System | ✅ COMPLETE | 100% |
+| **2** | 8-Part Framework Integration | 🔜 READY | 0% (waiting for Leo) |
+| **3** | Cultural Intelligence Layer | 🔄 IN PROGRESS | ~55% |
+| **4** | User Interface & Presentation | 🔄 SCAFFOLDED | ~25% |
+| **5** | Testing & Refinement | ⏳ PENDING | 0% |
+| **6** | Deployment & Training | ⏳ PENDING | 0% |
+| **M** | Maintenance / Compatibility | ✅ COMPLETE | 100% |
+| **B** | JL Branding Toolkit | 🆕 AWAITING FILE | 0% |
+| **E** | Exploration / R&D | 🆕 NEW | 0% |
+
+**Data Assets:** 42 documents, 2,153 chunks indexed | 19 presentations | 76 creators | 15 media ideas
 
 ---
 
@@ -46,7 +67,7 @@ Transform traditional advertising ideas into participation-worthy platforms by:
 | ---------------------------------- | -------------------------------------------------------- | --------------------------------------------------- |
 | **JL Institutional Memory**        | Vector DB (past presentations: VW, Adidas, etc.)         | Train on agency's unique voice and tactical history |
 | **8-Part Participation Framework** | Structured prompt/system instructions                    | Governing logic for all strategic outputs           |
-| **Culture & Subculture Feeds**     | Live APIs (Brandwatch, Exploding Topics, Reddit, TikTok) | Identify where people are already leaning in        |
+| **Culture & Subculture Feeds**     | Live APIs (Exa.ai, Tavily, Reddit, TikTok)               | Identify where people are already leaning in        |
 | **Project Seed**                   | User input form                                          | Initial idea + budget, dates, brand considerations  |
 
 ### Desired Outputs
@@ -126,23 +147,24 @@ The tool generates a **presentation-ready deck** that Leo can use directly with 
 ├───────────────────────┤ ├───────────────────────┤ ├───────────────────────┤
 │ ┌─────────────────┐   │ │ ┌─────────────────┐   │ │ ┌─────────────────┐   │
 │ │ Embedding       │   │ │ │ Exa.ai API      │   │ │ │ Claude Opus     │   │
-│ │ Service         │   │ │ │ (Web Search)    │   │ │ │ 4.5             │   │
+│ │ Service         │   │ │ │ (Web Search)    │   │ │ │ 4.6             │   │
 │ │ (Vertex AI)     │   │ │ └─────────────────┘   │ │ │ (configurable)  │   │
 │ └────────┬────────┘   │ │ ┌─────────────────┐   │ │ └─────────────────┘   │
-│          │            │ │ │ Perplexity API  │   │ │ ┌─────────────────┐   │
-│ ┌────────▼────────┐   │ │ │ (Search/Trends) │   │ │ │ Chain of        │   │
+│          │            │ │ │ Tavily API      │   │ │ ┌─────────────────┐   │
+│ ┌────────▼────────┐   │ │ │ (Backup Search) │   │ │ │ Chain of        │   │
 │ │ Vector Store    │   │ │ └─────────────────┘   │ │ │ Thought         │   │
-│ │ (Pinecone or    │   │ │ ┌─────────────────┐   │ │ │ Prompting       │   │
-│ │  Vertex AI)     │   │ │ │ Reddit/TikTok   │   │ │ └─────────────────┘   │
-│ └────────┬────────┘   │ │ │ Scrapers        │   │ │ ┌─────────────────┐   │
-│          │            │ │ │ (via Zapier)    │   │ │ │ 8-Part          │   │
-│ ┌────────▼────────┐   │ │ └─────────────────┘   │ │ │ Framework       │   │
-│ │ JL Knowledge    │   │ │ ┌─────────────────┐   │ │ │ (System Prompt) │   │
-│ │ Base            │   │ │ │ Brandwatch API  │   │ │ └─────────────────┘   │
-│ │ - Presentations │   │ │ │ (Social Listen) │   │ │                       │
-│ │ - Case Studies  │   │ │ └─────────────────┘   │ │                       │
-│ │ - Frameworks    │   │ │                       │ │                       │
-│ └─────────────────┘   │ │                       │ │                       │
+│ │ (Firestore +    │   │ │ ┌─────────────────┐   │ │ │ Prompting       │   │
+│ │  Vector Search) │   │ │ │ Perplexity API  │   │ │ └─────────────────┘   │
+│ └────────┬────────┘   │ │ │ (Search/Trends) │   │ │ ┌─────────────────┐   │
+│          │            │ │ └─────────────────┘   │ │ │ 8-Part          │   │
+│ ┌────────▼────────┐   │ │ ┌─────────────────┐   │ │ │ Framework       │   │
+│ │ JL Knowledge    │   │ │ │ Reddit/TikTok   │   │ │ │ (System Prompt) │   │
+│ │ Base            │   │ │ │ (via Exa.ai)    │   │ │ └─────────────────┘   │
+│ │ - Presentations │   │ │ └─────────────────┘   │ │                       │
+│ │ - Case Studies  │   │ │ ┌─────────────────┐   │ │                       │
+│ │ - Frameworks    │   │ │ │ Sentiment       │   │ │                       │
+│ └─────────────────┘   │ │ │ (Claude)        │   │ │                       │
+│                       │ │ └─────────────────┘   │ │                       │
 └───────────────────────┘ └───────────────────────┘ └───────────────────────┘
                     │                   │                   │
                     └───────────────────┼───────────────────┘
@@ -179,7 +201,7 @@ The tool generates a **presentation-ready deck** that Leo can use directly with 
 │                                      │                               │
 │  3. VECTOR STORAGE                   ▼                               │
 │  ┌──────────────────────────────────────────────────────────────┐   │
-│  │  Vector DB (Pinecone/Vertex AI Vector Search)                │   │
+│  │  Cloud Firestore (current) → Vertex AI Vector Search (prod)  │   │
 │  │  - Metadata: client, date, campaign, category                │   │
 │  │  - Namespace: presentations, frameworks, case_studies        │   │
 │  └───────────────────────────────────┬──────────────────────────┘   │
@@ -194,7 +216,7 @@ The tool generates a **presentation-ready deck** that Leo can use directly with 
 │  ┌──────────────────────────────────────────────────────────────┐   │
 │  │  Retrieved Context + Cultural Intel + Project Seed           │   │
 │  │                          ↓                                   │   │
-│  │  Claude Opus 4.5 (Chain of Thought Reasoning)                │   │
+│  │  Claude Opus 4.6 (Chain of Thought Reasoning)                │   │
 │  │                          ↓                                   │   │
 │  │  Structured Blueprint JSON                                   │   │
 │  └───────────────────────────────────┬──────────────────────────┘   │
@@ -215,188 +237,350 @@ The tool generates a **presentation-ready deck** that Leo can use directly with 
 
 ## Technology Stack
 
-### Core Technologies (Leveraging Existing Infrastructure)
+### Core Technologies
 
 | Layer                      | Technology                          | Rationale                         |
 | -------------------------- | ----------------------------------- | --------------------------------- |
 | **Frontend**               | Next.js 14 + React 18               | Modern web app, SSR, API routes   |
 | **Backend API**            | Node.js 22 LTS + Express            | Matches existing stack            |
-| **Reasoning Engine**       | Claude Opus 4.5 (configurable)      | Best-in-class strategic reasoning |
+| **Reasoning Engine**       | Claude Opus 4.6 (configurable)      | Best-in-class strategic reasoning |
 | **Embedding Model**        | Vertex AI text-embedding-005        | Google ecosystem, high quality    |
-| **Vector Store**           | Vertex AI Vector Search OR Pinecone | GCP-native option available       |
+| **Vector Store**           | Firestore (current) → Vector Search | GCP-native, production upgrade    |
 | **Document Storage**       | Cloud Storage                       | Presentation files                |
 | **Session/Output Storage** | Cloud Firestore                     | Real-time, scalable               |
-| **Search API**             | Exa.ai + Perplexity                 | Cultural momentum discovery       |
+| **Search API**             | Exa.ai + Tavily                     | Cultural momentum discovery       |
 | **Presentation Gen**       | PptxGenJS + Custom Templates        | Native PPTX generation            |
-| **Automation**             | Zapier/Make.com                     | Trend data ingestion              |
 | **Deployment**             | Cloud Run                           | Serverless, auto-scaling          |
 
 ### AI Model Configuration
 
-The reasoning engine is **configurable** to support model upgrades:
-
-| Model                  | Use Case                    | Availability             | Cost (MTok)     | Notes                           |
-| ---------------------- | --------------------------- | ------------------------ | --------------- | ------------------------------- |
-| **Claude Opus 4.5**    | Primary (complex reasoning) | Anthropic API, Vertex AI | $5 in / $25 out | Best strategic reasoning        |
-| **Claude Sonnet 4.5**  | Development/testing         | Anthropic API, Vertex AI | $3 in / $15 out | Good balance of speed/quality   |
-| **Claude Haiku 4.5**   | Simple tasks                | Anthropic API, Vertex AI | $1 in / $5 out  | Fastest, lowest cost            |
-| **Claude Sonnet 5** 🆕 | Future primary              | Coming Soon (Feb 2026)   | ~$2.5 in (est.) | Expected ~50% cheaper than Opus |
-
-**Claude Sonnet 5 Status (as of 2026-02-05):**
-
-- **Release**: Imminent (expected Super Bowl week, Feb 3-8, 2026)
-- **Codename**: "Fennec"
-- **Performance**: Expected comparable to Opus 4.5 at ~50% cost
-- **Context**: 128k tokens
-- **Strengths**: Strong coding, math, agentic capabilities
-- **Recommendation**: Monitor Vertex AI for availability; excellent candidate for primary model once released
+| Model                  | Use Case                    | Availability             | Notes                           |
+| ---------------------- | --------------------------- | ------------------------ | ------------------------------- |
+| **Claude Opus 4.6**    | Primary (complex reasoning) | Anthropic API, Vertex AI | Current primary model           |
+| **Claude Sonnet 4.5**  | Development/fallback        | Anthropic API, Vertex AI | Good balance of speed/quality   |
+| **Claude Haiku 4.5**   | Simple tasks                | Anthropic API, Vertex AI | Fastest, lowest cost            |
 
 ```typescript
 // Model configuration in .env
-AI_MODEL_PROVIDER = vertex; // or 'anthropic'
-AI_MODEL_NAME = claude - opus - 4 - 5 - 20251101; // Current primary
-AI_MODEL_FALLBACK = claude - sonnet - 4 - 5 - 20250929; // Current fallback
-// AI_MODEL_NAME=claude-sonnet-5-XXXXXXXX         // Future (when available)
+AI_MODEL_PROVIDER=vertex              // or 'anthropic'
+AI_MODEL_NAME=claude-opus-4-6         // Current primary
+AI_MODEL_FALLBACK=claude-sonnet-4-5   // Current fallback
 ```
 
 ### API Dependencies
 
-| API                        | Purpose                     | Cost Model              |
-| -------------------------- | --------------------------- | ----------------------- |
-| **Anthropic API**          | Claude Opus 4.5             | Pay-per-token           |
-| **Vertex AI (Claude)**     | Claude Opus 4 (alternative) | Pay-per-token           |
-| **Vertex AI (Embeddings)** | Vector embeddings           | Pay-per-request         |
-| **Exa.ai**                 | Semantic web search         | Subscription            |
-| **Perplexity API**         | Search + summarization      | Pay-per-query           |
-| **Brandwatch**             | Social listening (optional) | Enterprise subscription |
+| API                        | Purpose                     | Status              |
+| -------------------------- | --------------------------- | ------------------- |
+| **Vertex AI (Claude)**     | Claude Opus 4.6             | ✅ Active           |
+| **Vertex AI (Embeddings)** | Vector embeddings           | ✅ Active           |
+| **Exa.ai**                 | Semantic web search         | ✅ Active           |
+| **Tavily**                 | Backup semantic search      | ✅ Active           |
+| **Perplexity API**         | Search + summarization      | ⏳ Pending          |
+| **Brandwatch**             | Social listening (optional) | ⏳ Pending          |
 
 ---
 
 ## Implementation Phases
 
-### Phase 0: Foundation Setup (Week 1)
+### Phase 0: Foundation Setup ✅ COMPLETE
 
 **Goal:** Project scaffolding and infrastructure setup
 
-| Task | Description                    | Deliverable                                 |
-| ---- | ------------------------------ | ------------------------------------------- |
-| 0.1  | Create project structure       | `/src`, `/api`, `/lib`, `/docs` directories |
-| 0.2  | Initialize Next.js application | Working web app skeleton                    |
-| 0.3  | Configure GCP project          | Cloud Run, Storage, Firestore enabled       |
-| 0.4  | Set up environment variables   | `.env.example`, secure secrets              |
-| 0.5  | Create CI/CD pipeline          | GitHub Actions for deployment               |
-| 0.6  | Document setup process         | `docs/SETUP.md`                             |
+| Task | Description                    | Deliverable                                 | Status |
+| ---- | ------------------------------ | ------------------------------------------- | ------ |
+| 0.1  | Create project structure       | `/src`, `/api`, `/lib`, `/docs` directories | ✅ DONE |
+| 0.2  | Initialize Next.js application | Working web app skeleton                    | ✅ DONE |
+| 0.3  | Configure GCP project          | Cloud Run, Storage, Firestore enabled       | ✅ DONE |
+| 0.4  | Set up environment variables   | `.env.example`, secure secrets              | ✅ DONE |
+| 0.5  | Create agent delegation rules  | `.cursor/rules/agents.mdc`                  | ✅ DONE |
+| 0.6  | Create 5 subagent definitions  | 2 active, 3 placeholders                    | ✅ DONE |
+| 0.7  | Create participation-rag skill | SKILL.md + scripts                          | ✅ DONE |
+| 0.8  | Create document-analysis skill | SKILL.md                                    | ✅ DONE |
+| 0.9  | Adapt knowledge graph          | `src/lib/memory/knowledge-graph.ts`         | ✅ DONE |
+| 0.10 | Adapt task router              | `src/lib/router/task-router.ts`             | ✅ DONE |
+| 0.11 | Document GCP setup             | `docs/GCP_SETUP.md`                         | ✅ DONE |
 
-### Phase 1: Knowledge Base & RAG Core (Weeks 2-3)
+---
+
+### Phase 1: Knowledge Base & RAG Core ✅ ~95% COMPLETE
 
 **Goal:** Build the JL institutional memory system
 
-| Task | Description                        | Deliverable               |
-| ---- | ---------------------------------- | ------------------------- |
-| 1.1  | Design document ingestion pipeline | Architecture doc          |
-| 1.2  | Build PDF/PPTX/DOCX parser         | `/lib/parsers/` modules   |
-| 1.3  | Implement chunking strategy        | Semantic chunking logic   |
-| 1.4  | Set up Vertex AI Vector Search     | Vector store configured   |
-| 1.5  | Build embedding pipeline           | `/lib/embeddings/` module |
-| 1.6  | Create retrieval service           | `/api/retrieve` endpoint  |
-| 1.7  | Ingest initial JL presentations    | Populated vector store    |
-| 1.8  | Test retrieval quality             | Evaluation metrics        |
+#### 1.1 GCP Infrastructure ✅ COMPLETE
 
-### Phase 1.5: Learning/Evolution System (Week 3)
+| Task | Description                        | Deliverable                   | Status |
+| ---- | ---------------------------------- | ----------------------------- | ------ |
+| 1.1a | Create GCP project                | `participation-translator`    | ✅ DONE |
+| 1.1b | Enable required APIs              | Vertex AI, Firestore, Storage | ✅ DONE |
+| 1.1c | Set up service account            | IAM roles configured          | ✅ DONE |
+| 1.1d | Link billing                      | JL billing account            | ✅ DONE |
+| 1.1e | Create Cloud Storage buckets      | documents, exports            | ✅ DONE |
+| 1.1f | Create Firestore database         | Native mode, us-central1      | ✅ DONE |
+| 1.1g | Create Vector Search index        | 768 dimensions                | ⏳ PENDING (production upgrade) |
+
+#### 1.2 Document Ingestion Pipeline ✅ COMPLETE
+
+| Task | Description                        | Deliverable                      | Status |
+| ---- | ---------------------------------- | -------------------------------- | ------ |
+| 1.2a | Implement PDF parser              | `src/lib/parsers/index.ts`       | ✅ DONE |
+| 1.2b | Implement PPTX parser             | `src/lib/parsers/index.ts`       | ✅ DONE |
+| 1.2c | Implement DOCX parser             | `src/lib/parsers/index.ts`       | ✅ DONE |
+| 1.2d | Implement chunking strategy       | Semantic with overlap            | ✅ DONE |
+| 1.2e | Create CLI ingest script          | `src/cli/ingest.ts`              | ✅ DONE |
+| 1.2f | Create batch ingest CLI           | `src/cli/batch-ingest.ts`        | ✅ DONE |
+| 1.2g | PPTX to Markdown converter        | `src/cli/convert.ts`             | ✅ DONE |
+| 1.2h | Image-heavy detection             | Skill + parser updated           | ✅ DONE |
+
+#### 1.3 Embedding & Vector Storage ✅ MOSTLY COMPLETE
+
+| Task | Description                        | Deliverable                           | Status |
+| ---- | ---------------------------------- | ------------------------------------- | ------ |
+| 1.3a | Implement embedding generation    | Vertex AI text-embedding-005          | ✅ DONE |
+| 1.3b | Implement vector upsert           | Firestore (temp), Vector Search (prod)| ✅ DONE |
+| 1.3c | Create retrieval API              | `src/cli/retrieve.ts`                 | ✅ DONE |
+| 1.3d | Implement metadata filtering      | Client, category, year                | ✅ DONE |
+| 1.3e | Upgrade to Vector Search          | For production performance            | ⏳ PENDING |
+
+#### 1.4 Knowledge Graph ✅ COMPLETE
+
+| Task | Description                        | Deliverable                | Status |
+| ---- | ---------------------------------- | -------------------------- | ------ |
+| 1.4a | Seed framework sections           | 9 sections as nodes        | ✅ DONE |
+| 1.4b | Add strategic patterns            | 5 initial patterns         | ✅ DONE |
+| 1.4c | Add initial tactics               | 4 initial tactics          | ✅ DONE |
+| 1.4d | Create graph persistence          | JSON export to data/       | ✅ DONE |
+| 1.4e | Build pattern extractor           | Identify JL patterns       | ⏳ PENDING |
+
+#### 1.5 Initial Document Ingestion ✅ COMPLETE
+
+| Task | Description                        | Deliverable                        | Status |
+| ---- | ---------------------------------- | ---------------------------------- | ------ |
+| 1.5a | Get sample presentations          | 19 PPTX files from Sylvia         | ✅ DONE |
+| 1.5b | Copy to data directories          | presentations/creators/media       | ✅ DONE |
+| 1.5c | Create metadata manifest          | manifest.csv with metadata         | ✅ DONE |
+| 1.5d | Index to vector store             | 42 docs, 2,153 chunks             | ✅ DONE |
+| 1.5e | Validate retrieval quality        | Tested with queries                | ✅ DONE |
+| 1.5f | Extract structured metadata       | creators.json, media-ideas.json    | ✅ DONE |
+
+#### Data Assets (as of 2026-02-06)
+
+| Asset                       | Location                          | Count/Size     | Indexed |
+| --------------------------- | --------------------------------- | -------------- | ------- |
+| Participation Presentations | `data/presentations/`             | 19 PPTX files  | ✅ Yes  |
+| Collection of Creators      | `data/creators/`                  | 1 file (326MB) | ✅ Yes  |
+| Collection of Media Options | `data/media/`                     | 1 file (291MB) | ✅ Yes  |
+| Metadata Manifest           | `data/presentations/manifest.csv` | 19 entries     | —       |
+| Creators Markdown           | `data/markdown/creators.md`       | 54 KB          | ✅ Yes  |
+| Media Options Markdown      | `data/markdown/media.md`          | 43 KB          | ✅ Yes  |
+| Creators Metadata           | `data/metadata/creators.json`     | 76 creators    | —       |
+| Media Ideas Metadata        | `data/metadata/media-ideas.json`  | 15 ideas       | —       |
+| New PDF (from Leo)          | TBD                               | Large          | ⏳ Needs ingestion |
+| JL Branding Toolkit         | TBD                               | Large (expected) | ⏳ Needs ingestion + Skill |
+
+---
+
+### Phase 1.5: Learning/Evolution System ✅ COMPLETE
 
 **Goal:** Build the foundation for continuous improvement
 
 See [docs/EVOLUTION.md](/docs/EVOLUTION.md) for full architecture.
 
-| Task  | Description                              | Deliverable                          |
-| ----- | ---------------------------------------- | ------------------------------------ |
-| 1.5.1 | Set up Firestore observation collections | Schema and indexes                   |
-| 1.5.2 | Implement observation capture            | `/lib/learning/observation-store.ts` |
-| 1.5.3 | Implement pattern analyzer               | `/lib/learning/pattern-analyzer.ts`  |
-| 1.5.4 | Build context injector                   | `/lib/learning/context-injector.ts`  |
-| 1.5.5 | Create feedback capture UI               | Leo rating/edit interface            |
-| 1.5.6 | Integrate with knowledge graph           | Evolution nodes in graph             |
+| Task  | Description                              | Deliverable                          | Status |
+| ----- | ---------------------------------------- | ------------------------------------ | ------ |
+| 1.5.1 | Set up Firestore observation collections | Schema and indexes                   | ✅ DONE |
+| 1.5.2 | Implement observation capture            | `src/lib/learning/observation-store.ts` | ✅ DONE |
+| 1.5.3 | Implement pattern analyzer               | `src/lib/learning/pattern-analyzer.ts`  | ✅ DONE |
+| 1.5.4 | Build context injector                   | `src/lib/learning/context-injector.ts`  | ✅ DONE |
+| 1.5.5 | Create feedback capture UI               | Leo rating/edit interface            | ⏳ PENDING (Phase 4) |
+| 1.5.6 | Integrate with knowledge graph           | Evolution nodes in graph             | ⏳ PENDING |
 
-### Phase 2: 8-Part Framework Integration (Week 4)
+---
+
+### Phase 2: 8-Part Framework Integration 🔜 READY
 
 **Goal:** Codify the Participation Framework as system prompts
 
-| Task | Description                    | Deliverable                         |
-| ---- | ------------------------------ | ----------------------------------- |
-| 2.1  | Document framework sections    | Detailed spec per section           |
-| 2.2  | Create system prompt templates | `/prompts/` directory               |
-| 2.3  | Build prompt assembly service  | Dynamic prompt construction         |
-| 2.4  | Implement Claude integration   | Vertex AI Claude calls              |
-| 2.5  | Create output formatters       | Structured JSON → display           |
-| 2.6  | Test with sample inputs        | Validation outputs                  |
-| 2.7  | Integrate evolution context    | Context injection before generation |
+**Dependency:** Requires Leo's input on framework nuances
 
-### Phase 3: Cultural Intelligence Layer (Weeks 5-6)
+| Task | Description                    | Deliverable                         | Status |
+| ---- | ------------------------------ | ----------------------------------- | ------ |
+| 2.1  | Document framework sections    | Detailed spec per section           | ⏳ PENDING |
+| 2.2  | Create system prompt templates | `/prompts/` directory               | ⏳ PENDING |
+| 2.3  | Build prompt assembly service  | Dynamic prompt construction         | ⏳ PENDING |
+| 2.4  | Implement Claude integration   | Vertex AI Claude calls              | ⏳ PENDING |
+| 2.5  | Create output formatters       | Structured JSON → display           | ⏳ PENDING |
+| 2.6  | Test with sample inputs        | Validation outputs                  | ⏳ PENDING |
+| 2.7  | Integrate evolution context    | Context injection before generation | ⏳ PENDING |
+
+---
+
+### Phase 3: Cultural Intelligence Layer 🔄 ~55% COMPLETE
 
 **Goal:** Real-time trend and subculture discovery
 
 See [docs/CULTURAL_INTELLIGENCE.md](/docs/CULTURAL_INTELLIGENCE.md) for full research and alternatives.
 
-**Selected Stack:**
+| Task | Description                         | Deliverable                        | Status |
+| ---- | ----------------------------------- | ---------------------------------- | ------ |
+| 3.1  | Integrate Exa.ai API               | `src/lib/cultural/exa.ts`         | ✅ DONE |
+| 3.2  | Integrate Tavily API                | `src/lib/cultural/tavily.ts`      | ✅ DONE |
+| 3.3  | Build result merger/deduplicator    | `src/lib/cultural/merger.ts`      | ✅ DONE |
+| 3.4  | Implement sentiment analysis        | `src/lib/cultural/sentiment.ts`   | ✅ DONE (needs model enabled) |
+| 3.5  | Integrate Perplexity (failover)     | `src/lib/cultural/perplexity.ts`  | ⏳ PENDING |
+| 3.6  | Build trend aggregator              | Unified trend data model           | ⏳ PENDING |
+| 3.7  | Create subculture mapping           | Target audience → communities      | ⏳ PENDING |
+| 3.8  | Build 72-hour trend hijacks         | Time-sensitive opportunities       | ⏳ PENDING |
+| 3.9  | Reddit direct API (if needed)       | PRAW microservice (deferred)       | 🔽 DEFERRED |
 
-- **Semantic Search:** Exa.ai + Tavily (dual integration, merged results)
-- **Summarization:** Gemini Grounding (primary) + Perplexity (failover)
-- **Reddit:** Official API with PRAW
-- **TikTok:** Via Exa search of news/blog coverage
-- **Sentiment:** Claude Opus 4.5 analysis (no dedicated service for MVP)
+**Note:** Direct Reddit API access deferred — Exa.ai provides excellent Reddit content coverage via semantic search.
 
-| Task | Description                         | Deliverable                        |
-| ---- | ----------------------------------- | ---------------------------------- |
-| 3.1  | Integrate Exa.ai API                | `/lib/cultural/exa.ts`             |
-| 3.2  | Integrate Tavily API                | `/lib/cultural/tavily.ts`          |
-| 3.3  | Build result merger/deduplicator    | `/lib/cultural/merger.ts`          |
-| 3.4  | Integrate Gemini with Grounding     | `/lib/cultural/gemini-grounded.ts` |
-| 3.5  | Integrate Perplexity (failover)     | `/lib/cultural/perplexity.ts`      |
-| 3.6  | Integrate Reddit API (PRAW)         | `/lib/cultural/reddit.ts`          |
-| 3.7  | Build trend aggregator              | Unified trend data model           |
-| 3.8  | Create subculture mapping           | Target audience → communities      |
-| 3.9  | Build 72-hour trend hijacks         | Time-sensitive opportunities       |
-| 3.10 | Implement Claude sentiment analysis | `/lib/cultural/sentiment.ts`       |
+---
 
-### Phase 4: User Interface & Presentation Generation (Weeks 7-8)
+### Phase 4: User Interface & Presentation Generation 🔄 ~25% SCAFFOLDED
 
 **Goal:** Build Leo-friendly web application with presentation-ready output
 
-| Task | Description                     | Deliverable                        |
-| ---- | ------------------------------- | ---------------------------------- |
-| 4.1  | Design UI/UX wireframes         | Figma/mockups                      |
-| 4.2  | Build Project Seed input form   | Multi-step wizard                  |
-| 4.3  | Create generation progress UI   | Real-time status with streaming    |
-| 4.4  | Create JL presentation template | Branded PPTX master template       |
-| 4.5  | Build PPTX generation engine    | PptxGenJS integration              |
-| 4.6  | Build slide preview components  | In-browser presentation view       |
-| 4.7  | Add export functionality        | PPTX (primary), PDF, Google Slides |
-| 4.8  | Implement history/saved outputs | User sessions with deck preview    |
-| 4.9  | Mobile responsiveness           | iPad-friendly                      |
+| Task | Description                     | Deliverable                        | Status |
+| ---- | ------------------------------- | ---------------------------------- | ------ |
+| 4.0  | Create Next.js app              | `app/` directory                   | ✅ DONE |
+| 4.0b | Install shadcn/ui               | 14 components installed            | ✅ DONE |
+| 4.0c | Create landing page             | `app/src/app/page.tsx`             | ✅ DONE |
+| 4.0d | Create generation wizard        | `app/src/app/generate/`            | ✅ DONE |
+| 4.0e | Create history page             | `app/src/app/history/`             | ✅ DONE |
+| 4.1  | Connect frontend to backend     | API route integration              | ⏳ PENDING |
+| 4.2  | Build generation progress UI    | Real-time streaming                | ⏳ PENDING |
+| 4.3  | Create JL presentation template | Branded PPTX master                | ⏳ PENDING |
+| 4.4  | Build PPTX generation engine    | PptxGenJS integration              | ⏳ PENDING |
+| 4.5  | Build slide preview components  | In-browser deck view               | ⏳ PENDING |
+| 4.6  | Add export functionality        | PPTX, PDF, Google Slides           | ⏳ PENDING |
+| 4.7  | Implement history/saved outputs | User sessions with preview         | ⏳ PENDING |
+| 4.8  | Create feedback dashboard       | Ratings, corrections, suggestions  | ⏳ PENDING |
+| 4.9  | Mobile responsiveness           | iPad-friendly                      | ⏳ PENDING |
 
-### Phase 5: Testing & Refinement (Week 9)
+---
+
+### Phase 5: Testing & Refinement ⏳ PENDING
 
 **Goal:** Quality assurance and tuning
 
-| Task | Description                   | Deliverable                     |
-| ---- | ----------------------------- | ------------------------------- |
-| 5.1  | End-to-end testing            | Test suite                      |
-| 5.2  | Prompt engineering refinement | Improved outputs                |
-| 5.3  | Retrieval quality tuning      | Better context selection        |
-| 5.4  | Performance optimization      | Sub-30s generation              |
-| 5.5  | Security audit                | Authentication, data protection |
+| Task | Description                   | Deliverable                     | Status |
+| ---- | ----------------------------- | ------------------------------- | ------ |
+| 5.1  | End-to-end testing            | Test suite                      | ⏳ PENDING |
+| 5.2  | Prompt engineering refinement | Improved outputs                | ⏳ PENDING |
+| 5.3  | Retrieval quality tuning      | Better context selection        | ⏳ PENDING |
+| 5.4  | Performance optimization      | Sub-30s generation              | ⏳ PENDING |
+| 5.5  | Security audit                | Authentication, data protection | ⏳ PENDING |
 
-### Phase 6: Deployment & Training (Week 10)
+---
+
+### Phase 6: Deployment & Training ⏳ PENDING
 
 **Goal:** Production launch and user onboarding
 
-| Task | Description               | Deliverable            |
-| ---- | ------------------------- | ---------------------- |
-| 6.1  | Production deployment     | Live Cloud Run service |
-| 6.2  | Create user documentation | User guide for Leo     |
-| 6.3  | Training session          | 1:1 walkthrough        |
-| 6.4  | Feedback collection       | Iteration backlog      |
-| 6.5  | Handoff documentation     | Maintenance guide      |
+| Task | Description               | Deliverable            | Status |
+| ---- | ------------------------- | ---------------------- | ------ |
+| 6.1  | Production deployment     | Live Cloud Run service | ⏳ PENDING |
+| 6.2  | Create user documentation | User guide for Leo     | ⏳ PENDING |
+| 6.3  | Training session          | 1:1 walkthrough        | ⏳ PENDING |
+| 6.4  | Feedback collection       | Iteration backlog      | ⏳ PENDING |
+| 6.5  | Handoff documentation     | Maintenance guide      | ⏳ PENDING |
+
+---
+
+### Phase M: Maintenance & Compatibility 🆕
+
+**Goal:** Keep tooling current with AI model and IDE upgrades
+
+#### M.1 Opus 4.6 Compatibility Audit
+
+| Task | Area | Description | Status |
+|------|------|-------------|--------|
+| M.1a | Services | Check GCP/Vertex AI service configs for model version references | ✅ DONE |
+| M.1b | Code | Audit `src/lib/` for hardcoded model identifiers | ✅ DONE |
+| M.1c | Skills | Review `.cursor/skills/` for outdated model references | ✅ DONE |
+| M.1d | CLI Tools | Check `src/cli/` for model-specific logic | ✅ DONE |
+| M.1e | Rules | Review `.cursor/rules/` for Opus 4.5-specific guidance | ✅ DONE |
+| M.1f | Task Router | Update `src/lib/router/task-router.ts` model IDs if needed | ✅ DONE |
+| M.1g | Environment | Check `.env.example` and config for model version strings | ✅ DONE |
+| M.1h | Prompts | Review `src/prompts/` for model-specific prompt tuning | ✅ DONE |
+
+---
+
+### Phase B: JL Branding Toolkit 🆕
+
+**Goal:** Ingest JL brand guidelines and create a reusable Branding Skill for frontend/UI/presentation design
+
+| Task | Description | Deliverable | Priority | Status |
+|------|-------------|-------------|----------|--------|
+| B.1 | Receive and ingest JL Branding Toolkit deck | Indexed in vector store | 🔴 HIGH | ⏳ PENDING (awaiting file) |
+| B.2 | Convert to Markdown (if PPTX/PDF) | `data/markdown/jl-branding-toolkit.md` | 🔴 HIGH | ⏳ PENDING |
+| B.3 | Extract brand elements | Colors, typography, spacing, logo usage, tone | 🔴 HIGH | ⏳ PENDING |
+| B.4 | Create JL Branding Skill | `.cursor/skills/jl-branding/SKILL.md` | 🔴 HIGH | ⏳ PENDING |
+| B.5 | Apply to frontend components | Tailwind theme, component styling | 🟡 MEDIUM | ⏳ PENDING |
+| B.6 | Apply to PPTX export template | Branded slide master for PptxGenJS | 🟡 MEDIUM | ⏳ PENDING |
+
+**Branding Skill will be used for:**
+- Frontend UI/UX design decisions (colors, fonts, spacing, components)
+- Presentation template generation (PPTX export branding)
+- Any user-facing output that represents JL
+
+---
+
+### Phase E: Exploration & R&D 🆕
+
+**Goal:** Evaluate new capabilities for potential integration
+
+#### E.1 Agent Teams Feature Viability
+
+| Task | Description | Status |
+|------|-------------|--------|
+| E.1a | Research Agent Teams capabilities and constraints | ⏳ PENDING |
+| E.1b | Map to existing multi-agent delegation pattern | ⏳ PENDING |
+| E.1c | Prototype feasibility assessment | ⏳ PENDING |
+| E.1d | Document recommendation with pros/cons | ⏳ PENDING |
+
+---
+
+### Progress Dashboard 🔄 BUILT (Not Deployed)
+
+| Task | Description | Status |
+|------|-------------|--------|
+| D.1 | Create dashboard server | ✅ DONE (`dashboard/server.js`) |
+| D.2 | Create tasks data model | ✅ DONE (`dashboard/tasks.json`, 80+ tasks) |
+| D.3 | Create Dockerfile | ✅ DONE (`dashboard/Dockerfile`) |
+| D.4 | Create deploy script | ✅ DONE (`dashboard/deploy.sh`) |
+| D.5 | Deploy to Cloud Run | ⏳ PENDING |
+| D.6 | Configure IAP (Leo/Charley/Maggie) | ⏳ PENDING |
+| D.7 | Sync tasks.json with TASKS.md | ⏳ PENDING |
+
+**Local test:** `cd dashboard && node server.js` → http://localhost:8080
+
+---
+
+## 🏆 Recommended Priority Order
+
+### Before Leo Arrives (Quick Wins - 30 min)
+
+| # | Task | Time | Phase |
+|---|------|------|-------|
+| 1 | Opus 4.6 compatibility audit | ~15 min | M.1 |
+| 2 | Agent Teams quick research | ~15 min | E.1a |
+
+### With Leo (Session Focus)
+
+| # | Task | Time | Phase |
+|---|------|------|-------|
+| 3 | Demo retrieval to Leo | 15 min | Immediate #1 |
+| 4 | Phase 2 kickoff - Framework specs | 30-60 min | 2.1 |
+
+### After Leo Session (Backend Work)
+
+| # | Task | Time | Phase |
+|---|------|------|-------|
+| 5 | Deploy dashboard to Cloud Run | 30 min | D.5-D.6 |
+| 6 | Perplexity integration | 30 min | 3.5 |
+| 7 | Build trend aggregator | 1 hr | 3.6 |
+| 8 | Connect frontend to backend APIs | 1-2 hr | 4.1 |
 
 ---
 
@@ -404,16 +588,13 @@ See [docs/CULTURAL_INTELLIGENCE.md](/docs/CULTURAL_INTELLIGENCE.md) for full res
 
 ### 1. Document Ingestion Service
 
-```javascript
-// /lib/parsers/index.js
+```typescript
+// src/lib/parsers/index.ts
 /**
- * Supported formats: PDF, PPTX, DOCX
+ * Supported formats: PDF, PPTX, DOCX, TXT
  * Output: Structured chunks with metadata
+ * Includes image-heavy detection for PPTX files
  */
-const parseDocument = async (file, options) => {
-  // Extract text, preserve structure
-  // Return: { chunks: [], metadata: {} }
-};
 ```
 
 **Chunking Strategy:**
@@ -426,7 +607,7 @@ const parseDocument = async (file, options) => {
 ### 2. Vector Store Schema
 
 ```javascript
-// Pinecone/Vertex AI Vector Search
+// Firestore vector store (current) → Vertex AI Vector Search (production)
 {
   id: "uuid",
   values: [/* 768 float32 embeddings */],
@@ -466,93 +647,21 @@ Return a structured Participation Blueprint with all 9 sections...
 
 ### 4. Cultural Intelligence Service
 
-```javascript
-// /lib/cultural/index.js
-const getCulturalContext = async (brandCategory, targetAudience) => {
-  const [exaResults, perplexityResults] = await Promise.all([
-    exa.search(`${brandCategory} trends 2026`),
-    perplexity.search(`what's trending in ${targetAudience} culture`),
-  ]);
-
-  return {
-    currentMomentum: aggregateTrends(exaResults, perplexityResults),
-    subcultures: identifySubcultures(targetAudience),
-    trendHijacks: find72HourOpportunities(exaResults),
-  };
-};
+```typescript
+// src/lib/cultural/index.ts - Multi-source cultural intelligence
+// Active: Exa.ai, Tavily, Sentiment (Claude)
+// Pending: Perplexity, trend aggregator, subculture mapping
 ```
 
 ### 5. Presentation Generation Service
 
-The primary output is a **presentation-ready PPTX deck** using PptxGenJS.
-
 ```typescript
-// /lib/export/pptx.ts
+// src/lib/export/pptx.ts
 import PptxGenJS from "pptxgenjs";
 
-interface SlideContent {
-  title: string;
-  subtitle?: string;
-  body: string[];
-  bulletPoints?: string[];
-  image?: { url: string; caption: string };
-}
-
-const generatePresentation = async (
-  blueprint: ParticipationBlueprint,
-  template: "jl-master" | "minimal" = "jl-master"
-): Promise<Buffer> => {
-  const pptx = new PptxGenJS();
-
-  // Apply JL branding
-  pptx.layout = "LAYOUT_WIDE";
-  pptx.author = "Johannes Leonardo";
-  pptx.company = "Johannes Leonardo";
-
-  // Generate 20 slides from blueprint
-  generateTitleSlide(pptx, blueprint);
-  generateWriteupSlides(pptx, blueprint.writeup); // 9 slides
-  generatePackSlides(pptx, blueprint.pack); // 10 slides
-
-  return await pptx.write({ outputType: "nodebuffer" });
-};
+// Generates 20-slide branded PPTX from blueprint JSON
+// Export: PPTX (primary), PDF, Google Slides
 ```
-
-**Slide Template Structure:**
-
-```json
-{
-  "layouts": {
-    "title": {
-      "background": "#1A1A2E",
-      "titleFont": "Helvetica Neue Bold",
-      "titleSize": 44,
-      "subtitleSize": 24
-    },
-    "section": {
-      "background": "#FFFFFF",
-      "headerFont": "Helvetica Neue Bold",
-      "headerSize": 32,
-      "bodyFont": "Helvetica Neue",
-      "bodySize": 18,
-      "accentColor": "#E94560"
-    },
-    "content": {
-      "maxBullets": 5,
-      "bulletIndent": 0.5,
-      "imagePosition": "right"
-    }
-  }
-}
-```
-
-**Export Options:**
-
-| Format            | Library              | Notes                         |
-| ----------------- | -------------------- | ----------------------------- |
-| **PPTX**          | PptxGenJS            | Primary format, full fidelity |
-| **PDF**           | pdf-lib or Puppeteer | Flattened for sharing         |
-| **Google Slides** | Google Slides API    | Direct to GCP                 |
 
 ---
 
@@ -560,14 +669,14 @@ const generatePresentation = async (
 
 ### Existing Infrastructure Integration
 
-| System             | Integration Method             | Purpose                  |
-| ------------------ | ------------------------------ | ------------------------ |
-| **GCP Vertex AI**  | SDK (@google-cloud/aiplatform) | Claude, embeddings       |
-| **Cloud Run**      | gcloud CLI deploy              | Serverless hosting       |
-| **Cloud Storage**  | SDK (@google-cloud/storage)    | Document storage         |
-| **Firestore**      | SDK (firebase-admin)           | Session/output storage   |
-| **GitHub Actions** | Workflow YAML                  | CI/CD pipeline           |
-| **Slack**          | Webhook                        | Deployment notifications |
+| System             | Integration Method             | Purpose                  | Status |
+| ------------------ | ------------------------------ | ------------------------ | ------ |
+| **GCP Vertex AI**  | SDK (@google-cloud/aiplatform) | Claude, embeddings       | ✅ Active |
+| **Cloud Run**      | gcloud CLI deploy              | Serverless hosting       | ⏳ Pending |
+| **Cloud Storage**  | SDK (@google-cloud/storage)    | Document storage         | ✅ Active |
+| **Firestore**      | SDK (firebase-admin)           | Session/output storage   | ✅ Active |
+| **GitHub Actions** | Workflow YAML                  | CI/CD pipeline           | ⏳ Pending |
+| **Slack**          | Webhook                        | Deployment notifications | ⏳ Pending |
 
 ### Authentication Flow
 
@@ -581,7 +690,29 @@ User → Cloud IAP (Identity-Aware Proxy) → Cloud Run → GCP APIs
 
 ## Data Pipeline
 
-### Daily Automated Pipeline (via Zapier/Make)
+### Document Ingestion Pipeline (Active)
+
+```
+Admin runs CLI:
+  npm run ingest -- <file> --client "Name" --type presentation
+           ↓
+Parse document → Chunk → Embed → Store vectors in Firestore
+           ↓
+Metadata updated in manifest
+```
+
+### Cultural Intelligence Pipeline (Active)
+
+```
+CLI or API request:
+  npm run cultural -- search "query"
+           ↓
+Exa.ai + Tavily (parallel) → Merge & Dedupe → Return ranked results
+           ↓
+Optional: Sentiment analysis via Claude
+```
+
+### Future: Daily Automated Pipeline
 
 ```
 06:00 UTC: Fetch trending topics (Reddit, TikTok, Twitter/X)
@@ -593,31 +724,18 @@ User → Cloud IAP (Identity-Aware Proxy) → Cloud Run → GCP APIs
 On-demand: User queries pull fresh + cached cultural data
 ```
 
-### Document Ingestion Pipeline
-
-```
-Admin uploads presentation
-           ↓
-Cloud Function triggered (Storage event)
-           ↓
-Parse document → Chunk → Embed → Store vectors
-           ↓
-Firestore metadata updated
-           ↓
-Slack notification: "New knowledge added: {filename}"
-```
-
 ---
 
 ## Deployment Strategy
 
 ### Environment Tiers
 
-| Environment     | URL                          | Purpose           |
-| --------------- | ---------------------------- | ----------------- |
-| **Development** | localhost:3000               | Local development |
-| **Staging**     | participation-staging.jl.dev | Testing/QA        |
-| **Production**  | participation.jl.dev         | Leo's access      |
+| Environment     | URL                          | Purpose           | Status |
+| --------------- | ---------------------------- | ----------------- | ------ |
+| **Development** | localhost:3000               | Local development | ✅ Active |
+| **Dashboard**   | localhost:8080               | Progress tracking | ✅ Local only |
+| **Staging**     | participation-staging.jl.dev | Testing/QA        | ⏳ Pending |
+| **Production**  | participation.jl.dev         | Leo's access      | ⏳ Pending |
 
 ### Cloud Run Configuration
 
@@ -711,247 +829,49 @@ See full details in [docs/LEOS_REQUIREMENTS.md](/docs/LEOS_REQUIREMENTS.md)
 
 ---
 
-## Current Status (as of 2026-02-05)
-
-### Completed ✅
-
-| Phase   | Component               | Status                                                   |
-| ------- | ----------------------- | -------------------------------------------------------- |
-| **0**   | Foundation Setup        | ✅ Multi-agent architecture, rules, skills, hooks        |
-| **1.1** | GCP Infrastructure      | ✅ Project, APIs, service account, buckets, Firestore    |
-| **1.2** | Document Parsers        | ✅ PDF, PPTX, DOCX, TXT with semantic chunking           |
-| **1.3** | Embeddings & Vector     | ✅ Vertex AI text-embedding-005, Firestore storage       |
-| **1.4** | Knowledge Graph         | ✅ 9 framework sections, 5 patterns, 4 tactics seeded    |
-| **1.5** | Learning System         | ✅ Observation store, pattern analyzer, context injector |
-| **4**   | Frontend (early)        | ✅ Next.js 16, shadcn/ui, landing/wizard/history pages   |
-| **2**   | Data Organization       | ✅ 19 presentations + Creator/Media collections copied   |
-| **2**   | Manifest                | ✅ CSV metadata for all presentations                    |
-| **2**   | Image-Heavy Detection   | ✅ Skill created, parser updated with detection logic    |
-| **1.5** | Vector Indexing         | ✅ **40 documents, 2,086 chunks indexed**                |
-| **3.1** | Exa.ai Integration      | ✅ Semantic search + Reddit via `npm run cultural`       |
-| **Docs**| Leo's Requirements      | ✅ Full founder input captured                           |
-| **Docs**| Demo Walkthrough        | ✅ Session script created for Leo demo                   |
-| **Docs**| API Documentation       | ✅ `docs/URL_API.md` with keys and endpoints             |
-
-### In Progress 🔄
-
-| Item                      | Status                          | Next Action              |
-| ------------------------- | ------------------------------- | ------------------------ |
-| Phase 2: Framework        | Ready to start with Leo         | Document framework specs |
-| Phase 3: Cultural Intel   | Exa.ai done, others pending     | Add Tavily, merger       |
-
-### Data Assets
-
-| Asset                     | Location                   | Count/Size   |
-| ------------------------- | -------------------------- | ------------ |
-| Participation Presentations| `data/presentations/`     | 19 PPTX files|
-| Collection of Creators    | `data/creators/`           | 1 file (326MB)|
-| Collection of Media Options| `data/media/`             | 1 file (291MB)|
-| Metadata Manifest         | `data/presentations/manifest.csv` | 19 entries |
-
-### Ready for Phase 2 🚀
-
-The infrastructure is complete with real data:
-
-1. Ingest documents via CLI: `npm run ingest -- <file> --client "Name" --type presentation`
-2. Test retrieval: `npm run retrieve -- "query" --top-k 5`
-3. Demo to Leo (see `docs/DEMO_WALKTHROUGH.md`)
-4. Begin 8-Part Framework integration with Leo's guidance
-
----
-
-## Next Steps (Immediate)
-
-1. ✅ ~~**Index presentations**~~ - 40 docs, 2,086 chunks indexed
-2. ✅ ~~**Set up cultural intelligence**~~ - Exa.ai integrated (`npm run cultural`)
-3. **Demo to Leo** - Follow walkthrough script (`docs/DEMO_WALKTHROUGH.md`)
-4. **Add Tavily + context merger** - Backup search + combine RAG + cultural
-5. **Phase 2 kickoff** - Leo guides Framework integration with real use case
-
----
-
-## Reddit Integration Architecture (POC Priority)
-
-### Flow with Cultural Intelligence
-
-```
-User Input (Idea/Brief)
-        │
-        ├──────────────────────────────────────┐
-        │                                      │
-        ▼                                      ▼
-┌───────────────────┐              ┌───────────────────┐
-│ RAG RETRIEVAL     │              │ CULTURAL INTEL    │
-│ (JL Knowledge)    │              │ (Reddit + Exa)    │
-│                   │              │                   │
-│ • Past campaigns  │              │ • Subreddit trends│
-│ • Framework       │              │ • Sentiment       │
-│ • Patterns        │              │ • Subcultures     │
-└─────────┬─────────┘              └─────────┬─────────┘
-          │                                  │
-          └──────────────┬───────────────────┘
-                         │
-                         ▼
-              ┌─────────────────────┐
-              │ CONTEXT MERGER      │
-              │                     │
-              │ JL patterns +       │
-              │ Real-time culture = │
-              │ Grounded + Relevant │
-              └──────────┬──────────┘
-                         │
-                         ▼
-              ┌─────────────────────┐
-              │ CLAUDE GENERATION   │
-              │ (Framework applied) │
-              └─────────────────────┘
-```
-
-### Selected Stack
-
-| Component | Tool | Purpose |
-|-----------|------|---------|
-| **Reddit Scraper** | PRAW (Python) | Real-time Reddit data - posts, comments, trends |
-| **Semantic Search** | Exa.ai | Semantic search across Reddit + web content |
-| **Sentiment** | Claude Opus 4.5 | Analyze sentiment from scraped content |
-
-### Architecture
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     Node.js Backend                          │
-│  ┌─────────────────┐  ┌─────────────────┐                   │
-│  │ /api/cultural   │  │ /api/generate   │                   │
-│  └────────┬────────┘  └────────┬────────┘                   │
-│           │                    │                             │
-│           ▼                    │                             │
-│  ┌─────────────────────────────┼─────────────────────────┐  │
-│  │         Cultural Intelligence Service                  │  │
-│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │  │
-│  │  │ Reddit       │  │ Exa.ai       │  │ Context      │ │  │
-│  │  │ Client       │  │ Client       │  │ Merger       │ │  │
-│  │  └──────┬───────┘  └──────┬───────┘  └──────────────┘ │  │
-│  └─────────┼─────────────────┼───────────────────────────┘  │
-└────────────┼─────────────────┼──────────────────────────────┘
-             │                 │
-             ▼                 ▼
-┌────────────────────┐  ┌────────────────────┐
-│ Python PRAW        │  │ Exa.ai API         │
-│ Microservice       │  │                    │
-│ (FastAPI/Flask)    │  │ Semantic search    │
-│                    │  │ across Reddit +    │
-│ • Hot posts        │  │ web content        │
-│ • Subreddit trends │  │                    │
-│ • Comments/sent.   │  │                    │
-└─────────┬──────────┘  └────────────────────┘
-          │
-          ▼
-┌────────────────────┐
-│ Reddit API         │
-│ (Official)         │
-│                    │
-│ Free: 100 req/min  │
-└────────────────────┘
-```
-
-### Implementation Tasks (Phase 3 - HIGH PRIORITY)
-
-| Task | Description | Deliverable |
-|------|-------------|-------------|
-| 3.0 | Create Python PRAW microservice | `services/reddit/` |
-| 3.1 | Reddit API credentials | `.env` config |
-| 3.2 | Subreddit trend endpoint | `/trends/{subreddit}` |
-| 3.3 | Hot posts endpoint | `/hot/{subreddit}` |
-| 3.4 | Sentiment analysis | Claude integration |
-| 3.5 | Exa.ai Reddit search | `/search/reddit` |
-| 3.6 | Context merger service | Combine RAG + Cultural |
-| 3.7 | Node.js client for Python service | `src/lib/cultural/reddit.ts` |
-
-### Reddit API Setup
+## CLI Commands Reference
 
 ```bash
-# 1. Create Reddit App at https://www.reddit.com/prefs/apps
-# 2. Add to .env:
-REDDIT_CLIENT_ID=your-client-id
-REDDIT_CLIENT_SECRET=your-client-secret
-REDDIT_USER_AGENT=participation-translator/1.0
-```
+# Ingest a document
+npm run ingest -- ./path/to/document.pptx --client "ClientName" --type presentation
 
-### Example PRAW Microservice
+# Batch ingest
+npm run batch-ingest -- --dry-run
 
-```python
-# services/reddit/main.py
-from fastapi import FastAPI
-import praw
+# Test retrieval
+npm run retrieve -- "participation mechanics for automotive"
 
-app = FastAPI()
-reddit = praw.Reddit(
-    client_id=os.environ["REDDIT_CLIENT_ID"],
-    client_secret=os.environ["REDDIT_CLIENT_SECRET"],
-    user_agent=os.environ["REDDIT_USER_AGENT"]
-)
+# Show vector store stats
+npm run stats
 
-@app.get("/trends/{subreddit}")
-def get_trends(subreddit: str, limit: int = 25):
-    """Get trending posts from a subreddit"""
-    sub = reddit.subreddit(subreddit)
-    posts = []
-    for post in sub.hot(limit=limit):
-        posts.append({
-            "title": post.title,
-            "score": post.score,
-            "url": post.url,
-            "num_comments": post.num_comments,
-            "created_utc": post.created_utc
-        })
-    return {"subreddit": subreddit, "posts": posts}
-```
+# Seed knowledge graph
+npm run seed-graph
 
----
+# Convert PPTX to Markdown
+npm run convert -- ./data/creators/file.pptx --output ./data/markdown/output.md
 
-## Appendix: File Structure
+# Extract structured metadata
+npm run extract-metadata
 
-```
-leo-participation-translator/
-├── src/
-│   ├── app/                    # Next.js app directory
-│   │   ├── page.tsx            # Home/landing
-│   │   ├── generate/           # Generation wizard
-│   │   ├── history/            # Past outputs
-│   │   └── api/                # API routes
-│   ├── components/             # React components
-│   │   ├── SeedForm/           # Project seed wizard
-│   │   ├── SlidePreview/       # In-browser deck preview
-│   │   ├── ProgressTracker/    # Generation progress UI
-│   │   └── ExportMenu/         # Download options
-│   ├── lib/
-│   │   ├── parsers/            # Document parsing
-│   │   ├── embeddings/         # Vector operations
-│   │   ├── cultural/           # Trend APIs
-│   │   ├── generation/         # Claude integration
-│   │   └── export/             # Presentation export
-│   │       ├── pptx.ts         # PptxGenJS integration
-│   │       ├── pdf.ts          # PDF generation
-│   │       └── google-slides.ts # Google Slides API
-│   ├── prompts/                # System prompts
-│   └── templates/              # Presentation templates
-│       ├── jl-master.pptx      # JL branded master
-│       └── slide-layouts.json  # Slide structure definitions
-├── docs/
-│   ├── SETUP.md                # Developer setup
-│   ├── ARCHITECTURE.md         # Technical architecture
-│   ├── USER_GUIDE.md           # For Leo
-│   └── API.md                  # API documentation
-├── scripts/
-│   ├── ingest.js               # Document ingestion CLI
-│   └── seed-db.js              # Initial data seeding
-├── sessions/                   # Session logs
-├── tests/                      # Test files
-├── PLAN.md                     # This file
-├── CLAUDE.md                   # AI context
-└── package.json
+# Cultural Intelligence
+npm run cultural -- search "sneaker culture Gen Z"
+npm run cultural -- reddit "brand opinions Nike"
+npm run cultural -- trends "streetwear fashion"
+npm run cultural -- context "Adidas" "footwear"
+npm run cultural -- answer "What are top sneaker trends?" --provider tavily
+npm run cultural -- merge "participation for sneakers" --brand Adidas
+npm run cultural -- sentiment "Nike brand perception" --brand Nike
+
+# Dashboard (local)
+cd dashboard && node server.js
 ```
 
 ---
 
 _This plan is a living document. Update as requirements evolve._
+
+---
+
+Author: Charley Scholz, JLIT
+Co-authored: Claude Opus 4.6, Claude Code (coding assistant), Cursor (IDE)
+Last Updated: 2026-02-06

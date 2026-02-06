@@ -67,7 +67,7 @@ Available models (via Vertex AI):
 
 - Subscription: Claude Pro/Max via Cursor Pro Plan
 - Config: ~/.claude.json
-- Default Model: Opus 4.5
+- Default Model: Opus 4.6
 
 ### Setup
 
@@ -84,7 +84,7 @@ claude setup-token
 ## Cursor IDE
 
 - Plan: Cursor Pro (recommended)
-- Available Models: Opus 4.5, Sonnet 4.5, Gemini 3 Pro, GPT-5.1
+- Available Models: Opus 4.6, Sonnet 4.5, Gemini 3 Pro, GPT-5.1
 
 ### Setup
 
