@@ -8,6 +8,8 @@
  */
 
 import type { CulturalContext } from '../cultural/index.js';
+import { assembleWriteupPrompt, assemblePackPrompt } from './prompt-assembly.js';
+import { callClaudeForBlueprint, parseClaudeResponse } from './claude-client.js';
 
 /**
  * Project seed - initial input from user
@@ -268,6 +270,7 @@ export async function generateBlueprint(
   seed: ProjectSeed,
   options?: {
     stream?: boolean;
+    model?: string;
     onChunk?: (chunk: string) => void;
     onProgress?: (stage: string, progress: number) => void;
     skipCultural?: boolean;
@@ -299,6 +302,7 @@ export async function generateBlueprint(
     writeupPrompt.userPrompt,
     {
       stream: options?.stream,
+      model: options?.model,
       onChunk: options?.onChunk,
     }
   );
@@ -322,11 +326,18 @@ export async function generateBlueprint(
     packPrompt.userPrompt,
     {
       stream: options?.stream,
+      model: options?.model,
+      maxTokens: 8192, // Vertex AI Sonnet 4.5 hangs above 8192; prompt instructs conciseness
       onChunk: options?.onChunk,
     }
   );
 
-  const packResult = parseClaudeResponse<ParticipationPack>(packResponse);
+  const rawPackResult = parseClaudeResponse<ParticipationPack | { participationPack: ParticipationPack }>(packResponse);
+
+  // Unwrap nested wrapper — Claude sometimes returns { participationPack: { ... } }
+  const packResult = rawPackResult.success && 'participationPack' in rawPackResult.data
+    ? { success: true as const, data: rawPackResult.data.participationPack }
+    : rawPackResult as { success: true; data: ParticipationPack } | { success: false; rawText: string; error: string };
 
   // Step 4: Assemble the final blueprint
   options?.onProgress?.('Assembling blueprint...', 0.9);
@@ -460,9 +471,8 @@ export async function generatePack(
 export {
   assembleWriteupPrompt,
   assemblePackPrompt,
-  type AssembledPrompt,
-  type AssemblyOptions,
 } from './prompt-assembly.js';
+export type { AssembledPrompt, AssemblyOptions } from './prompt-assembly.js';
 
 // Re-export Claude client
 export {
@@ -470,9 +480,8 @@ export {
   callClaudeForBlueprint,
   callClaudeForTask,
   parseClaudeResponse,
-  type ClaudeCallOptions,
-  type ClaudeResponse,
 } from './claude-client.js';
+export type { ClaudeCallOptions, ClaudeResponse } from './claude-client.js';
 
 // Re-export output formatters
 export {

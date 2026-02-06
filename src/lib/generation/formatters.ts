@@ -175,7 +175,7 @@ export function formatAsMarkdown(blueprint: ParticipationBlueprint): string {
   lines.push('');
 
   // Subculture Briefs
-  if (pack.subcultureBriefs.length > 0) {
+  if (pack.subcultureBriefs?.length > 0) {
     lines.push('### Subculture Briefs');
     lines.push('');
     for (const brief of pack.subcultureBriefs) {
@@ -184,7 +184,7 @@ export function formatAsMarkdown(blueprint: ParticipationBlueprint): string {
   }
 
   // Mechanics
-  if (pack.mechanics.length > 0) {
+  if (pack.mechanics?.length > 0) {
     lines.push('### Participation Mechanics');
     lines.push('');
     for (const mech of pack.mechanics) {
@@ -193,7 +193,7 @@ export function formatAsMarkdown(blueprint: ParticipationBlueprint): string {
   }
 
   // Creators
-  if (pack.creators.length > 0) {
+  if (pack.creators?.length > 0) {
     lines.push('### Casting & Creators');
     lines.push('');
     for (const creator of pack.creators) {
@@ -202,13 +202,13 @@ export function formatAsMarkdown(blueprint: ParticipationBlueprint): string {
   }
 
   // Trend Hijacks
-  if (pack.trendHijacks.length > 0) {
+  if (pack.trendHijacks?.length > 0) {
     lines.push('### 72-Hour Trend Hijacks');
     lines.push('');
     for (const hijack of pack.trendHijacks) {
-      lines.push(`**${hijack.trend}**`);
-      lines.push(`${hijack.execution}`);
-      lines.push(`*Timing: ${hijack.timing} | Risk: ${hijack.riskLevel}*`);
+      lines.push(`**${hijack.trend || 'Unnamed Trend'}**`);
+      lines.push(`${hijack.execution || hijack.description || ''}`);
+      lines.push(`*Timing: ${hijack.timing || 'TBD'} | Risk: ${hijack.riskLevel || 'medium'}*`);
       lines.push('');
     }
   }
@@ -290,33 +290,33 @@ export function formatAsHtml(blueprint: ParticipationBlueprint): string {
       </div>
     </div>
 
-    ${pack.subcultureBriefs.length > 0 ? `
+    ${pack.subcultureBriefs?.length > 0 ? `
     <div class="subcultures">
       <h3>Subculture Briefs</h3>
       ${pack.subcultureBriefs.map(b => formatSubcultureHtml(b)).join('\n')}
     </div>` : ''}
 
-    ${pack.mechanics.length > 0 ? `
+    ${pack.mechanics?.length > 0 ? `
     <div class="mechanics">
       <h3>Participation Mechanics</h3>
       ${pack.mechanics.map(m => formatMechanicHtml(m)).join('\n')}
     </div>` : ''}
 
-    ${pack.creators.length > 0 ? `
+    ${pack.creators?.length > 0 ? `
     <div class="creators">
       <h3>Casting & Creators</h3>
       ${pack.creators.map(c => formatCreatorHtml(c)).join('\n')}
     </div>` : ''}
 
-    ${pack.trendHijacks.length > 0 ? `
+    ${pack.trendHijacks?.length > 0 ? `
     <div class="trend-hijacks">
       <h3>72-Hour Trend Hijacks</h3>
       ${pack.trendHijacks.map(t => `
       <div class="hijack-card">
-        <h4>${escapeHtml(t.trend)}</h4>
-        <p>${escapeHtml(t.execution)}</p>
+        <h4>${escapeHtml(t.trend || '')}</h4>
+        <p>${escapeHtml(t.execution || t.description || '')}</p>
         <div class="hijack-meta">
-          <span class="timing">${escapeHtml(t.timing)}</span>
+          <span class="timing">${escapeHtml(t.timing || 'TBD')}</span>
           <span class="risk-badge risk-${t.riskLevel}">${t.riskLevel}</span>
         </div>
       </div>`).join('\n')}
@@ -427,26 +427,26 @@ export function formatAsPlainText(blueprint: ParticipationBlueprint): string {
   lines.push(`Risk: ${pack.bigAudaciousAct.riskLevel} | Impact: ${pack.bigAudaciousAct.potentialImpact}`);
   lines.push('');
 
-  if (pack.subcultureBriefs.length > 0) {
+  if (pack.subcultureBriefs?.length > 0) {
     lines.push('SUBCULTURE BRIEFS');
     lines.push(subDivider);
     for (const brief of pack.subcultureBriefs) {
-      lines.push(`> ${brief.subculture}`);
-      lines.push(`  ${brief.message}`);
-      lines.push(`  Platforms: ${brief.platforms.join(', ')}`);
-      lines.push(`  Formats: ${brief.contentFormats.join(', ')}`);
+      lines.push(`> ${brief.subculture || brief.name || 'Unnamed'}`);
+      lines.push(`  ${brief.message || brief.description || ''}`);
+      lines.push(`  Platforms: ${Array.isArray(brief.platforms) ? brief.platforms.join(', ') : 'TBD'}`);
+      lines.push(`  Formats: ${Array.isArray(brief.contentFormats) ? brief.contentFormats.join(', ') : 'TBD'}`);
       lines.push('');
     }
   }
 
-  if (pack.mechanics.length > 0) {
+  if (pack.mechanics?.length > 0) {
     lines.push('PARTICIPATION MECHANICS');
     lines.push(subDivider);
     for (const mech of pack.mechanics) {
-      lines.push(`> ${mech.name} (${mech.type})`);
-      lines.push(`  ${mech.description}`);
-      lines.push(`  Implementation: ${mech.implementation}`);
-      lines.push(`  Expected Engagement: ${mech.expectedEngagement}`);
+      lines.push(`> ${mech.name || mech.title || 'Unnamed'} (${mech.type || 'N/A'})`);
+      lines.push(`  ${mech.description || ''}`);
+      lines.push(`  Implementation: ${mech.implementation || 'TBD'}`);
+      lines.push(`  Expected Engagement: ${mech.expectedEngagement || 'TBD'}`);
       lines.push('');
     }
   }
@@ -550,59 +550,59 @@ export function formatAsSlides(blueprint: ParticipationBlueprint): SlideData[] {
   slides.push({
     type: 'audacious-act',
     title: 'The Big Audacious Act',
-    body: pack.bigAudaciousAct.description,
-    subtitle: pack.bigAudaciousAct.title,
-    callout: `Risk: ${pack.bigAudaciousAct.riskLevel}`,
+    body: pack.bigAudaciousAct?.description || '',
+    subtitle: pack.bigAudaciousAct?.title || '',
+    callout: `Risk: ${pack.bigAudaciousAct?.riskLevel || 'high'}`,
     slideNumber: slideNum++,
   });
 
   // Subculture slides
-  for (const brief of pack.subcultureBriefs) {
+  for (const brief of (pack.subcultureBriefs || [])) {
     slides.push({
       type: 'subculture',
-      title: brief.subculture,
-      body: brief.message,
-      bullets: brief.contentFormats,
-      tags: brief.platforms,
+      title: brief.subculture || brief.name || 'Subculture',
+      body: brief.message || brief.description || '',
+      bullets: Array.isArray(brief.contentFormats) ? brief.contentFormats : [],
+      tags: Array.isArray(brief.platforms) ? brief.platforms : [],
       slideNumber: slideNum++,
     });
   }
 
   // Mechanic slides
-  for (const mech of pack.mechanics) {
+  for (const mech of (pack.mechanics || [])) {
     slides.push({
       type: 'mechanic',
-      title: mech.name,
-      body: mech.description,
-      subtitle: mech.type,
+      title: mech.name || mech.title || 'Mechanic',
+      body: mech.description || '',
+      subtitle: mech.type || '',
       bullets: [
-        `Implementation: ${mech.implementation}`,
-        `Expected Engagement: ${mech.expectedEngagement}`,
+        `Implementation: ${mech.implementation || 'TBD'}`,
+        `Expected Engagement: ${mech.expectedEngagement || 'TBD'}`,
       ],
       slideNumber: slideNum++,
     });
   }
 
   // Creator slides
-  for (const creator of pack.creators) {
+  for (const creator of (pack.creators || [])) {
     slides.push({
       type: 'creator',
-      title: creator.archetype,
-      body: creator.rationale,
-      subtitle: creator.role,
-      tags: creator.platforms,
+      title: creator.archetype || creator.name || 'Creator',
+      body: creator.rationale || creator.description || '',
+      subtitle: creator.role || '',
+      tags: Array.isArray(creator.platforms) ? creator.platforms : [],
       slideNumber: slideNum++,
     });
   }
 
   // Trend hijack slides
-  for (const hijack of pack.trendHijacks) {
+  for (const hijack of (pack.trendHijacks || [])) {
     slides.push({
       type: 'trend',
-      title: hijack.trend,
-      body: hijack.execution,
-      subtitle: hijack.timing,
-      callout: `Risk: ${hijack.riskLevel}`,
+      title: hijack.trend || hijack.name || 'Trend',
+      body: hijack.execution || hijack.description || '',
+      subtitle: hijack.timing || '',
+      callout: `Risk: ${hijack.riskLevel || 'medium'}`,
       slideNumber: slideNum++,
     });
   }
@@ -657,7 +657,8 @@ export function formatBlueprint(blueprint: ParticipationBlueprint): FormattedBlu
 // ─────────────────────────────────────────────────
 
 /** Escape HTML special characters */
-function escapeHtml(text: string): string {
+function escapeHtml(text: string | undefined | null): string {
+  if (!text) return '';
   return text
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -713,10 +714,15 @@ function formatRecommendationHtml(rec: TierBRecommendation, num: number): string
 
 /** Format a subculture brief as markdown */
 function formatSubcultureMarkdown(brief: SubcultureBrief): string {
-  let md = `#### ${brief.subculture}\n\n`;
-  md += `${brief.message}\n\n`;
-  md += `- **Platforms:** ${brief.platforms.join(', ')}\n`;
-  md += `- **Content Formats:** ${brief.contentFormats.join(', ')}\n\n`;
+  let md = `#### ${brief.subculture || brief.name || 'Unnamed Subculture'}\n\n`;
+  md += `${brief.message || brief.description || ''}\n\n`;
+  if (Array.isArray(brief.platforms) && brief.platforms.length) {
+    md += `- **Platforms:** ${brief.platforms.join(', ')}\n`;
+  }
+  if (Array.isArray(brief.contentFormats) && brief.contentFormats.length) {
+    md += `- **Content Formats:** ${brief.contentFormats.join(', ')}\n`;
+  }
+  md += '\n';
   return md;
 }
 
@@ -724,42 +730,46 @@ function formatSubcultureMarkdown(brief: SubcultureBrief): string {
 function formatSubcultureHtml(brief: SubcultureBrief): string {
   return `
     <div class="subculture-card">
-      <h4>${escapeHtml(brief.subculture)}</h4>
-      <p>${escapeHtml(brief.message)}</p>
-      <div class="platforms">${brief.platforms.map(p => `<span class="platform-tag">${escapeHtml(p)}</span>`).join(' ')}</div>
-      <div class="formats">${brief.contentFormats.map(f => `<span class="format-tag">${escapeHtml(f)}</span>`).join(' ')}</div>
+      <h4>${escapeHtml(brief.subculture || brief.name || 'Unnamed')}</h4>
+      <p>${escapeHtml(brief.message || brief.description || '')}</p>
+      ${Array.isArray(brief.platforms) && brief.platforms.length ? `<div class="platforms">${brief.platforms.map(p => `<span class="platform-tag">${escapeHtml(p)}</span>`).join(' ')}</div>` : ''}
+      ${Array.isArray(brief.contentFormats) && brief.contentFormats.length ? `<div class="formats">${brief.contentFormats.map(f => `<span class="format-tag">${escapeHtml(f)}</span>`).join(' ')}</div>` : ''}
     </div>`;
 }
 
 /** Format a mechanic as markdown */
 function formatMechanicMarkdown(mech: ParticipationMechanic): string {
-  let md = `#### ${mech.name} *(${mech.type})*\n\n`;
-  md += `${mech.description}\n\n`;
-  md += `- **Implementation:** ${mech.implementation}\n`;
-  md += `- **Expected Engagement:** ${mech.expectedEngagement}\n\n`;
+  let md = `#### ${mech.name || mech.title || 'Unnamed'} *(${mech.type || 'N/A'})*\n\n`;
+  md += `${mech.description || ''}\n\n`;
+  if (mech.implementation) md += `- **Implementation:** ${mech.implementation}\n`;
+  if (mech.expectedEngagement) md += `- **Expected Engagement:** ${mech.expectedEngagement}\n`;
+  md += '\n';
   return md;
 }
 
 /** Format a mechanic as HTML */
 function formatMechanicHtml(mech: ParticipationMechanic): string {
   return `
-    <div class="mechanic-card" data-type="${mech.type}">
-      <h4>${escapeHtml(mech.name)}</h4>
-      <span class="type-badge type-${mech.type}">${mech.type}</span>
-      <p>${escapeHtml(mech.description)}</p>
+    <div class="mechanic-card" data-type="${mech.type || 'general'}">
+      <h4>${escapeHtml(mech.name || mech.title || 'Unnamed')}</h4>
+      <span class="type-badge type-${mech.type || 'general'}">${mech.type || 'general'}</span>
+      <p>${escapeHtml(mech.description || '')}</p>
       <dl>
-        <dt>Implementation</dt><dd>${escapeHtml(mech.implementation)}</dd>
-        <dt>Expected Engagement</dt><dd>${escapeHtml(mech.expectedEngagement)}</dd>
+        <dt>Implementation</dt><dd>${escapeHtml(mech.implementation || 'TBD')}</dd>
+        <dt>Expected Engagement</dt><dd>${escapeHtml(mech.expectedEngagement || 'TBD')}</dd>
       </dl>
     </div>`;
 }
 
 /** Format a creator as markdown */
 function formatCreatorMarkdown(creator: CreatorSuggestion): string {
-  let md = `#### ${creator.archetype}\n\n`;
-  md += `**Role:** ${creator.role}\n\n`;
-  md += `${creator.rationale}\n\n`;
-  md += `- **Platforms:** ${creator.platforms.join(', ')}\n\n`;
+  let md = `#### ${creator.archetype || creator.name || 'Unnamed'}\n\n`;
+  if (creator.role) md += `**Role:** ${creator.role}\n\n`;
+  md += `${creator.rationale || creator.description || ''}\n\n`;
+  if (Array.isArray(creator.platforms) && creator.platforms.length) {
+    md += `- **Platforms:** ${creator.platforms.join(', ')}\n`;
+  }
+  md += '\n';
   return md;
 }
 
@@ -767,9 +777,9 @@ function formatCreatorMarkdown(creator: CreatorSuggestion): string {
 function formatCreatorHtml(creator: CreatorSuggestion): string {
   return `
     <div class="creator-card">
-      <h4>${escapeHtml(creator.archetype)}</h4>
-      <span class="role">${escapeHtml(creator.role)}</span>
-      <p>${escapeHtml(creator.rationale)}</p>
-      <div class="platforms">${creator.platforms.map(p => `<span class="platform-tag">${escapeHtml(p)}</span>`).join(' ')}</div>
+      <h4>${escapeHtml(creator.archetype || creator.name || 'Unnamed')}</h4>
+      <span class="role">${escapeHtml(creator.role || '')}</span>
+      <p>${escapeHtml(creator.rationale || creator.description || '')}</p>
+      ${Array.isArray(creator.platforms) && creator.platforms.length ? `<div class="platforms">${creator.platforms.map(p => `<span class="platform-tag">${escapeHtml(p)}</span>`).join(' ')}</div>` : ''}
     </div>`;
 }

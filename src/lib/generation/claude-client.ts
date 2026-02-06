@@ -242,8 +242,11 @@ export async function callClaude(
     //
     //   Used for background generation or when streaming isn't needed.
     //   Simpler code path, waits for the full response.
+    //   Includes a 5-minute timeout to prevent indefinite hangs
+    //   (Vertex AI can silently hang on large maxTokens values).
     //
-    const response = await client.messages.create({
+    const TIMEOUT_MS = 300_000; // 5 minutes
+    const apiCall = client.messages.create({
       model,
       max_tokens: maxTokens,
       temperature,
@@ -252,6 +255,12 @@ export async function callClaude(
         { role: 'user', content: userPrompt },
       ],
     });
+
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error(`Claude API call timed out after ${TIMEOUT_MS / 1000}s`)), TIMEOUT_MS)
+    );
+
+    const response = await Promise.race([apiCall, timeout]);
 
     // Extract text from content blocks
     for (const block of response.content) {
@@ -312,9 +321,16 @@ export function parseClaudeResponse<T>(
 
   // Strip markdown code fences if present
   // Claude sometimes wraps JSON in ```json ... ```
-  const fenceMatch = jsonText.match(/```(?:json)?\s*\n?([\s\S]*?)\n?```/);
-  if (fenceMatch) {
-    jsonText = fenceMatch[1].trim();
+  // Handle both complete fences and truncated ones (no closing ```)
+  const completeFence = jsonText.match(/```(?:json)?\s*\n?([\s\S]*?)\n?```/);
+  if (completeFence) {
+    jsonText = completeFence[1].trim();
+  } else {
+    // Handle unclosed fence (truncated response hit max_tokens)
+    const openFence = jsonText.match(/^```(?:json)?\s*\n?([\s\S]*)$/);
+    if (openFence) {
+      jsonText = openFence[1].trim();
+    }
   }
 
   try {

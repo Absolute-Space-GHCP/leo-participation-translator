@@ -260,7 +260,7 @@ FINAL INSTRUCTIONS:
 - Be specific and actionable, not generic
 - Write in the JL voice: bold, smart, culturally fluent
 - Every recommendation should ladder back to participation
-- Return valid JSON matching the specified format
+- Return ONLY valid JSON matching the specified format — no markdown fences, no \`\`\`json wrapper, no commentary before or after the JSON
 - The write-up MUST read as a seamless narrative, not a structured document
 `);
 
@@ -372,12 +372,16 @@ Generate the Participation Pack components. Be tactical and specific. Every reco
 
 Focus especially on:
 1. One truly audacious act that will generate conversation
-2. Detailed briefs for each subculture identified in the write-up
-3. Concrete participation mechanics with clear user journeys
-4. Specific creator archetypes with rationale for each
-5. Time-sensitive trend opportunities (72-hour window)
+2. 2-3 subculture briefs (keep descriptions to 2-3 sentences each)
+3. 3-5 participation mechanics with clear user journeys (concise descriptions)
+4. 3-5 specific creator archetypes with rationale (1-2 sentences each)
+5. 2-3 time-sensitive trend opportunities (72-hour window, 1-2 sentences each)
 
-Return valid JSON matching the ParticipationPack interface.
+CRITICAL OUTPUT RULES:
+- Return ONLY valid JSON — no markdown fences, no \`\`\`json wrapper, no commentary
+- Keep all string values concise — favor punchy strategic language over lengthy exposition
+- Total output must fit within 8,000 tokens
+- Match the ParticipationPack interface exactly
 `;
 }
 
