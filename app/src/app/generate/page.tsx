@@ -19,7 +19,7 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, ArrowRight, Sparkles, Loader2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Sparkles, Loader2, Copy, Download, RotateCcw } from "lucide-react";
 
 interface ProjectSeed {
   brandName: string;
@@ -29,6 +29,12 @@ interface ProjectSeed {
   budget?: string;
   timeline?: string;
   additionalContext?: string;
+}
+
+interface GenerationResult {
+  blueprint: string;
+  model: string;
+  usage: { input_tokens: number; output_tokens: number };
 }
 
 const steps = [
@@ -41,6 +47,8 @@ const steps = [
 export default function GeneratePage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [result, setResult] = useState<GenerationResult | null>(null);
   const [seed, setSeed] = useState<ProjectSeed>({
     brandName: "",
     category: "",
@@ -51,7 +59,7 @@ export default function GeneratePage() {
     additionalContext: "",
   });
 
-  const progress = (currentStep / steps.length) * 100;
+  const progress = result ? 100 : (currentStep / steps.length) * 100;
 
   const updateSeed = (field: keyof ProjectSeed, value: string) => {
     setSeed((prev) => ({ ...prev, [field]: value }));
@@ -71,11 +79,47 @@ export default function GeneratePage() {
 
   const handleGenerate = async () => {
     setIsGenerating(true);
-    // TODO: Call generation API
-    setTimeout(() => {
+    setError(null);
+    
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(seed),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Generation failed");
+      }
+      
+      const data = await response.json();
+      setResult(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Generation failed");
+    } finally {
       setIsGenerating(false);
-      // TODO: Navigate to results
-    }, 3000);
+    }
+  };
+
+  const handleCopy = () => {
+    if (result?.blueprint) {
+      navigator.clipboard.writeText(result.blueprint);
+    }
+  };
+
+  const handleReset = () => {
+    setResult(null);
+    setCurrentStep(1);
+    setSeed({
+      brandName: "",
+      category: "",
+      passiveIdea: "",
+      targetAudience: "",
+      budget: "",
+      timeline: "",
+      additionalContext: "",
+    });
   };
 
   const canProceed = () => {
@@ -107,10 +151,22 @@ export default function GeneratePage() {
             <Sparkles className="h-5 w-5 text-rose-500" />
             <span className="font-semibold">Generate Blueprint</span>
           </div>
+          {result && (
+            <div className="ml-auto flex gap-2">
+              <Button variant="outline" size="sm" onClick={handleCopy}>
+                <Copy className="h-4 w-4 mr-2" />
+                Copy
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleReset}>
+                <RotateCcw className="h-4 w-4 mr-2" />
+                New
+              </Button>
+            </div>
+          )}
         </div>
       </header>
 
-      <main className="container mx-auto px-6 py-8 max-w-3xl">
+      <main className="container mx-auto px-6 py-8 max-w-4xl">
         {/* Progress */}
         <div className="mb-8">
           <div className="flex justify-between mb-2">
@@ -275,42 +331,80 @@ export default function GeneratePage() {
           </CardContent>
         </Card>
 
-        {/* Navigation */}
-        <div className="flex justify-between mt-6">
-          <Button
-            variant="outline"
-            onClick={handleBack}
-            disabled={currentStep === 1}
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
-          </Button>
+        {/* Error Display */}
+        {error && (
+          <Card className="mt-6 border-red-200 bg-red-50">
+            <CardContent className="pt-6">
+              <p className="text-red-600">{error}</p>
+            </CardContent>
+          </Card>
+        )}
 
-          {currentStep < steps.length ? (
-            <Button onClick={handleNext} disabled={!canProceed()}>
-              Next
-              <ArrowRight className="h-4 w-4 ml-2" />
-            </Button>
-          ) : (
+        {/* Results Display */}
+        {result && (
+          <Card className="mt-6">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2">
+                    <Sparkles className="h-5 w-5 text-rose-500" />
+                    Participation Blueprint
+                  </CardTitle>
+                  <CardDescription>
+                    Generated for {seed.brandName} • {result.usage.output_tokens} tokens
+                  </CardDescription>
+                </div>
+                <Badge variant="secondary">{result.model}</Badge>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="prose prose-zinc dark:prose-invert max-w-none">
+                <div className="whitespace-pre-wrap font-sans text-sm leading-relaxed">
+                  {result.blueprint}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Navigation */}
+        {!result && (
+          <div className="flex justify-between mt-6">
             <Button
-              onClick={handleGenerate}
-              disabled={isGenerating}
-              className="bg-rose-600 hover:bg-rose-700"
+              variant="outline"
+              onClick={handleBack}
+              disabled={currentStep === 1 || isGenerating}
             >
-              {isGenerating ? (
-                <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Generating...
-                </>
-              ) : (
-                <>
-                  <Sparkles className="h-4 w-4 mr-2" />
-                  Generate Blueprint
-                </>
-              )}
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
             </Button>
-          )}
-        </div>
+
+            {currentStep < steps.length ? (
+              <Button onClick={handleNext} disabled={!canProceed()}>
+                Next
+                <ArrowRight className="h-4 w-4 ml-2" />
+              </Button>
+            ) : (
+              <Button
+                onClick={handleGenerate}
+                disabled={isGenerating}
+                className="bg-rose-600 hover:bg-rose-700"
+              >
+                {isGenerating ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Generating Blueprint...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    Generate Blueprint
+                  </>
+                )}
+              </Button>
+            )}
+          </div>
+        )}
       </main>
     </div>
   );

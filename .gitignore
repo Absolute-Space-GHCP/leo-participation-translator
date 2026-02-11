@@ -58,3 +58,9 @@ data/media/*.pptx
 data/media/*.pdf
 !data/presentations/manifest.csv
 !data/**/.gitkeep
+
+# Upload artifacts (user-uploaded files)
+data/uploads/
+
+# Session lock (regenerated per session)
+sessions/.session_started
