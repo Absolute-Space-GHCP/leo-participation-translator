@@ -1,0 +1,160 @@
+/**
+ * @file sample-output.ts
+ * @description Polished sample output for demo fallback. Contains a realistic,
+ *              high-quality blueprint that showcases the full Participation Pack.
+ * @author Charley Scholz, JLIT
+ * @coauthor Claude Opus 4.6, Claude Code (coding assistant), Cursor (IDE)
+ * @created 2026-02-11
+ * @updated 2026-02-11
+ */
+
+/**
+ * Sample output for a Nike Running scenario.
+ * Covers all 10 sections with realistic strategic content.
+ */
+export const SAMPLE_OUTPUT = `## PARTICIPATION WORTHY IDEA WRITE-UP
+
+Running is having a moment — but not the kind you'd expect. The marathon boom has plateaued. The real energy is in the anti-optimization movement: run clubs that ban watches, "junk mile" celebrations on TikTok, runners who post their slowest splits with pride. There's a cultural rebellion brewing against the quantified self, and it's happening on the roads and trails where Nike built its empire.
+
+Nike has always understood that running is more than performance metrics. From "Just Do It" to Breaking2, the brand has oscillated between celebrating the everyday runner and chasing elite performance. But here's the tension: as Strava culture turns every jog into a data point, runners are burning out. The shared interest isn't about going faster — it's about **remembering why you started running in the first place**. The joy. The community. The feeling of wind and pavement and being alive.
+
+The passive trap is obvious: another inspirational anthem film featuring elite athletes crossing finish lines in slow motion, with "Just Do It" resolving at the end. It's beautiful. It's expected. And it gives the audience nothing to do except watch.
+
+The participation-worthy reframe: **"The Untracked Mile."** Nike invites runners everywhere to run one mile with no watch, no phone, no tracking. Just run. The brand that helped create run-tracking culture now gives you permission to let go of it. It's an unfinished platform — runners complete it by sharing not their time, but their *feeling*. What did that mile feel like when nobody was counting?
+
+This isn't anti-technology. It's a reminder that technology should serve the runner, not the other way around. Nike reclaims its position as the brand that truly understands the runner's soul — not just their VO2 max. The idea spreads through run clubs, social feeds, and real-world activations because it gives people something meaningful to participate in: a collective moment of presence in an over-optimized world.
+
+## OVERALL CREATIVE APPROACH
+
+The creative direction centers on "presence over performance" — a philosophical pivot that feels authentically Nike while tapping into the cultural pushback against quantified everything. Visually, we strip away the HUDs, the data overlays, and the split times that dominate running advertising. Instead, we lean into the sensory experience: shallow depth of field on feet hitting wet pavement, close-ups of faces mid-run showing exertion and joy, ambient sound design that lets you *hear* the run.
+
+The tone is warm but not soft. This is still Nike — there's grit and determination — but the determination is pointed inward. The tagline framework "Run to Feel" becomes the participation prompt, not a passive brand message. Every piece of content ends with a question, not a statement, leaving space for the audience to answer with their own experience.
+
+Campaign aesthetics blend documentary realism with moments of unexpected beauty. User-generated content isn't an afterthought — it's the primary medium. Nike provides the frame; runners fill it with their truth.
+
+## MEDIA STRATEGY OVERVIEW
+
+The media strategy is built for participation, not just reach. We prioritize platforms where conversation happens over platforms where content is consumed. TikTok and Instagram Reels are the primary social channels, but the play isn't paid reach — it's seeding the "Untracked Mile" challenge through organic run-club culture first. We partner with Strava (yes, the data platform) for a paradoxical feature launch: an "Untracked Mile" mode that records your run but hides all metrics, showing only a simple "You ran."
+
+OOH activations in running-dense cities (NYC, LA, London, Berlin, Tokyo) use billboards with no data, no times, no distances — just the question "How did it feel?" placed along popular running routes. These become photo-worthy moments that runners share naturally.
+
+Podcast sponsorship targets the growing "slow running" and mindfulness communities, with 60-second spots that are essentially guided micro-meditations for runners. We avoid traditional sports media saturation and instead show up in unexpected contexts: meditation apps, lo-fi music playlists, and park bulletin boards.
+
+## CREATOR/INFLUENCER STRATEGY
+
+We reject the traditional influencer tier model entirely. Instead, we build a "Runners Who Feel" collective — a mix of ultramarathoners who run for spiritual reasons, run-club founders who prioritize community over competition, and everyday runners whose content celebrates the unglamorous truth of the sport.
+
+**First Responders:** Underground run club leaders in Brooklyn (Orchard Street Runners), East London (Run Dem Crew alumni), and Tokyo (Midnight Runners Tokyo). These communities already embody "presence over performance." We don't brief them — we support what they're already doing and give them a platform.
+
+**Amplifiers:** Athletes like Courtney Dauwalter (ultrarunning's most joyful competitor), Eliud Kipchoge (who already speaks philosophically about running), and emerging voices like TikTok's "sad girl run club" creators who've turned running into mental health advocacy. The key is that every creator must genuinely believe in the message — this only works if it's real.
+
+## EXECUTIONAL RECOMMENDATIONS
+
+### 1. The Untracked Mile Challenge
+Launch a global participation moment: run one mile with no tracking. Share how it felt, not how fast you went. Nike Run Club app gets an "Untracked Mode" feature. The challenge seeds through run clubs before going to social, ensuring authentic origin.
+
+### 2. Strava x Nike "Feel Mode"
+Partner with Strava to launch a limited "Feel Mode" that replaces all metrics with a single prompt after your run: "How did that feel?" Responses become a living heatmap of runner emotion across cities. Data visualization meets human truth.
+
+### 3. The Blank Billboard Series
+OOH campaign in 10 cities: Nike-branded billboards along running routes with no stats, no athletes, no product — just "How did it feel?" in Helvetica on a blank background. Runners photograph themselves in front of them and share their answer.
+
+### 4. Run Club Residencies
+Nike embeds in 50 independent run clubs worldwide for a 6-month residency. No branding takeover — just support (gear, hydration, route permits). Each club creates a signature "Untracked Run" that becomes part of their weekly schedule. Authentic integration, not sponsorship.
+
+### 5. The Feeling Archive
+A digital platform where runners submit 10-second voice notes describing how a run felt. These are woven into an evolving sound installation at Nike flagship stores and a podcast series. Running content that isn't about times or distances — just human voices talking about feeling alive.
+
+### 6. Anti-Data Running Film
+A documentary short following three runners across three continents who've abandoned tracking entirely. Not preachy — just observational. Released on YouTube, promoted through running communities, eventually submitted to film festivals. Content marketing that transcends the category.
+
+### 7. NRC "Presence Runs"
+Nike Run Club introduces guided "Presence Runs" — audio-guided runs with no pace prompts, no distance callouts. Instead: prompts to notice the world around you. Featuring voices from unexpected guides: poets, musicians, meditation teachers, not just coaches.
+
+## THE BIG AUDACIOUS ACT
+
+Nike buys a full-page ad in the New York Times — during NYC Marathon week — that is completely blank except for four words in small type at the center: **"How did it feel?"**
+
+No swoosh until you look closely at the bottom corner. No call to action. No QR code. Just the question. In a week when every running brand is shouting about PBs, splits, and carbon-plated shoes, Nike says nothing about performance. The contrast is deafening.
+
+The ad becomes the most-photographed, most-shared piece of print advertising of the year — not because of what it says, but because of what it doesn't. It gives runners permission to have their own answer. Running media covers it. Marketing Twitter debates it. And everyday runners — the people who actually matter — feel *seen* by a brand for the first time in years.
+
+This is the participation trigger. Everything else in the campaign flows from this single, audacious act of restraint.
+
+## SUBCULTURE MINI-BRIEFS
+
+### The Watch-Free Run Club Movement
+A growing subculture of runners who deliberately leave GPS watches at home. Active primarily in Brooklyn, East London, and Melbourne. They see trackingless running as a form of rebellion against hustle culture. **Activation:** Nike sponsors a "No-Watch 5K" series through these clubs — no timing mats, no results, just a communal run ending at a local coffee shop. Finisher "medals" are hand-stamped wooden tokens with the date. No times recorded, ever.
+
+### Sad Girl Run Club / Emotional Running TikTok
+A massive TikTok community (5M+ collective followers) that reframes running as emotional processing, not fitness. Content features crying on runs, anxiety-reducing jogs, and "run and rant" videos. **Activation:** Nike collaborates with 10 creators to produce a "Run to Feel" content series — unscripted, raw footage of runs paired with honest voice-over about what they're processing. No product placement, just Nike Run Club as the app that holds the space.
+
+### Trail Ultras and Spiritual Running
+Ultrarunners who describe long runs in spiritual terms — "moving meditation," "church of the trail." Active on podcasts, YouTube, and niche forums like UltraSignup. **Activation:** Nike sponsors a 24-hour "Vigil Run" at a scenic trail location — runners come and go as they please, running laps of a beautiful 2-mile loop. A live stream captures the passing of day into night. No race, no competition. Just shared miles and shared presence.
+
+## MECHANIC DEEP-DIVES
+
+### Mechanic 1: The Untracked Mile (Core Participation)
+**How it works:** User opens Nike Run Club, selects "Untracked Mile," and runs. The app records the run but displays zero metrics. After the run, it asks: "How did that feel?" Users type or voice-record their response. Responses are anonymous and feed into a collective "Feeling Map."
+**Why it drives participation:** It's a low-barrier, high-meaning action. Every runner can do one mile. The prompt creates sharable content that's intrinsically personal. Runners aren't performing for metrics — they're reflecting for themselves.
+
+### Mechanic 2: The Feeling Map (Social Proof + Discovery)
+**How it works:** A real-time visualization on nike.com/feel showing runner sentiment across cities. Color-coded by emotion (euphoria, calm, grit, release). Users can zoom into their neighborhood and see how their community feels when they run.
+**Why it drives participation:** It transforms individual runs into collective data. Runners return to see how their city "feels" and to add their voice. It's addictive without being competitive.
+
+### Mechanic 3: Voice Note Archive (Content Flywheel)
+**How it works:** Runners submit 10-second voice notes post-run via NRC. Best submissions are curated into a weekly podcast episode and played in Nike stores worldwide. Contributors get a "Your voice was featured" notification.
+**Why it drives participation:** User-generated audio is more intimate than photos or videos. Being featured is aspirational but accessible. The archive grows into a permanent cultural artifact of what running means to real people.
+
+### Mechanic 4: Run Club Signal (IRL Activation)
+**How it works:** Nike produces a limited-edition "Untracked" run flag — a physical pennant that run clubs fly during their Untracked runs. Clubs register on NRC, receive a flag, and their run appears as a live dot on the Feeling Map during the run.
+**Why it drives participation:** Physical objects create tribal identity. The flag becomes a badge of belonging. Seeing your club's dot appear on the global map creates instant community connection.
+
+## CASTING AND CREATORS
+
+**First Responders (Niche Authenticity):**
+- **Marnie Kunz** — NYC run coach and founder of Runstreet, known for art-inspired running routes
+- **Knox Robinson** — Co-founder of Black Roses NYC, legendary for community-first run culture
+- **Rickey Gates** — Ultrarunner and artist who ran every street in San Francisco; embodies running as exploration
+- **Alison Désir** — Author and activist who connects running with social justice; brings depth and purpose
+
+**Amplifiers (Scaled Reach):**
+- **Courtney Dauwalter** — The most relatable elite ultrarunner; her joy and humor are infectious
+- **Eliud Kipchoge** — His philosophical approach to running ("No human is limited") aligns perfectly
+- **TikTok collective** — Partner with 15-20 creators from the emotional running / sad girl run club space
+
+**Unexpected Voices:**
+- **Ross Gay** (poet) — Featured voice in NRC "Presence Runs," reading from *The Book of Delights*
+- **Ryuichi Sakamoto estate** — License ambient compositions for guided runs
+- **Local run club founders** in 10 cities — Not celebrities, just the people who build running community every week
+
+## 72-HOUR TREND HIJACKS
+
+### Trend 1: "Deinfluencing" Athletic Gear
+**The moment:** Anti-consumerism content is surging on TikTok, with creators telling people *not* to buy things. Running gear (especially carbon-plated shoes) is a frequent target.
+**The connection:** Nike can embrace it rather than fight it. "You don't need the latest shoe to feel something on a run."
+**Fast-turn activation:** NRC pushes a notification to all users: "Today's challenge: run in your oldest pair of Nikes. Tag #WornToFeel." Nike reposts the most beat-up, beloved shoes. Celebrates wear as evidence of miles lived.
+
+### Trend 2: "Soft Hiking" / "Hot Girl Walk" Evolution
+**The moment:** Low-intensity outdoor movement continues to trend, but it's evolving from walking into slow jogging. "Soft running" is emerging as a term.
+**The connection:** Nike Run Club can own the "soft running" space before anyone else.
+**Fast-turn activation:** Release a "Soft Run" guided workout in NRC within 48 hours. Promote it with a single Instagram Story: "Not every run needs to be hard. Try a soft run." Minimal branding, maximum relevance.
+
+### Trend 3: AI Fatigue / "Be A Human" Backlash
+**The moment:** Growing cultural pushback against AI-generated everything. "Made by a human" is becoming a badge of honor.
+**The connection:** Running is inherently, irreducibly human. You can't outsource a mile.
+**Fast-turn activation:** Nike posts a simple black-and-white image on all social channels: "This message was not generated by AI. Neither was your last run." No hashtag, no CTA. Just a statement of humanity in a sea of synthetic content.
+`;
+
+/**
+ * Sample seed data that corresponds to the sample output.
+ */
+export const SAMPLE_SEED = {
+  brand: "Nike",
+  category: "Running",
+  passiveIdea: "An inspirational anthem film featuring elite athletes crossing finish lines in slow motion, with 'Just Do It' resolving at the end.",
+  audience: "Runners aged 18-35 who are part of run club culture, active on Strava and TikTok, and increasingly questioning the quantified-self movement.",
+  budget: "$5M-$10M",
+  timeline: "Q3 2026 (NYC Marathon activation window)",
+  context: "Nike Run Club has 100M+ downloads but engagement is declining. Run club culture is booming independently. The brand needs to reconnect with everyday runners, not just elite performance.",
+};

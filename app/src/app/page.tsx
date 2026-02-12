@@ -1,137 +1,188 @@
+"use client";
+
 /**
  * @file page.tsx
- * @description Landing page for The Participation Translator
+ * @description Landing page with links to all three demo options
  * @author Charley Scholz, JLIT
- * @coauthor Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
- * @created 2026-02-03
- * @updated 2026-02-03
+ * @coauthor Claude Opus 4.6, Claude Code (coding assistant), Cursor (IDE)
+ * @created 2026-02-11
  */
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Sparkles, Brain, TrendingUp, FileSliders } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Sparkles, Zap, Layout, Columns2 } from "lucide-react";
 
-export default function Home() {
+interface Stats {
+  documentCount: number;
+  chunkCount: number;
+  clients: string[];
+}
+
+export default function LandingPage() {
+  const [stats, setStats] = useState<Stats | null>(null);
+
+  useEffect(() => {
+    fetch("/api/stats")
+      .then((r) => r.json())
+      .then(setStats)
+      .catch(() => {});
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-white dark:from-zinc-950 dark:to-black">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-zinc-200 dark:border-zinc-800">
-        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+      <header className="border-b">
+        <div className="container mx-auto flex items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-3">
             <Sparkles className="h-6 w-6 text-rose-500" />
-            <span className="font-semibold text-lg">Participation Translator</span>
+            <h1 className="text-xl font-bold">The Participation Translator</h1>
           </div>
-          <Badge variant="outline" className="text-xs">
-            v1.0.1 Beta
-          </Badge>
+          <div className="flex items-center gap-3">
+            <Badge variant="outline">v1.2.0 Demo</Badge>
+            {stats && (
+              <Badge variant="secondary">
+                {stats.chunkCount.toLocaleString()} chunks |{" "}
+                {stats.documentCount} docs | {stats.clients.length} clients
+              </Badge>
+            )}
+          </div>
         </div>
       </header>
 
       {/* Hero */}
-      <main className="container mx-auto px-6 py-16">
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <Badge className="mb-4 bg-rose-100 text-rose-700 dark:bg-rose-900 dark:text-rose-300">
-            Johannes Leonardo Internal Tool
-          </Badge>
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 bg-gradient-to-r from-zinc-900 via-zinc-700 to-zinc-900 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-100 bg-clip-text text-transparent">
-            Transform Ideas Into Participation-Worthy Platforms
-          </h1>
-          <p className="text-lg text-zinc-600 dark:text-zinc-400 mb-8 max-w-2xl mx-auto">
-            Powered by JL&apos;s institutional memory, real-time cultural intelligence, and the 8-Part Participation Framework.
-          </p>
-          <div className="flex gap-4 justify-center">
-            <Link href="/generate">
-              <Button size="lg" className="gap-2">
-                Start Generating
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
-            <Link href="/history">
-              <Button size="lg" variant="outline">
-                View History
-              </Button>
-            </Link>
-          </div>
-        </div>
+      <section className="container mx-auto px-6 py-12 text-center">
+        <h2 className="mb-4 text-4xl font-bold tracking-tight">
+          Transform Passive Ideas Into
+          <br />
+          <span className="text-rose-500">Participation-Worthy Platforms</span>
+        </h2>
+        <p className="mx-auto mb-6 max-w-2xl text-lg text-muted-foreground">
+          Powered by JL&apos;s institutional knowledge ({stats?.chunkCount.toLocaleString() || "1,000+"}
+          {" "}indexed chunks), real-time cultural intelligence (Exa + Tavily),
+          and Claude via Vertex AI.
+        </p>
+        <Link href="/option-c">
+          <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700">
+            <Sparkles className="mr-2 h-4 w-4" />
+            Launch The Participation Translator
+          </Button>
+        </Link>
+      </section>
 
-        {/* Features */}
-        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          <Card className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur">
+      {/* Three Options */}
+      <section className="container mx-auto px-6 pb-16">
+        <h3 className="mb-6 text-center text-sm font-medium uppercase tracking-wider text-muted-foreground">
+          Choose a Demo Experience
+        </h3>
+
+        <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-3">
+          {/* Option A */}
+          <Card className="group relative overflow-hidden transition-shadow hover:shadow-lg">
             <CardHeader>
-              <Brain className="h-10 w-10 text-rose-500 mb-2" />
-              <CardTitle>JL Institutional Memory</CardTitle>
+              <div className="mb-2 flex items-center gap-2">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-rose-100 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400">
+                  <Zap className="h-5 w-5" />
+                </div>
+                <Badge>A</Badge>
+              </div>
+              <CardTitle>The Clean Sheet</CardTitle>
               <CardDescription>
-                Grounded in decades of award-winning work. VW, Adidas, and more.
+                Single page. One form. One button. Results stream in below.
+                Fastest and most reliable.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                RAG pipeline retrieves relevant patterns, tactics, and voice from past presentations and case studies.
-              </p>
+              <ul className="mb-6 space-y-1 text-sm text-muted-foreground">
+                <li>- Minimal input form</li>
+                <li>- Streaming text output</li>
+                <li>- Copy and download actions</li>
+                <li>- Zero navigation friction</li>
+              </ul>
+              <Link href="/option-a">
+                <Button className="w-full bg-rose-600 hover:bg-rose-700">
+                  Launch Option A
+                </Button>
+              </Link>
             </CardContent>
           </Card>
 
-          <Card className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur">
+          {/* Option B */}
+          <Card className="group relative overflow-hidden transition-shadow hover:shadow-lg">
             <CardHeader>
-              <TrendingUp className="h-10 w-10 text-rose-500 mb-2" />
-              <CardTitle>Cultural Intelligence</CardTitle>
+              <div className="mb-2 flex items-center gap-2">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                  <Layout className="h-5 w-5" />
+                </div>
+                <Badge>B</Badge>
+              </div>
+              <CardTitle>The Guided Flow</CardTitle>
               <CardDescription>
-                Real-time trends, subcultures, and 72-hour opportunity windows.
+                Two-page experience: input with context, then results with tabs.
+                Polished and organized.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                Dual search (Exa + Tavily), Reddit monitoring, and Claude-powered sentiment analysis.
-              </p>
+              <ul className="mb-6 space-y-1 text-sm text-muted-foreground">
+                <li>- Knowledge base stats bar</li>
+                <li>- Multi-step progress states</li>
+                <li>- Tabbed results display</li>
+                <li>- Clean separation of input/output</li>
+              </ul>
+              <Link href="/option-b">
+                <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                  Launch Option B
+                </Button>
+              </Link>
             </CardContent>
           </Card>
 
-          <Card className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur">
+          {/* Option C */}
+          <Card className="group relative overflow-hidden transition-shadow hover:shadow-lg">
             <CardHeader>
-              <FileSliders className="h-10 w-10 text-rose-500 mb-2" />
-              <CardTitle>Presentation Ready</CardTitle>
+              <div className="mb-2 flex items-center gap-2">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
+                  <Columns2 className="h-5 w-5" />
+                </div>
+                <Badge>C</Badge>
+              </div>
+              <CardTitle>The Engine Room</CardTitle>
               <CardDescription>
-                Export directly to Google Slides or PPTX. No reformatting needed.
+                Dashboard with RAG visibility. See the retrieval, context
+                assembly, and generation in real time.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                JL-branded templates with the full 8-Part Framework applied systematically.
-              </p>
+              <ul className="mb-6 space-y-1 text-sm text-muted-foreground">
+                <li>- Split-panel layout</li>
+                <li>- Retrieved chunks with scores</li>
+                <li>- Cultural intel preview</li>
+                <li>- Full pipeline transparency</li>
+              </ul>
+              <Link href="/option-c">
+                <Button className="w-full bg-emerald-600 hover:bg-emerald-700">
+                  Launch Option C
+                </Button>
+              </Link>
             </CardContent>
           </Card>
         </div>
-
-        {/* Framework Preview */}
-        <div className="max-w-3xl mx-auto mt-16 text-center">
-          <h2 className="text-2xl font-semibold mb-4">The 8-Part Participation Framework</h2>
-          <div className="flex flex-wrap justify-center gap-2">
-            {[
-              "Cultural Context",
-              "Brand Credibility",
-              "Shared Interest",
-              "Passive Trap",
-              "Participation Idea",
-              "Moments & Places",
-              "Mechanics",
-              "First Responders",
-              "Ripple Effect"
-            ].map((section, i) => (
-              <Badge key={section} variant="secondary" className="text-sm">
-                {i + 1}. {section}
-              </Badge>
-            ))}
-          </div>
-        </div>
-      </main>
+      </section>
 
       {/* Footer */}
-      <footer className="border-t border-zinc-200 dark:border-zinc-800 mt-16">
-        <div className="container mx-auto px-6 py-6 text-center text-sm text-zinc-500">
-          <p>Johannes Leonardo Internal Tool &bull; Powered by Claude Opus 4.6</p>
-        </div>
+      <footer className="border-t py-6 text-center text-sm text-muted-foreground">
+        <p>
+          Johannes Leonardo &middot; The Participation Translator &middot;
+          Internal Tool
+        </p>
       </footer>
     </div>
   );

@@ -1,0 +1,246 @@
+/**
+ * @file generate-pdf.ts
+ * @description Client-side PDF generation from parsed blueprint sections using jsPDF.
+ * @author Charley Scholz, JLIT
+ * @coauthor Claude Opus 4.6, Claude Code (coding assistant), Cursor (IDE)
+ * @created 2026-02-11
+ * @updated 2026-02-11
+ */
+
+import { jsPDF } from "jspdf";
+import type { OutputSection, SectionTier } from "./parse-output";
+
+// ── PDF Constants ──
+
+const PAGE_WIDTH = 210; // A4 mm
+const PAGE_HEIGHT = 297;
+const MARGIN = 20;
+const CONTENT_WIDTH = PAGE_WIDTH - MARGIN * 2;
+
+const COLORS = {
+  black: [17, 17, 17] as [number, number, number],
+  sapphire: [22, 106, 216] as [number, number, number],
+  emerald: [7, 145, 118] as [number, number, number],
+  gray: [120, 120, 120] as [number, number, number],
+  lightGray: [200, 200, 200] as [number, number, number],
+  white: [241, 241, 241] as [number, number, number],
+  background: [250, 250, 250] as [number, number, number],
+};
+
+const TIER_COLORS: Record<SectionTier, [number, number, number]> = {
+  narrative: COLORS.sapphire,
+  executional: COLORS.emerald,
+  pack: [246, 198, 39], // gold
+};
+
+interface PDFOptions {
+  brand: string;
+  sections: OutputSection[];
+  date?: string;
+}
+
+/**
+ * Generate a PDF blob from parsed blueprint sections.
+ */
+export function generatePDF({ brand, sections, date }: PDFOptions): Blob {
+  const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+  const today = date || new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+  // ── Title Page ──
+  drawTitlePage(doc, brand, today);
+
+  // ── Content Pages ──
+  const tiers: { tier: SectionTier; label: string }[] = [
+    { tier: "narrative", label: "STRATEGIC NARRATIVE" },
+    { tier: "executional", label: "EXECUTIONAL RECOMMENDATIONS" },
+    { tier: "pack", label: "PARTICIPATION PACK" },
+  ];
+
+  for (const { tier, label } of tiers) {
+    const tierSections = sections.filter((s) => s.tier === tier);
+    if (tierSections.length === 0) continue;
+
+    // Tier divider page
+    doc.addPage();
+    drawDividerPage(doc, label, TIER_COLORS[tier]);
+
+    // Section pages
+    for (const section of tierSections) {
+      doc.addPage();
+      drawSectionPage(doc, section, TIER_COLORS[tier]);
+    }
+  }
+
+  // ── Footer on each page (except title) ──
+  const totalPages = doc.getNumberOfPages();
+  for (let i = 2; i <= totalPages; i++) {
+    doc.setPage(i);
+    doc.setFontSize(7);
+    doc.setTextColor(...COLORS.gray);
+    doc.text(
+      `${brand} — Participation Blueprint`,
+      MARGIN,
+      PAGE_HEIGHT - 10
+    );
+    doc.text(
+      `${i - 1} / ${totalPages - 1}`,
+      PAGE_WIDTH - MARGIN,
+      PAGE_HEIGHT - 10,
+      { align: "right" }
+    );
+  }
+
+  return doc.output("blob");
+}
+
+/**
+ * Generate PDF and return as base64 string (for email attachment).
+ */
+export function generatePDFBase64(options: PDFOptions): string {
+  const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+  const today = options.date || new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+  drawTitlePage(doc, options.brand, today);
+
+  const tiers: { tier: SectionTier; label: string }[] = [
+    { tier: "narrative", label: "STRATEGIC NARRATIVE" },
+    { tier: "executional", label: "EXECUTIONAL RECOMMENDATIONS" },
+    { tier: "pack", label: "PARTICIPATION PACK" },
+  ];
+
+  for (const { tier, label } of tiers) {
+    const tierSections = options.sections.filter((s) => s.tier === tier);
+    if (tierSections.length === 0) continue;
+
+    doc.addPage();
+    drawDividerPage(doc, label, TIER_COLORS[tier]);
+
+    for (const section of tierSections) {
+      doc.addPage();
+      drawSectionPage(doc, section, TIER_COLORS[tier]);
+    }
+  }
+
+  const totalPages = doc.getNumberOfPages();
+  for (let i = 2; i <= totalPages; i++) {
+    doc.setPage(i);
+    doc.setFontSize(7);
+    doc.setTextColor(...COLORS.gray);
+    doc.text(`${options.brand} — Participation Blueprint`, MARGIN, PAGE_HEIGHT - 10);
+    doc.text(`${i - 1} / ${totalPages - 1}`, PAGE_WIDTH - MARGIN, PAGE_HEIGHT - 10, { align: "right" });
+  }
+
+  return doc.output("datauristring");
+}
+
+// ── Internal drawing functions ──
+
+function drawTitlePage(doc: jsPDF, brand: string, date: string): void {
+  // Dark background
+  doc.setFillColor(...COLORS.black);
+  doc.rect(0, 0, PAGE_WIDTH, PAGE_HEIGHT, "F");
+
+  // Brand name (large)
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(42);
+  doc.setTextColor(...COLORS.white);
+  doc.text(brand.toUpperCase(), MARGIN, 100);
+
+  // Sapphire accent line
+  doc.setDrawColor(...COLORS.sapphire);
+  doc.setLineWidth(1);
+  doc.line(MARGIN, 108, MARGIN + 60, 108);
+
+  // Subtitle
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(16);
+  doc.setTextColor(...COLORS.white);
+  doc.text("PARTICIPATION BLUEPRINT", MARGIN, 122);
+
+  // Date
+  doc.setFontSize(10);
+  doc.setTextColor(...COLORS.gray);
+  doc.text(date, MARGIN, 138);
+
+  // Footer
+  doc.setFontSize(8);
+  doc.setTextColor(...COLORS.gray);
+  doc.text("Generated by The Participation Translator", MARGIN, PAGE_HEIGHT - 20);
+  doc.text("Strategic Intelligence", MARGIN, PAGE_HEIGHT - 14);
+}
+
+function drawDividerPage(doc: jsPDF, title: string, color: [number, number, number]): void {
+  // White background with centered title
+  doc.setFillColor(...COLORS.background);
+  doc.rect(0, 0, PAGE_WIDTH, PAGE_HEIGHT, "F");
+
+  // Accent line
+  doc.setDrawColor(...color);
+  doc.setLineWidth(1.5);
+  doc.line(MARGIN, PAGE_HEIGHT / 2 - 15, MARGIN + 40, PAGE_HEIGHT / 2 - 15);
+
+  // Tier title
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(24);
+  doc.setTextColor(...COLORS.black);
+  doc.text(title, MARGIN, PAGE_HEIGHT / 2);
+}
+
+function drawSectionPage(doc: jsPDF, section: OutputSection, accentColor: [number, number, number]): void {
+  doc.setFillColor(...COLORS.background);
+  doc.rect(0, 0, PAGE_WIDTH, PAGE_HEIGHT, "F");
+
+  let y = MARGIN + 5;
+
+  // Section title with accent bar
+  doc.setFillColor(...accentColor);
+  doc.rect(MARGIN, y - 1, 3, 8, "F");
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(12);
+  doc.setTextColor(...COLORS.black);
+  doc.text(section.title.toUpperCase(), MARGIN + 8, y + 5);
+  y += 16;
+
+  // Section content
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.setTextColor(50, 50, 50);
+
+  // Strip markdown formatting for PDF
+  const cleanText = section.content
+    .replace(/^### .+$/gm, (match) => `\n${match.replace("### ", "").toUpperCase()}\n`)
+    .replace(/\*\*(.+?)\*\*/g, "$1")
+    .replace(/\*(.+?)\*/g, "$1")
+    .replace(/^- /gm, "  •  ")
+    .replace(/^\d+\. /gm, (match) => `  ${match}`);
+
+  const lines = doc.splitTextToSize(cleanText.trim(), CONTENT_WIDTH - 8);
+
+  for (const line of lines) {
+    if (y > PAGE_HEIGHT - 25) {
+      doc.addPage();
+      doc.setFillColor(...COLORS.background);
+      doc.rect(0, 0, PAGE_WIDTH, PAGE_HEIGHT, "F");
+      y = MARGIN + 5;
+    }
+
+    // Detect sub-headers (all-caps lines)
+    const isSubHeader = /^[A-Z][A-Z\s\d:&\-/]+$/.test(line.trim()) && line.trim().length > 3;
+
+    if (isSubHeader) {
+      y += 4;
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(9);
+      doc.setTextColor(...accentColor);
+      doc.text(line, MARGIN + 4, y);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      doc.setTextColor(50, 50, 50);
+      y += 6;
+    } else {
+      doc.text(line, MARGIN + 4, y);
+      y += 5;
+    }
+  }
+}

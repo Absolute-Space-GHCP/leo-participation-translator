@@ -1,7 +1,7 @@
 # TODO - The Participation Translator
 
-Version: 1.1.0
-Last Updated: 2026-02-06
+Version: 1.2.0
+Last Updated: 2026-02-11
 Purpose: Tracks implementation progress across all phases
 
 Priority Legend: HIGH | MEDIUM | LOW
@@ -9,12 +9,14 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 
 ---
 
-## Current Status: Phase 2 Ready + Cultural Intel Active
+## Current Status: Demo Active + Full Pipeline Connected
 
 **Architecture:** Multi-agent with specialized subagents, knowledge graph, task routing
-**Vector Store:** 42 documents, 2,153 chunks indexed (presentations + creators + media)
-**Cultural Intel:** Exa.ai + Tavily + Sentiment Analysis ✅
-**Focus:** Demo to Leo → Framework Integration
+**Vector Store:** 23 documents, 1,186 chunks indexed (re-indexed Feb 10)
+**Cultural Intel:** Exa.ai + Tavily connected in parallel ✅
+**Generation:** Claude Sonnet 4.5 via Vertex AI with SSE streaming ✅
+**Frontend:** Engine Room dashboard (Option C) — full pipeline visibility ✅
+**Focus:** Demo validation with Leo & Jan → accuracy testing → production
 
 ---
 
@@ -115,16 +117,27 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 
 ---
 
-## Phase 4: Frontend (Started Early)
+## Phase 4: Frontend & Demo — ACTIVE
 
-| Task                     | Status  | Notes                   |
-| ------------------------ | ------- | ----------------------- |
-| Create Next.js app       | ✅ DONE | `app/` directory        |
-| Install shadcn/ui        | ✅ DONE | 14 components installed |
-| Create landing page      | ✅ DONE | `app/src/app/page.tsx`  |
-| Create generation wizard | ✅ DONE | `app/src/app/generate/` |
-| Create history page      | ✅ DONE | `app/src/app/history/`  |
-| Connect to backend APIs  | PENDING | Phase 4 main work       |
+| Task                              | Status  | Notes                                          |
+| --------------------------------- | ------- | ---------------------------------------------- |
+| Create Next.js app                | ✅ DONE | `app/` directory                               |
+| Install shadcn/ui                 | ✅ DONE | 14 components installed                        |
+| Build Engine Room dashboard       | ✅ DONE | `app/src/app/option-c/page.tsx` (Feb 11)       |
+| Build streaming generate API      | ✅ DONE | `app/src/app/api/generate/route.ts` (SSE)      |
+| Build retrieval API               | ✅ DONE | `app/src/app/api/retrieve/route.ts`            |
+| Build stats API                   | ✅ DONE | `app/src/app/api/stats/route.ts`               |
+| Build file upload API             | ✅ DONE | `app/src/app/api/upload/route.ts` (in-memory)  |
+| Connect RAG retrieval (Firestore) | ✅ DONE | Direct SDK, no child process                   |
+| Connect cultural intel (Exa+Tavily) | ✅ DONE | Parallel queries, merged results             |
+| Connect Claude streaming          | ✅ DONE | `@anthropic-ai/vertex-sdk` SSE                |
+| File upload + text extraction     | ✅ DONE | PPTX/PDF/DOCX/TXT, in-memory only             |
+| Landing page with option picker   | ✅ DONE | `app/src/app/page.tsx`                         |
+| Option A: Clean Sheet             | ✅ DONE | `app/src/app/option-a/page.tsx`                |
+| Option B: Guided Flow             | ✅ DONE | `app/src/app/option-b/` (input + results)      |
+| PPTX export                       | PENDING | PptxGenJS integration                          |
+| History / saved outputs           | PENDING | Session persistence                            |
+| Feedback dashboard                | PENDING | Ratings, corrections                           |
 
 ---
 
@@ -188,6 +201,109 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 | `data/creators/Collection of Creators.pptx`        | ✅ Copied  |
 | `data/media/Collection of Media Options.pptx`      | ✅ Copied  |
 | `data/presentations/manifest.csv`                  | ✅ Created |
+
+---
+
+## ═══════════════════════════════════════════════════════════════
+## SYSTEM WORKFLOW CHART — Full Technology Pipeline
+## ═══════════════════════════════════════════════════════════════
+
+### Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                     THE PARTICIPATION TRANSLATOR                        │
+│                    Full-Stack Workflow (Feb 2026)                        │
+└─────────────────────────────────────────────────────────────────────────┘
+
+USER ──► BROWSER (Next.js 16 + React 19) ──► API ROUTES (Next.js Server)
+                                                    │
+                         ┌──────────────────────────┼──────────────────────┐
+                         ▼                          ▼                      ▼
+               Firestore Vector Store    Cultural Intelligence APIs    Claude via Vertex AI
+               (Embeddings + Chunks)       (Exa.ai + Tavily)       (Anthropic Vertex SDK)
+```
+
+### Step-by-Step Workflow
+
+| Step | Trigger | Platform / Technology | Action | Responsible For |
+|------|---------|----------------------|--------|-----------------|
+| **1. User Opens App** | Browser navigates to `localhost:3005/option-c` | **Next.js 16** (Turbopack dev server) | Serves the React SPA; renders the Engine Room dashboard | Routing, SSR, static assets |
+| **2. Stats Load** | Page mount (`useEffect`) | **Next.js API Route** `GET /api/stats` → **Google Cloud Firestore** | Queries `documents` and `chunks` collections for counts and client list | Knowledge base status display |
+| **3. User Fills Form** | Manual input | **React 19** (client-side state) | Captures brand, category, audience, passive idea, optional fields into `ProjectSeed` state | Form validation, UX |
+| **4a. File Upload** *(optional)* | User drops/selects a file | **Browser** `FormData` → **Next.js API Route** `POST /api/upload` | Receives file as `ArrayBuffer`, converts to `Buffer` (in-memory, NO disk) | File acceptance, size/type validation |
+| **4b. Text Extraction** | Upload API receives buffer | **PizZip** (PPTX) / **pdf-parse** (PDF) / **Mammoth** (DOCX) / direct read (TXT/MD) | Extracts text content from binary file buffer entirely in memory | Text extraction from office formats |
+| **4c. Return Text** | Extraction complete | **Next.js API Route** `POST /api/upload` response | Returns `{ text, filename, fileType, pageCount, charCount }` to client | Extracted text storage in component state |
+| **5. User Clicks Generate** | Button click | **React** `useGeneration()` hook → `fetch('/api/generate')` | Sends `ProjectSeed` (+ uploaded doc text) as JSON POST; opens SSE stream reader | Initiating the generation pipeline |
+| **6. RAG Retrieval** | Generate API receives POST | **Vertex AI** `text-embedding-005` (via REST API) + **Google Cloud Firestore** | 1. Generates query embedding (768-dim vector) via Vertex AI REST endpoint<br>2. Fetches up to 1,000 chunks from Firestore<br>3. Computes cosine similarity in-memory<br>4. Returns top-10 ranked chunks | Finding relevant JL institutional knowledge |
+| **7. Cultural Intelligence** | After RAG retrieval completes | **Exa.ai** REST API + **Tavily** Node SDK (in parallel) | Exa: Semantic web search for trends + Reddit discussions<br>Tavily: News search + community discussions<br>Results merged, deduplicated, formatted | Real-time cultural context (trends, discussions, news) |
+| **8. Context Assembly** | After RAG + Cultural complete | **Node.js** (in-process) | Formats retrieved chunks + cultural results + uploaded doc text into structured prompt sections | Building the complete context window for Claude |
+| **9. Prompt Assembly** | Context ready | `buildSystemPrompt()` + `buildUserPrompt()` in `app/src/lib/prompts.ts` | Combines:<br>- JL strategist persona<br>- Invisible 9-section framework<br>- Output format instructions<br>- Project seed data<br>- RAG context<br>- Cultural intelligence<br>- Uploaded document context | Constructing the full system + user prompt |
+| **10. Claude Streaming** | Prompt assembled | **Anthropic Vertex SDK** → **Google Cloud Vertex AI** → **Claude Sonnet 4.5** (us-east5) | Streams response via `client.messages.stream()`. Each text delta is sent as an SSE `chunk` event to the browser | Strategic blueprint generation |
+| **11. SSE Events → UI** | Each stream event | **Browser** `ReadableStream` reader in `useGeneration()` hook | Parses SSE events: `status`, `context`, `chunk`, `done`, `error`<br>Updates React state progressively | Real-time UI updates (progress, context display, streaming text) |
+| **12. Output Display** | Text chunks accumulate | **React 19** + **Tailwind CSS** | Renders streaming text in right panel with typing cursor; shows retrieved chunks and cultural intel in left panel | Live generation visualization |
+| **13. Completion** | Claude stream ends (`done` event) | **Next.js API Route** sends final SSE `done` event | Reports model, token usage (input + output), generation duration | Cost tracking, performance metrics |
+| **14. Export** | User clicks Copy/Download | **Browser** `navigator.clipboard` / `Blob` + `URL.createObjectURL` | Copy to clipboard or download as `.md` file | Output delivery |
+
+### Technology Inventory
+
+| Technology | Version | Role | Location |
+|------------|---------|------|----------|
+| **Next.js** | 16.1.6 | Web framework, API routes, SSR | `app/` |
+| **React** | 19 | UI rendering, state management | `app/src/` |
+| **Tailwind CSS** | 4.x | Styling, responsive layout | `app/src/globals.css` |
+| **shadcn/ui** | latest | UI component library (14 components) | `app/src/components/ui/` |
+| **Node.js** | 22 LTS | Server runtime | API routes runtime |
+| **TypeScript** | 5.x | Type safety | Throughout |
+| **Google Cloud Firestore** | 8.x SDK | Vector store (chunks + documents) | `app/src/lib/embeddings.ts` |
+| **Vertex AI Embeddings** | text-embedding-005 | 768-dim text embeddings | Via REST API + `google-auth-library` |
+| **Claude Sonnet 4.5** | via Vertex AI | Strategic reasoning + generation | `app/src/lib/claude.ts` via `@anthropic-ai/vertex-sdk` |
+| **Exa.ai** | REST API | Semantic web search (primary cultural) | `app/src/lib/cultural.ts` |
+| **Tavily** | @tavily/core SDK | News + discussion search (secondary) | `app/src/lib/cultural.ts` |
+| **PizZip** | latest | PPTX text extraction (in-memory) | `app/src/lib/file-parser.ts` |
+| **pdf-parse** | latest | PDF text extraction (in-memory) | `app/src/lib/file-parser.ts` |
+| **Mammoth** | 1.9.x | DOCX text extraction (in-memory) | `app/src/lib/file-parser.ts` |
+
+### SSE Event Flow
+
+```
+Browser                   API Route                  External Services
+  │                          │                              │
+  │── POST /api/generate ──►│                              │
+  │                          │── status: "retrieving" ────►│
+  │◄── SSE: status ─────────│                              │
+  │                          │── embed query ─────────────►│ Vertex AI
+  │                          │◄── 768-dim vector ──────────│
+  │                          │── search Firestore ────────►│ Firestore
+  │                          │◄── top-10 chunks ───────────│
+  │◄── SSE: status ─────────│── status: "cultural" ──────►│
+  │                          │── parallel search ─────────►│ Exa + Tavily
+  │                          │◄── cultural results ────────│
+  │◄── SSE: context ────────│                              │
+  │◄── SSE: status ─────────│── status: "generating" ────►│
+  │                          │── stream request ──────────►│ Claude (Vertex)
+  │◄── SSE: chunk ──────────│◄── text delta ───────────────│
+  │◄── SSE: chunk ──────────│◄── text delta ───────────────│
+  │◄── SSE: chunk ──────────│◄── text delta ───────────────│
+  │    ... (streaming) ...   │    ... (streaming) ...       │
+  │◄── SSE: done ───────────│◄── final message ───────────│
+  │                          │                              │
+```
+
+### Trigger Map
+
+| Trigger | Source | Target | Type |
+|---------|--------|--------|------|
+| Page load | Browser navigation | Next.js server | HTTP GET |
+| Stats fetch | React `useEffect` mount | `/api/stats` → Firestore | HTTP GET → gRPC |
+| File drop/select | User drag-drop or file picker | `/api/upload` | HTTP POST (FormData) |
+| Generate click | User button click | `/api/generate` | HTTP POST (JSON) → SSE stream |
+| Query embedding | Generate route Step 6 | Vertex AI REST API | HTTP POST (OAuth2) |
+| Vector search | After embedding returns | Firestore `chunks` collection | gRPC (Firestore SDK) |
+| Cultural search | After vector search | Exa.ai REST + Tavily SDK | HTTP POST (API keys) |
+| Claude stream | After prompt assembly | Vertex AI Anthropic endpoint | HTTP POST (OAuth2) → SSE |
+| SSE parsing | Each stream event | React state update | In-browser stream reader |
+| Copy/Download | User action | Browser APIs | `navigator.clipboard` / `Blob` |
 
 ---
 
