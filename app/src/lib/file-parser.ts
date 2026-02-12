@@ -18,7 +18,7 @@ const SUPPORTED_EXTENSIONS = new Set([
   "csv",
 ]);
 
-const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
+const MAX_FILE_SIZE = 150 * 1024 * 1024; // 150 MB — large PPTX files are mostly images; text extraction is lightweight
 
 export interface ParseResult {
   text: string;

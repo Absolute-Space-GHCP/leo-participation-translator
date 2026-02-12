@@ -1,36 +1,78 @@
 /**
  * @file claude.ts
- * @description Claude API client via Vertex AI with streaming support
+ * @description Claude API client with dual-mode support (Direct API + Vertex AI)
  * @author Charley Scholz, JLIT
  * @coauthor Claude Opus 4.6, Claude Code (coding assistant), Cursor (IDE)
  * @created 2026-02-11
+ * @updated 2026-02-11
  */
 
+import Anthropic from "@anthropic-ai/sdk";
 import { AnthropicVertex } from "@anthropic-ai/vertex-sdk";
 
-// ── Singleton ──
+// ── Types ──
 
-let vertexClient: AnthropicVertex | null = null;
+type ClaudeClient = Anthropic | AnthropicVertex;
 
-function getClient(): AnthropicVertex {
-  if (!vertexClient) {
-    const region = process.env.VERTEX_AI_CLAUDE_REGION || "us-east5";
-    const projectId = process.env.GCP_PROJECT_ID;
+type StreamEvent =
+  | { type: "text"; text: string }
+  | { type: "done"; model: string; inputTokens: number; outputTokens: number };
 
-    if (!projectId) {
-      throw new Error("GCP_PROJECT_ID environment variable is required");
-    }
+// ── Client Selection ──
 
-    vertexClient = new AnthropicVertex({ region, projectId });
+let cachedClient: ClaudeClient | null = null;
+let clientMode: "direct" | "vertex" | null = null;
+
+/**
+ * Returns the appropriate Claude client based on available credentials.
+ * Priority: Direct Anthropic API (ANTHROPIC_API_KEY) > Vertex AI (GCP_PROJECT_ID)
+ */
+function getClient(): ClaudeClient {
+  if (cachedClient) return cachedClient;
+
+  // Priority 1: Direct Anthropic API (fastest to set up, no Model Garden needed)
+  if (process.env.ANTHROPIC_API_KEY) {
+    cachedClient = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    clientMode = "direct";
+    console.log("[claude] Using direct Anthropic API");
+    return cachedClient;
   }
-  return vertexClient;
+
+  // Priority 2: Vertex AI
+  const projectId = process.env.GCP_PROJECT_ID;
+  if (projectId) {
+    const region = process.env.VERTEX_AI_CLAUDE_REGION || "us-east5";
+    cachedClient = new AnthropicVertex({ region, projectId });
+    clientMode = "vertex";
+    console.log(`[claude] Using Vertex AI (project=${projectId}, region=${region})`);
+    return cachedClient;
+  }
+
+  throw new Error(
+    "No Claude credentials configured. Set ANTHROPIC_API_KEY for direct API or GCP_PROJECT_ID for Vertex AI."
+  );
+}
+
+/**
+ * Resolves the model name based on client mode and configuration.
+ * Direct API and Vertex AI may use different model ID formats.
+ */
+function resolveModel(overrideModel?: string): string {
+  if (overrideModel) return overrideModel;
+
+  if (clientMode === "direct") {
+    return process.env.CLAUDE_MODEL || "claude-sonnet-4-5-20250929";
+  }
+
+  // Vertex AI model names
+  return process.env.VERTEX_AI_CLAUDE_MODEL || "claude-sonnet-4-5@20250929";
 }
 
 // ── Streaming Generation ──
 
 /**
  * Stream a Claude response, yielding text chunks as they arrive.
- * Returns an async generator that yields text deltas.
+ * Works with both direct Anthropic API and Vertex AI.
  */
 export async function* streamGeneration(
   systemPrompt: string,
@@ -40,20 +82,9 @@ export async function* streamGeneration(
     maxTokens?: number;
     temperature?: number;
   } = {}
-): AsyncGenerator<
-  | { type: "text"; text: string }
-  | {
-      type: "done";
-      model: string;
-      inputTokens: number;
-      outputTokens: number;
-    }
-> {
+): AsyncGenerator<StreamEvent> {
   const client = getClient();
-  const model =
-    options.model ||
-    process.env.VERTEX_AI_CLAUDE_MODEL ||
-    "claude-sonnet-4-5-20250514";
+  const model = resolveModel(options.model);
   const maxTokens = options.maxTokens || 8192;
   const temperature = options.temperature || 0.7;
 
@@ -65,7 +96,6 @@ export async function* streamGeneration(
     messages: [{ role: "user", content: userPrompt }],
   });
 
-  // Yield text chunks as they arrive
   for await (const event of stream) {
     if (
       event.type === "content_block_delta" &&
@@ -75,7 +105,6 @@ export async function* streamGeneration(
     }
   }
 
-  // Get final message for usage stats
   const finalMessage = await stream.finalMessage();
 
   yield {
@@ -104,10 +133,7 @@ export async function generate(
   outputTokens: number;
 }> {
   const client = getClient();
-  const model =
-    options.model ||
-    process.env.VERTEX_AI_CLAUDE_MODEL ||
-    "claude-sonnet-4-5-20250514";
+  const model = resolveModel(options.model);
   const maxTokens = options.maxTokens || 8192;
   const temperature = options.temperature || 0.7;
 

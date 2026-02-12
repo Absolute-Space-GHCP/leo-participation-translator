@@ -272,6 +272,80 @@
   font-weight: 700;
 }
 
+/* ── Scenario Button Interactions ── */
+.jl-scenario-btn {
+  position: relative;
+  overflow: hidden;
+}
+.jl-scenario-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.jl-scenario-btn:hover::before {
+  opacity: 1;
+  background: linear-gradient(90deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.02) 100%);
+}
+.jl-scenario-btn:hover {
+  transform: translateX(2px);
+}
+.jl-scenario-btn:active {
+  transform: translateX(0) scale(0.99);
+}
+
+/* ── Staggered entrance for cards/items ── */
+@keyframes jl-stagger-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.jl-stagger-in {
+  animation: jl-stagger-in 0.4s ease-out both;
+}
+
+/* ── Pulse ring on active elements ── */
+@keyframes jl-ring-pulse {
+  0% { box-shadow: 0 0 0 0 currentColor; }
+  70% { box-shadow: 0 0 0 6px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+.jl-ring-pulse {
+  animation: jl-ring-pulse 1.5s ease-out infinite;
+}
+
+/* ── Typing cursor blink ── */
+@keyframes jl-cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.jl-cursor-blink {
+  animation: jl-cursor-blink 0.8s ease-in-out infinite;
+}
+
+/* ── Scale pop for stat numbers ── */
+@keyframes jl-scale-pop {
+  0% { transform: scale(0.7); opacity: 0; }
+  60% { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.jl-scale-pop {
+  animation: jl-scale-pop 0.5s ease-out both;
+}
+
+/* ── Slide up entrance ── */
+@keyframes jl-slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.jl-animate-slide-up {
+  animation: jl-slide-up 0.4s ease-out both;
+}
+
 /* Markdown prose styling (light panel) */
 .jl-prose h3 {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;

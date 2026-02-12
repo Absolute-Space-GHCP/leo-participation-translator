@@ -34,7 +34,7 @@ import {
 import { useGeneration, type GenerationStep } from "@/lib/use-generation";
 import { parseOutput, getSectionsByTier, getTierCounts, type SectionTier } from "@/lib/parse-output";
 import type { ProjectSeed, KnowledgeBaseStats, UploadedDocument } from "@/lib/types";
-import { SAMPLE_OUTPUT, SAMPLE_SEED } from "@/lib/sample-output";
+import { SAMPLE_OUTPUT, SAMPLE_SEED, DEMO_SCENARIOS } from "@/lib/sample-output";
 
 // ── Pipeline Steps ──
 
@@ -49,9 +49,6 @@ const PIPELINE_STEPS = [
 function getStepIndex(step: GenerationStep): number {
   return PIPELINE_STEPS.findIndex((s) => s.key === step);
 }
-
-// ── Hidden clients filter ──
-const HIDDEN_CLIENTS = ["johannes leonardo", "jl internal", "jl reference"];
 
 export default function EngineRoomPage() {
   const [stats, setStats] = useState<KnowledgeBaseStats | null>(null);
@@ -68,6 +65,9 @@ export default function EngineRoomPage() {
     timeline: "",
     context: "",
   });
+
+  // Active scenario (for visual highlighting)
+  const [activeScenario, setActiveScenario] = useState<string | null>(null);
 
   // Upload state
   const [uploadedDocs, setUploadedDocs] = useState<UploadedDocument[]>([]);
@@ -141,9 +141,7 @@ export default function EngineRoomPage() {
     setSeed((prev) => ({ ...prev, [field]: value }));
   }
 
-  const displayClients = stats?.clients.filter(
-    (c) => !HIDDEN_CLIENTS.includes(c.toLowerCase())
-  ) ?? [];
+  const displayClients = stats?.clients ?? [];
 
   // ── File Upload ──
 
@@ -278,7 +276,7 @@ export default function EngineRoomPage() {
               <h1 className="jl-title text-[13px] tracking-[0.15em]" style={{ color: "var(--jl-white)" }}>
                 THE PARTICIPATION TRANSLATOR
               </h1>
-              <p className="mt-0.5 text-[10px] uppercase tracking-[0.2em] text-white/45">
+              <p className="mt-0.5 text-[10px] uppercase tracking-[0.2em] text-white/60">
                 Strategic Intelligence
               </p>
             </div>
@@ -327,8 +325,8 @@ export default function EngineRoomPage() {
             {(gen.step !== "idle" || isDemoComplete) && (
               <button
                 onClick={() => { gen.reset(); setDemoMode(false); }}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] uppercase tracking-[0.15em] font-medium text-white/40 hover:text-white/70 transition-colors"
-                style={{ border: "1px solid rgba(255,255,255,0.08)" }}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] uppercase tracking-[0.15em] font-medium text-white/55 hover:text-white/80 transition-colors"
+                style={{ border: "1px solid rgba(255,255,255,0.15)" }}
               >
                 <RotateCcw className="h-3 w-3" /> RESET
               </button>
@@ -346,10 +344,12 @@ export default function EngineRoomPage() {
                 return (
                   <div key={step.key} className="flex flex-1 items-center gap-1">
                     <div
-                      className={`flex h-1.5 flex-1 rounded-full transition-all duration-500 ${isActive ? "jl-animate-glow" : ""}`}
+                      className={`flex h-1.5 flex-1 rounded-full transition-all duration-700 ${isActive ? "jl-animate-glow" : ""}`}
                       style={{
-                        background: isDone || isActive ? "var(--jl-sapphire)" : "rgba(255,255,255,0.06)",
-                        opacity: isActive ? 0.8 : 1,
+                        background: isDone ? "var(--jl-sapphire)" : isActive ? "linear-gradient(90deg, var(--jl-sapphire), rgba(22,106,216,0.5))" : "rgba(255,255,255,0.06)",
+                        opacity: 1,
+                        transform: isDone ? "scaleY(1)" : isActive ? "scaleY(1.3)" : "scaleY(1)",
+                        transformOrigin: "center",
                       }}
                     />
                     {i < PIPELINE_STEPS.length - 1 && <div className="h-px w-1" style={{ background: "rgba(255,255,255,0.06)" }} />}
@@ -365,7 +365,7 @@ export default function EngineRoomPage() {
                   <span
                     key={step.key}
                     className="text-[9px] uppercase tracking-[0.15em] font-medium transition-colors"
-                    style={{ color: isActive ? "var(--jl-sapphire)" : isDone ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.3)" }}
+                    style={{ color: isActive ? "var(--jl-sapphire)" : isDone ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.45)" }}
                   >
                     {step.label}
                   </span>
@@ -394,10 +394,18 @@ export default function EngineRoomPage() {
                     { value: stats.chunkCount.toLocaleString(), label: "INDEXED CHUNKS", color: "var(--jl-sapphire)" },
                     { value: stats.documentCount.toString(), label: "DOCUMENTS", color: "var(--jl-emerald)" },
                     { value: displayClients.length.toString(), label: "CLIENTS", color: "var(--jl-gold)" },
-                  ].map((stat) => (
-                    <div key={stat.label} className="jl-stat-card px-3 py-2" style={{ border: "1px solid rgba(255,255,255,0.06)", borderTop: `2px solid ${stat.color}` }}>
-                      <span className="jl-numeral text-2xl" style={{ color: stat.color }}>{stat.value}</span>
-                      <p className="mt-0.5 text-[8px] uppercase tracking-[0.2em] text-white/55">{stat.label}</p>
+                  ].map((stat, i) => (
+                    <div
+                      key={stat.label}
+                      className="jl-stat-card jl-stagger-in px-3 py-2"
+                      style={{
+                        border: "1px solid rgba(255,255,255,0.08)",
+                        borderTop: `2px solid ${stat.color}`,
+                        animationDelay: `${i * 120}ms`,
+                      }}
+                    >
+                      <span className="jl-numeral jl-scale-pop text-2xl" style={{ color: stat.color, animationDelay: `${200 + i * 120}ms` }}>{stat.value}</span>
+                      <p className="mt-0.5 text-[8px] uppercase tracking-[0.2em] text-white/70">{stat.label}</p>
                     </div>
                   ))}
                 </div>
@@ -405,21 +413,27 @@ export default function EngineRoomPage() {
 
               {/* Form Fields */}
               <div className="grid grid-cols-2 gap-3">
-                <JLInput label="BRAND" placeholder="e.g. Nike" value={seed.brand} onChange={(v) => updateSeed("brand", v)} />
-                <JLInput label="CATEGORY" placeholder="e.g. Footwear" value={seed.category} onChange={(v) => updateSeed("category", v)} />
+                <div className="jl-stagger-in" style={{ animationDelay: "50ms" }}>
+                  <JLInput label="BRAND" placeholder="e.g. Nike" value={seed.brand} onChange={(v) => updateSeed("brand", v)} />
+                </div>
+                <div className="jl-stagger-in" style={{ animationDelay: "100ms" }}>
+                  <JLInput label="CATEGORY" placeholder="e.g. Footwear" value={seed.category} onChange={(v) => updateSeed("category", v)} />
+                </div>
               </div>
 
-              <JLInput label="AUDIENCE" placeholder="e.g. Gen Z sneaker culture" value={seed.audience} onChange={(v) => updateSeed("audience", v)} />
+              <div className="jl-stagger-in" style={{ animationDelay: "150ms" }}>
+                <JLInput label="AUDIENCE" placeholder="e.g. Gen Z sneaker culture" value={seed.audience} onChange={(v) => updateSeed("audience", v)} />
+              </div>
 
-              <div className="space-y-1.5">
-                <label className="text-[10px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,0.7)" }}>THE PASSIVE IDEA</label>
+              <div className="space-y-1.5 jl-stagger-in" style={{ animationDelay: "200ms" }}>
+                <label className="text-[10px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,0.85)" }}>THE PASSIVE IDEA</label>
                 <textarea
                   placeholder="The traditional advertising concept to transform..."
                   rows={3}
                   value={seed.passiveIdea}
                   onChange={(e) => updateSeed("passiveIdea", e.target.value)}
-                  className="jl-input-focus w-full resize-none border-0 border-b bg-transparent px-0 py-2 text-sm focus:outline-none focus:ring-0 placeholder:text-white/40"
-                  style={{ color: "var(--jl-white)", borderColor: "rgba(255,255,255,0.15)" }}
+                  className="jl-input-focus w-full resize-none border-0 border-b bg-transparent px-0 py-2 text-sm focus:outline-none focus:ring-0 placeholder:text-white/50"
+                  style={{ color: "var(--jl-white)", borderColor: "rgba(255,255,255,0.20)" }}
                 />
               </div>
 
@@ -427,26 +441,26 @@ export default function EngineRoomPage() {
               <button
                 type="button"
                 onClick={() => setShowOptions(!showOptions)}
-                className="text-[10px] uppercase tracking-[0.15em] text-white/55 hover:text-white/70 transition-colors"
+                className="text-[10px] uppercase tracking-[0.15em] text-white/65 hover:text-white/80 transition-colors"
               >
                 {showOptions ? "− HIDE OPTIONS" : "+ MORE OPTIONS"}
               </button>
 
               {showOptions && (
-                <div className="space-y-3 jl-animate-fade-in" style={{ borderLeft: "2px solid rgba(255,255,255,0.06)", paddingLeft: "12px" }}>
+                <div className="space-y-3 jl-animate-fade-in" style={{ borderLeft: "2px solid rgba(255,255,255,0.12)", paddingLeft: "12px" }}>
                   <div className="grid grid-cols-2 gap-3">
                     <JLInput label="BUDGET" placeholder="$500K–$1M" value={seed.budget || ""} onChange={(v) => updateSeed("budget", v)} />
                     <JLInput label="TIMELINE" placeholder="Q3 2026" value={seed.timeline || ""} onChange={(v) => updateSeed("timeline", v)} />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-[10px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,0.7)" }}>CONTEXT</label>
+                    <label className="text-[10px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,0.85)" }}>CONTEXT</label>
                     <textarea
                       placeholder="Brand considerations, past campaigns..."
                       rows={2}
                       value={seed.context}
                       onChange={(e) => updateSeed("context", e.target.value)}
-                      className="jl-input-focus w-full resize-none border-0 border-b bg-transparent px-0 py-2 text-sm focus:outline-none focus:ring-0 placeholder:text-white/40"
-                      style={{ color: "var(--jl-white)", borderColor: "rgba(255,255,255,0.15)" }}
+                      className="jl-input-focus w-full resize-none border-0 border-b bg-transparent px-0 py-2 text-sm focus:outline-none focus:ring-0 placeholder:text-white/50"
+                      style={{ color: "var(--jl-white)", borderColor: "rgba(255,255,255,0.20)" }}
                     />
                   </div>
                 </div>
@@ -454,9 +468,9 @@ export default function EngineRoomPage() {
 
               {/* File Upload Zone */}
               <div className="space-y-2">
-                <label className="text-[10px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,0.7)" }}>REFERENCE DOCUMENTS</label>
+                <label className="text-[10px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,0.85)" }}>REFERENCE DOCUMENTS</label>
                 <div
-                  className={`border border-dashed p-3 text-center transition-all ${dragOver ? "border-[var(--jl-sapphire)] bg-[rgba(22,106,216,0.05)]" : "border-white/10 hover:border-white/20"}`}
+                  className={`border border-dashed p-3 text-center transition-all ${dragOver ? "border-[var(--jl-sapphire)] bg-[rgba(22,106,216,0.05)]" : "border-white/20 hover:border-white/30"}`}
                   onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
                   onDragLeave={() => setDragOver(false)}
                   onDrop={handleDrop}
@@ -464,16 +478,16 @@ export default function EngineRoomPage() {
                   <input ref={fileInputRef} type="file" accept=".pptx,.pdf,.docx,.txt,.md,.csv" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFileUpload(f); if (fileInputRef.current) fileInputRef.current.value = ""; }} className="hidden" />
                   {uploading ? (
                     <div className="flex items-center justify-center gap-2 py-1">
-                      <Loader2 className="h-3 w-3 animate-spin text-white/55" />
-                      <span className="text-[10px] uppercase tracking-[0.15em] text-white/55">EXTRACTING...</span>
+                      <Loader2 className="h-3 w-3 animate-spin text-white/70" />
+                      <span className="text-[10px] uppercase tracking-[0.15em] text-white/70">EXTRACTING...</span>
                     </div>
                   ) : (
-                    <button type="button" onClick={() => fileInputRef.current?.click()} className="flex w-full items-center justify-center gap-2 py-1 text-white/50 hover:text-white/70 transition-colors">
+                    <button type="button" onClick={() => fileInputRef.current?.click()} className="flex w-full items-center justify-center gap-2 py-1 text-white/60 hover:text-white/80 transition-colors">
                       <Upload className="h-3 w-3" />
                       <span className="text-[10px] uppercase tracking-[0.15em]">DROP OR BROWSE</span>
                     </button>
                   )}
-                  <p className="mt-1 text-[9px] text-white/40 uppercase tracking-[0.1em]">PPTX &middot; PDF &middot; DOCX &middot; TXT &middot; MD</p>
+                  <p className="mt-1 text-[9px] text-white/55 uppercase tracking-[0.1em]">PPTX &middot; PDF &middot; DOCX &middot; TXT &middot; MD</p>
                 </div>
 
                 {uploadError && (
@@ -484,13 +498,13 @@ export default function EngineRoomPage() {
                 )}
 
                 {uploadedDocs.map((doc, i) => (
-                  <div key={`${doc.filename}-${i}`} className="flex items-center gap-2 p-2 jl-animate-slide-in jl-hover-lift" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
+                  <div key={`${doc.filename}-${i}`} className="flex items-center gap-2 p-2 jl-animate-slide-in jl-hover-lift" style={{ border: "1px solid rgba(255,255,255,0.12)" }}>
                     <FileText className="h-3 w-3 flex-none" style={{ color: "var(--jl-sapphire)" }} />
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-[11px] font-medium" style={{ color: "var(--jl-white)" }}>{doc.filename}</p>
-                      <p className="text-[9px] uppercase tracking-[0.1em] text-white/45">{doc.fileType.toUpperCase()}{doc.pageCount ? ` · ${doc.pageCount} PG` : ""} · {doc.charCount.toLocaleString()} CHARS</p>
+                      <p className="text-[9px] uppercase tracking-[0.1em] text-white/60">{doc.fileType.toUpperCase()}{doc.pageCount ? ` · ${doc.pageCount} PG` : ""} · {doc.charCount.toLocaleString()} CHARS</p>
                     </div>
-                    <button onClick={() => setUploadedDocs((prev) => prev.filter((_, j) => j !== i))} className="flex-none text-white/40 hover:text-[var(--jl-ruby)] transition-colors"><X className="h-3 w-3" /></button>
+                    <button onClick={() => setUploadedDocs((prev) => prev.filter((_, j) => j !== i))} className="flex-none text-white/55 hover:text-[var(--jl-ruby)] transition-colors"><X className="h-3 w-3" /></button>
                   </div>
                 ))}
               </div>
@@ -500,12 +514,12 @@ export default function EngineRoomPage() {
                 <button
                   onClick={handleGenerate}
                   disabled={!canGenerate}
-                  className="jl-btn-glow group w-full py-3.5 text-[12px] uppercase tracking-[0.2em] font-bold transition-all duration-300 disabled:opacity-20 disabled:cursor-not-allowed"
+                  className={`jl-btn-glow group w-full py-3.5 text-[12px] uppercase tracking-[0.2em] font-bold transition-all duration-300 disabled:opacity-20 disabled:cursor-not-allowed ${canGenerate && !isGenerating ? "jl-animate-glow" : ""}`}
                   style={{
                     background: canGenerate ? "linear-gradient(135deg, #1a7aef 0%, #166AD8 50%, #1260c0 100%)" : "transparent",
                     color: canGenerate ? "#fff" : "rgba(255,255,255,0.2)",
                     border: canGenerate ? "none" : "1px solid rgba(255,255,255,0.08)",
-                    boxShadow: canGenerate ? "0 0 16px rgba(22,106,216,0.25)" : "none",
+                    boxShadow: canGenerate ? "0 0 20px rgba(22,106,216,0.3)" : "none",
                   }}
                 >
                   {isGenerating ? (
@@ -516,12 +530,68 @@ export default function EngineRoomPage() {
                 </button>
 
                 {gen.step === "idle" && !isDemoComplete && (
-                  <button
-                    onClick={handleLoadDemo}
-                    className="w-full py-2 text-[10px] uppercase tracking-[0.15em] text-white/40 hover:text-white/55 transition-colors"
-                  >
-                    LOAD SAMPLE DEMO
-                  </button>
+                  <div className="space-y-2.5">
+                    <button
+                      onClick={handleLoadDemo}
+                      className="w-full py-2 text-[10px] uppercase tracking-[0.15em] text-white/55 hover:text-white/70 transition-colors"
+                    >
+                      LOAD SAMPLE DEMO
+                    </button>
+                    <div className="pt-1">
+                      <p className="text-[8px] uppercase tracking-[0.2em] text-white/45 mb-2">QUICK-LOAD SCENARIOS</p>
+                      <div className="space-y-1.5">
+                        {DEMO_SCENARIOS.map((scenario, idx) => {
+                          const isActive = activeScenario === scenario.name;
+                          return (
+                            <button
+                              key={scenario.name}
+                              onClick={() => { setSeed(scenario.seed); setActiveScenario(scenario.name); setDemoMode(false); }}
+                              className="jl-scenario-btn group w-full text-left rounded transition-all duration-300 jl-animate-slide-in"
+                              style={{
+                                animationDelay: `${idx * 80}ms`,
+                                borderLeft: `3px solid ${isActive ? scenario.brandColor : `${scenario.brandColor}33`}`,
+                                background: isActive ? scenario.brandColorLight : "transparent",
+                                padding: "8px 10px",
+                                boxShadow: isActive ? `0 0 12px ${scenario.brandColor}20` : "none",
+                              }}
+                            >
+                              <div className="flex items-center gap-2.5">
+                                <span
+                                  className="flex h-6 w-6 flex-none items-center justify-center rounded-sm text-[9px] font-black uppercase transition-all duration-300"
+                                  style={{
+                                    background: isActive ? scenario.brandColor : `${scenario.brandColor}20`,
+                                    color: isActive ? "#fff" : `${scenario.brandColor}90`,
+                                    boxShadow: isActive ? `0 0 8px ${scenario.brandColor}40` : "none",
+                                  }}
+                                >
+                                  {scenario.icon}
+                                </span>
+                                <div className="min-w-0 flex-1">
+                                  <span
+                                    className="block text-[10px] font-semibold tracking-wide transition-colors duration-300"
+                                    style={{ color: isActive ? scenario.brandColor : `${scenario.brandColor}99` }}
+                                  >
+                                    {scenario.name}
+                                  </span>
+                                  <span className="block text-[8px] text-white/30 group-hover:text-white/45 transition-colors mt-0.5 line-clamp-1">
+                                    {scenario.description}
+                                  </span>
+                                </div>
+                                <ChevronRight
+                                  className="h-3 w-3 flex-none transition-all duration-300"
+                                  style={{
+                                    color: isActive ? scenario.brandColor : "rgba(255,255,255,0.15)",
+                                    transform: isActive ? "translateX(2px)" : "translateX(0)",
+                                    opacity: isActive ? 1 : 0.5,
+                                  }}
+                                />
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
@@ -531,13 +601,34 @@ export default function EngineRoomPage() {
           <div className="flex-1 overflow-y-auto border-t px-5 py-4 jl-scrollbar" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
             {gen.step === "idle" && !isDemoComplete && stats ? (
               <div className="space-y-2">
-                <p className="text-[9px] uppercase tracking-[0.2em] font-medium" style={{ color: "rgba(22,106,216,0.5)" }}>INDEXED CLIENTS</p>
+                <p className="text-[9px] uppercase tracking-[0.2em] font-medium" style={{ color: "rgba(22,106,216,0.7)" }}>INDEXED CLIENTS</p>
                 <div className="flex flex-wrap gap-1.5">
-                  {displayClients.map((c) => (
-                    <span key={c} className="jl-tag-hover px-2 py-0.5 text-[9px] uppercase tracking-[0.1em] cursor-default" style={{ color: "rgba(22,106,216,0.6)", border: "1px solid rgba(22,106,216,0.15)", background: "rgba(22,106,216,0.03)" }}>
-                      {c}
-                    </span>
-                  ))}
+                  {displayClients.map((c) => {
+                    // Highlight client tag if it matches the active scenario brand
+                    const matchingScenario = DEMO_SCENARIOS.find(
+                      (s) => s.seed.brand.toLowerCase() === c.toLowerCase()
+                    );
+                    const isHighlighted = matchingScenario && activeScenario === matchingScenario.name;
+                    const tagColor = isHighlighted ? matchingScenario.brandColor : "rgba(22,106,216,0.8)";
+                    const tagBorder = isHighlighted ? `${matchingScenario.brandColor}60` : "rgba(22,106,216,0.25)";
+                    const tagBg = isHighlighted ? `${matchingScenario.brandColor}15` : "rgba(22,106,216,0.05)";
+
+                    return (
+                      <span
+                        key={c}
+                        className="jl-tag-hover px-2 py-0.5 text-[9px] uppercase tracking-[0.1em] cursor-default transition-all duration-300"
+                        style={{
+                          color: tagColor,
+                          border: `1px solid ${tagBorder}`,
+                          background: tagBg,
+                          boxShadow: isHighlighted ? `0 0 8px ${matchingScenario.brandColor}20` : "none",
+                          transform: isHighlighted ? "scale(1.05)" : "scale(1)",
+                        }}
+                      >
+                        {c}
+                      </span>
+                    );
+                  })}
                 </div>
               </div>
             ) : gen.chunks.length > 0 || gen.culturalResults.length > 0 ? (
@@ -552,8 +643,8 @@ export default function EngineRoomPage() {
                             <span className="text-[10px] font-medium truncate max-w-[220px]" style={{ color: "var(--jl-white)" }}>{chunk.metadata.filename || "Unknown"}</span>
                             <span className="jl-numeral text-[11px]" style={{ color: chunk.score > 0.7 ? "var(--jl-sapphire)" : chunk.score > 0.5 ? "var(--jl-gold)" : "rgba(255,255,255,0.3)" }}>{(chunk.score * 100).toFixed(0)}%</span>
                           </div>
-                          {chunk.metadata.client && <span className="text-[8px] uppercase tracking-[0.15em] text-white/45">{chunk.metadata.client}</span>}
-                          <p className="mt-1 text-[10px] text-white/55 line-clamp-2 leading-relaxed">{chunk.content}</p>
+                          {chunk.metadata.client && <span className="text-[8px] uppercase tracking-[0.15em] text-white/60">{chunk.metadata.client}</span>}
+                          <p className="mt-1 text-[10px] text-white/65 line-clamp-2 leading-relaxed">{chunk.content}</p>
                         </div>
                       ))}
                     </div>
@@ -567,10 +658,10 @@ export default function EngineRoomPage() {
                         <div key={i} className="p-2 jl-animate-slide-in jl-hover-lift" style={{ background: "rgba(255,255,255,0.02)", borderLeft: "2px solid var(--jl-emerald)", animationDelay: `${i * 50}ms` }}>
                           <div className="flex items-center justify-between mb-0.5">
                             <span className="text-[10px] font-medium truncate max-w-[250px]" style={{ color: "var(--jl-white)" }}>{result.title}</span>
-                            <span className="text-[8px] uppercase tracking-[0.15em] text-white/45">{result.source}</span>
+                            <span className="text-[8px] uppercase tracking-[0.15em] text-white/60">{result.source}</span>
                           </div>
                           <span className="text-[8px] uppercase tracking-[0.15em]" style={{ color: "var(--jl-emerald)" }}>{result.sourceType}</span>
-                          <p className="mt-1 text-[10px] text-white/55 line-clamp-2 leading-relaxed">{result.content}</p>
+                          <p className="mt-1 text-[10px] text-white/65 line-clamp-2 leading-relaxed">{result.content}</p>
                         </div>
                       ))}
                     </div>
@@ -578,11 +669,20 @@ export default function EngineRoomPage() {
                 )}
               </div>
             ) : isGenerating ? (
-              <div className="flex flex-col items-center justify-center py-16">
-                <Loader2 className="mb-3 h-5 w-5 animate-spin" style={{ color: "var(--jl-sapphire)" }} />
-                <p className="text-[10px] uppercase tracking-[0.2em] text-white/55">{gen.statusMessage}</p>
+              <div className="flex flex-col items-center justify-center py-16 jl-animate-fade-in">
+                <div className="jl-ring-pulse mb-3" style={{ color: "var(--jl-sapphire)" }}>
+                  <Loader2 className="h-5 w-5 animate-spin" style={{ color: "var(--jl-sapphire)" }} />
+                </div>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-white/70">{gen.statusMessage}</p>
               </div>
             ) : null}
+
+            {/* Footer */}
+            <div className="mt-auto px-5 py-3" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+              <p className="text-[8px] uppercase tracking-[0.15em] text-white/25">
+                &copy; {new Date().getFullYear()} Catchfire &middot; Built by Charley Scholz
+              </p>
+            </div>
           </div>
         </div>
 
@@ -592,17 +692,20 @@ export default function EngineRoomPage() {
           {/* Tab Bar */}
           {hasOutput && sections.length > 0 && (
             <div className="flex-none flex items-center gap-6 px-10 pt-4 pb-0" style={{ borderBottom: "1px solid rgba(17,17,17,0.06)" }}>
-              {tierCounts.map(({ tier, label, count }) => (
+              {tierCounts.map(({ tier, label, count }, idx) => (
                 <button
                   key={tier}
                   onClick={() => setActiveTab(tier)}
-                  className={`jl-tab pb-2 text-[10px] uppercase tracking-[0.15em] ${activeTab === tier ? "jl-tab-active" : ""}`}
-                  style={{ color: activeTab === tier ? "var(--jl-black)" : "rgba(17,17,17,0.3)" }}
+                  className={`jl-tab pb-2 text-[10px] uppercase tracking-[0.15em] jl-stagger-in ${activeTab === tier ? "jl-tab-active" : ""}`}
+                  style={{ color: activeTab === tier ? "var(--jl-black)" : "rgba(17,17,17,0.3)", animationDelay: `${idx * 80}ms` }}
                   disabled={count === 0}
                 >
                   {label}
                   {count > 0 && (
-                    <span className="ml-1.5 jl-numeral text-[9px]" style={{ color: activeTab === tier ? "var(--jl-sapphire)" : "rgba(17,17,17,0.2)" }}>
+                    <span
+                      className="ml-1.5 jl-numeral text-[9px] transition-colors duration-300"
+                      style={{ color: activeTab === tier ? "var(--jl-sapphire)" : "rgba(17,17,17,0.2)" }}
+                    >
                       {count}
                     </span>
                   )}
@@ -616,8 +719,8 @@ export default function EngineRoomPage() {
             <div ref={outputRef} className="flex-1 overflow-y-auto px-10 py-6 jl-scrollbar-light">
               {activeSections.length > 0 ? (
                 <div className="space-y-8">
-                  {activeSections.map((section) => (
-                    <div key={section.key} className="jl-animate-fade-in">
+                  {activeSections.map((section, idx) => (
+                    <div key={section.key} className="jl-animate-slide-up" style={{ animationDelay: `${idx * 100}ms` }}>
                       <div className="jl-prose jl-body-serif text-[14px]" style={{ color: "var(--jl-black)" }}>
                         <ReactMarkdown>{section.content}</ReactMarkdown>
                       </div>
@@ -630,7 +733,7 @@ export default function EngineRoomPage() {
                 </div>
               )}
               {isGenerating && (
-                <span className="inline-block h-5 w-0.5 jl-animate-pulse mt-1" style={{ background: "var(--jl-sapphire)" }} />
+                <span className="inline-block h-5 w-0.5 jl-cursor-blink mt-1" style={{ background: "var(--jl-sapphire)" }} />
               )}
             </div>
           ) : gen.step === "error" ? (
@@ -643,9 +746,9 @@ export default function EngineRoomPage() {
             </div>
           ) : (
             <div className="jl-shimmer flex flex-1 flex-col items-center justify-center px-10 text-center">
-              <p className="jl-title text-[40px] mb-4" style={{ color: "var(--jl-black)", opacity: 0.06 }}>FROM PASSIVE<br />TO PARTICIPATION</p>
-              <p className="text-[12px] uppercase tracking-[0.2em]" style={{ color: "var(--jl-black)", opacity: 0.25 }}>Fill in the form. Click generate.</p>
-              <p className="mt-1 text-[11px]" style={{ color: "var(--jl-black)", opacity: 0.15 }}>RAG retrieval, cultural intelligence, and Claude&apos;s response stream in real time.</p>
+              <p className="jl-title text-[40px] mb-4 jl-animate-slide-up" style={{ color: "var(--jl-black)", opacity: 0.06 }}>FROM PASSIVE<br />TO PARTICIPATION</p>
+              <p className="text-[12px] uppercase tracking-[0.2em] jl-animate-slide-up" style={{ color: "var(--jl-black)", opacity: 0.25, animationDelay: "150ms" }}>Fill in the form. Click generate.</p>
+              <p className="mt-1 text-[11px] jl-animate-slide-up" style={{ color: "var(--jl-black)", opacity: 0.15, animationDelay: "300ms" }}>RAG retrieval, cultural intelligence, and Claude&apos;s response stream in real time.</p>
             </div>
           )}
 
@@ -756,14 +859,14 @@ export default function EngineRoomPage() {
 function JLInput({ label, placeholder, value, onChange }: { label: string; placeholder: string; value: string; onChange: (value: string) => void }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[10px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,0.7)" }}>{label}</label>
+      <label className="text-[10px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,0.85)" }}>{label}</label>
       <input
         type="text"
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="jl-input-focus w-full border-0 border-b bg-transparent px-0 py-2 text-sm focus:outline-none focus:ring-0 placeholder:text-white/40"
-        style={{ color: "var(--jl-white)", borderColor: "rgba(255,255,255,0.15)" }}
+        className="jl-input-focus w-full border-0 border-b bg-transparent px-0 py-2 text-sm focus:outline-none focus:ring-0 placeholder:text-white/55"
+        style={{ color: "var(--jl-white)", borderColor: "rgba(255,255,255,0.20)" }}
       />
     </div>
   );

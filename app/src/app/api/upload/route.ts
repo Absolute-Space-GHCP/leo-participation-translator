@@ -15,7 +15,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validateFile, parseFile } from "@/lib/file-parser";
 
-export const maxDuration = 60; // 1 min timeout for large file parsing
+export const maxDuration = 120; // 2 min timeout for large file parsing (up to 150MB)
 
 /**
  * POST /api/upload

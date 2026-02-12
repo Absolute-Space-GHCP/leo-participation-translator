@@ -179,9 +179,9 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="border-t py-6 text-center text-sm text-muted-foreground">
-        <p>
-          Johannes Leonardo &middot; The Participation Translator &middot;
-          Internal Tool
+        <p>&copy; {new Date().getFullYear()} Catchfire. All rights reserved.</p>
+        <p className="mt-1 text-xs text-muted-foreground/60">
+          The Participation Translator &middot; Built by Charley Scholz
         </p>
       </footer>
     </div>

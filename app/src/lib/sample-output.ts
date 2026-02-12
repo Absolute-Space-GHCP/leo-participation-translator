@@ -158,3 +158,75 @@ export const SAMPLE_SEED = {
   timeline: "Q3 2026 (NYC Marathon activation window)",
   context: "Nike Run Club has 100M+ downloads but engagement is declining. Run club culture is booming independently. The brand needs to reconnect with everyday runners, not just elite performance.",
 };
+
+// ── Demo Seed Scenarios ──
+// Pre-built scenarios for the live demo with Leo and Jan.
+// Each leverages indexed clients in the knowledge base for strong RAG retrieval.
+
+export interface DemoScenario {
+  name: string;
+  description: string;
+  brandColor: string;       // Primary brand color for UI accent
+  brandColorLight: string;  // Lighter variant for hover/glow effects
+  icon: string;             // Emoji icon for visual flair
+  seed: {
+    brand: string;
+    category: string;
+    passiveIdea: string;
+    audience: string;
+    budget?: string;
+    timeline?: string;
+    context?: string;
+  };
+}
+
+export const DEMO_SCENARIOS: DemoScenario[] = [
+  {
+    name: "Adidas — Run Club Platform",
+    description: "Transform a classic running shoe ad into a community-powered participation platform. Leverages Adidas presentations in the knowledge base.",
+    brandColor: "#1DB954",
+    brandColorLight: "rgba(29,185,84,0.15)",
+    icon: "3S",
+    seed: {
+      brand: "Adidas",
+      category: "Running Shoes",
+      passiveIdea: "A TV commercial showing athletes running in slow motion wearing the latest Ultraboost, with an inspirational voiceover about pushing limits.",
+      audience: "Urban runners aged 20-35 who are part of run club culture and active on social media",
+      budget: "$2M-$5M",
+      timeline: "Q3 2026",
+      context: "Run club culture is exploding in major cities. Adidas has strong heritage in running but needs to move beyond product-centric ads to own the social running space.",
+    },
+  },
+  {
+    name: "Uber — Urban Mobility",
+    description: "Rethink a standard ride-hailing promo into a city-exploration participation idea. Leverages Uber content in the knowledge base.",
+    brandColor: "#276EF1",
+    brandColorLight: "rgba(39,110,241,0.15)",
+    icon: "U",
+    seed: {
+      brand: "Uber",
+      category: "Ride-Hailing / Urban Mobility",
+      passiveIdea: "A digital campaign offering 20% off rides this weekend, promoted through push notifications and Instagram ads with the tagline 'Go Anywhere.'",
+      audience: "City dwellers aged 22-40 who use ride-hailing weekly and are culturally curious — foodies, concert-goers, neighborhood explorers",
+      budget: "$3M-$8M",
+      timeline: "Summer 2026",
+      context: "Uber is seen as a utility, not a brand people feel connected to. Competitors are matching on price and convenience. The brand needs an emotional and cultural reason to choose Uber beyond discounts.",
+    },
+  },
+  {
+    name: "Roblox — Creator Economy",
+    description: "Transform a passive gaming ad into a participation-first creator empowerment platform. Leverages Roblox presentations in the knowledge base.",
+    brandColor: "#E2241A",
+    brandColorLight: "rgba(226,36,26,0.15)",
+    icon: "R",
+    seed: {
+      brand: "Roblox",
+      category: "Gaming / Virtual Worlds",
+      passiveIdea: "A YouTube pre-roll ad showing gameplay highlights from top Roblox experiences, ending with 'Imagination lives here — play now.'",
+      audience: "Gen Z and Gen Alpha creators aged 13-24 who build, share, and monetize virtual experiences, plus the broader gaming community watching on YouTube and TikTok",
+      budget: "$5M-$15M",
+      timeline: "Q4 2026 (Holiday season)",
+      context: "Roblox has 70M+ daily active users but struggles with brand perception among older teens and young adults. The creator economy is the platform's strongest differentiator but isn't well understood outside the community.",
+    },
+  },
+];
