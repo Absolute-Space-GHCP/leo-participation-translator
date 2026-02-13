@@ -276,7 +276,7 @@ export default function EngineRoomPage() {
               <h1 className="jl-title text-[13px] tracking-[0.15em]" style={{ color: "var(--jl-white)" }}>
                 THE PARTICIPATION TRANSLATOR
               </h1>
-              <p className="mt-0.5 text-[10px] uppercase tracking-[0.2em] text-white/60">
+              <p className="mt-0.5 text-[10px] uppercase tracking-[0.2em] text-white/85">
                 Strategic Intelligence
               </p>
             </div>
@@ -325,7 +325,7 @@ export default function EngineRoomPage() {
             {(gen.step !== "idle" || isDemoComplete) && (
               <button
                 onClick={() => { gen.reset(); setDemoMode(false); }}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] uppercase tracking-[0.15em] font-medium text-white/55 hover:text-white/80 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] uppercase tracking-[0.15em] font-medium text-white/80 hover:text-white transition-colors"
                 style={{ border: "1px solid rgba(255,255,255,0.15)" }}
               >
                 <RotateCcw className="h-3 w-3" /> RESET
@@ -405,7 +405,7 @@ export default function EngineRoomPage() {
                       }}
                     >
                       <span className="jl-numeral jl-scale-pop text-2xl" style={{ color: stat.color, animationDelay: `${200 + i * 120}ms` }}>{stat.value}</span>
-                      <p className="mt-0.5 text-[8px] uppercase tracking-[0.2em] text-white/70">{stat.label}</p>
+                      <p className="mt-0.5 text-[10px] uppercase tracking-[0.2em] text-white">{stat.label}</p>
                     </div>
                   ))}
                 </div>
@@ -426,14 +426,14 @@ export default function EngineRoomPage() {
               </div>
 
               <div className="space-y-1.5 jl-stagger-in" style={{ animationDelay: "200ms" }}>
-                <label className="text-[10px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,0.85)" }}>THE PASSIVE IDEA</label>
+                <label className="text-[12px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,1)" }}>THE PASSIVE IDEA</label>
                 <textarea
                   placeholder="The traditional advertising concept to transform..."
                   rows={3}
                   value={seed.passiveIdea}
                   onChange={(e) => updateSeed("passiveIdea", e.target.value)}
-                  className="jl-input-focus w-full resize-none border-0 border-b bg-transparent px-0 py-2 text-sm focus:outline-none focus:ring-0 placeholder:text-white/50"
-                  style={{ color: "var(--jl-white)", borderColor: "rgba(255,255,255,0.20)" }}
+                  className="jl-input-focus w-full resize-none border-0 border-b bg-transparent px-0 py-2 text-[15px] focus:outline-none focus:ring-0 placeholder:text-white/90"
+                  style={{ color: "var(--jl-white)", borderColor: "rgba(255,255,255,0.50)" }}
                 />
               </div>
 
@@ -441,7 +441,7 @@ export default function EngineRoomPage() {
               <button
                 type="button"
                 onClick={() => setShowOptions(!showOptions)}
-                className="text-[10px] uppercase tracking-[0.15em] text-white/65 hover:text-white/80 transition-colors"
+                className="text-[12px] uppercase tracking-[0.15em] text-white/95 hover:text-white transition-colors"
               >
                 {showOptions ? "− HIDE OPTIONS" : "+ MORE OPTIONS"}
               </button>
@@ -453,14 +453,14 @@ export default function EngineRoomPage() {
                     <JLInput label="TIMELINE" placeholder="Q3 2026" value={seed.timeline || ""} onChange={(v) => updateSeed("timeline", v)} />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-[10px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,0.85)" }}>CONTEXT</label>
+                    <label className="text-[12px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,1)" }}>CONTEXT</label>
                     <textarea
                       placeholder="Brand considerations, past campaigns..."
                       rows={2}
                       value={seed.context}
                       onChange={(e) => updateSeed("context", e.target.value)}
-                      className="jl-input-focus w-full resize-none border-0 border-b bg-transparent px-0 py-2 text-sm focus:outline-none focus:ring-0 placeholder:text-white/50"
-                      style={{ color: "var(--jl-white)", borderColor: "rgba(255,255,255,0.20)" }}
+                      className="jl-input-focus w-full resize-none border-0 border-b bg-transparent px-0 py-2 text-[15px] focus:outline-none focus:ring-0 placeholder:text-white/90"
+                      style={{ color: "var(--jl-white)", borderColor: "rgba(255,255,255,0.50)" }}
                     />
                   </div>
                 </div>
@@ -468,7 +468,7 @@ export default function EngineRoomPage() {
 
               {/* File Upload Zone */}
               <div className="space-y-2">
-                <label className="text-[10px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,0.85)" }}>REFERENCE DOCUMENTS</label>
+                <label className="text-[12px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,1)" }}>REFERENCE DOCUMENTS</label>
                 <div
                   className={`border border-dashed p-3 text-center transition-all ${dragOver ? "border-[var(--jl-sapphire)] bg-[rgba(22,106,216,0.05)]" : "border-white/20 hover:border-white/30"}`}
                   onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
@@ -482,12 +482,12 @@ export default function EngineRoomPage() {
                       <span className="text-[10px] uppercase tracking-[0.15em] text-white/70">EXTRACTING...</span>
                     </div>
                   ) : (
-                    <button type="button" onClick={() => fileInputRef.current?.click()} className="flex w-full items-center justify-center gap-2 py-1 text-white/60 hover:text-white/80 transition-colors">
-                      <Upload className="h-3 w-3" />
-                      <span className="text-[10px] uppercase tracking-[0.15em]">DROP OR BROWSE</span>
+                    <button type="button" onClick={() => fileInputRef.current?.click()} className="flex w-full items-center justify-center gap-2 py-1 text-white hover:text-white transition-colors">
+                      <Upload className="h-3.5 w-3.5" />
+                      <span className="text-[12px] uppercase tracking-[0.15em]">DROP OR BROWSE</span>
                     </button>
                   )}
-                  <p className="mt-1 text-[9px] text-white/55 uppercase tracking-[0.1em]">PPTX &middot; PDF &middot; DOCX &middot; TXT &middot; MD</p>
+                  <p className="mt-1 text-[11px] text-white/90 uppercase tracking-[0.1em]">PPTX &middot; PDF &middot; DOCX &middot; TXT &middot; MD</p>
                 </div>
 
                 {uploadError && (
@@ -501,8 +501,8 @@ export default function EngineRoomPage() {
                   <div key={`${doc.filename}-${i}`} className="flex items-center gap-2 p-2 jl-animate-slide-in jl-hover-lift" style={{ border: "1px solid rgba(255,255,255,0.12)" }}>
                     <FileText className="h-3 w-3 flex-none" style={{ color: "var(--jl-sapphire)" }} />
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-[11px] font-medium" style={{ color: "var(--jl-white)" }}>{doc.filename}</p>
-                      <p className="text-[9px] uppercase tracking-[0.1em] text-white/60">{doc.fileType.toUpperCase()}{doc.pageCount ? ` · ${doc.pageCount} PG` : ""} · {doc.charCount.toLocaleString()} CHARS</p>
+                      <p className="truncate text-[13px] font-medium" style={{ color: "var(--jl-white)" }}>{doc.filename}</p>
+                      <p className="text-[11px] uppercase tracking-[0.1em] text-white/90">{doc.fileType.toUpperCase()}{doc.pageCount ? ` · ${doc.pageCount} PG` : ""} · {doc.charCount.toLocaleString()} CHARS</p>
                     </div>
                     <button onClick={() => setUploadedDocs((prev) => prev.filter((_, j) => j !== i))} className="flex-none text-white/55 hover:text-[var(--jl-ruby)] transition-colors"><X className="h-3 w-3" /></button>
                   </div>
@@ -514,7 +514,7 @@ export default function EngineRoomPage() {
                 <button
                   onClick={handleGenerate}
                   disabled={!canGenerate}
-                  className={`jl-btn-glow group w-full py-3.5 text-[12px] uppercase tracking-[0.2em] font-bold transition-all duration-300 disabled:opacity-20 disabled:cursor-not-allowed ${canGenerate && !isGenerating ? "jl-animate-glow" : ""}`}
+                  className={`jl-btn-glow group w-full py-3.5 text-[13px] uppercase tracking-[0.2em] font-bold transition-all duration-300 disabled:opacity-20 disabled:cursor-not-allowed ${canGenerate && !isGenerating ? "jl-animate-glow" : ""}`}
                   style={{
                     background: canGenerate ? "linear-gradient(135deg, #1a7aef 0%, #166AD8 50%, #1260c0 100%)" : "transparent",
                     color: canGenerate ? "#fff" : "rgba(255,255,255,0.2)",
@@ -533,12 +533,12 @@ export default function EngineRoomPage() {
                   <div className="space-y-2.5">
                     <button
                       onClick={handleLoadDemo}
-                      className="w-full py-2 text-[10px] uppercase tracking-[0.15em] text-white/55 hover:text-white/70 transition-colors"
+                      className="w-full py-2 text-[12px] uppercase tracking-[0.15em] text-white/90 hover:text-white transition-colors"
                     >
                       LOAD SAMPLE DEMO
                     </button>
                     <div className="pt-1">
-                      <p className="text-[8px] uppercase tracking-[0.2em] text-white/45 mb-2">QUICK-LOAD SCENARIOS</p>
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-white/90 mb-2">QUICK-LOAD SCENARIOS</p>
                       <div className="space-y-1.5">
                         {DEMO_SCENARIOS.map((scenario, idx) => {
                           const isActive = activeScenario === scenario.name;
@@ -568,12 +568,12 @@ export default function EngineRoomPage() {
                                 </span>
                                 <div className="min-w-0 flex-1">
                                   <span
-                                    className="block text-[10px] font-semibold tracking-wide transition-colors duration-300"
-                                    style={{ color: isActive ? scenario.brandColor : `${scenario.brandColor}99` }}
+                                    className="block text-[12px] font-semibold tracking-wide transition-colors duration-300"
+                                    style={{ color: isActive ? scenario.brandColor : `${scenario.brandColor}ee` }}
                                   >
                                     {scenario.name}
                                   </span>
-                                  <span className="block text-[8px] text-white/30 group-hover:text-white/45 transition-colors mt-0.5 line-clamp-1">
+                                  <span className="block text-[10px] text-white/75 group-hover:text-white/90 transition-colors mt-0.5 line-clamp-1">
                                     {scenario.description}
                                   </span>
                                 </div>
@@ -601,7 +601,7 @@ export default function EngineRoomPage() {
           <div className="flex-1 overflow-y-auto border-t px-5 py-4 jl-scrollbar" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
             {gen.step === "idle" && !isDemoComplete && stats ? (
               <div className="space-y-2">
-                <p className="text-[9px] uppercase tracking-[0.2em] font-medium" style={{ color: "rgba(22,106,216,0.7)" }}>INDEXED CLIENTS</p>
+                <p className="text-[11px] uppercase tracking-[0.2em] font-medium" style={{ color: "rgba(22,106,216,1)" }}>INDEXED CLIENTS</p>
                 <div className="flex flex-wrap gap-1.5">
                   {displayClients.map((c) => {
                     // Highlight client tag if it matches the active scenario brand
@@ -609,14 +609,14 @@ export default function EngineRoomPage() {
                       (s) => s.seed.brand.toLowerCase() === c.toLowerCase()
                     );
                     const isHighlighted = matchingScenario && activeScenario === matchingScenario.name;
-                    const tagColor = isHighlighted ? matchingScenario.brandColor : "rgba(22,106,216,0.8)";
-                    const tagBorder = isHighlighted ? `${matchingScenario.brandColor}60` : "rgba(22,106,216,0.25)";
+                    const tagColor = isHighlighted ? matchingScenario.brandColor : "rgba(22,106,216,1)";
+                    const tagBorder = isHighlighted ? `${matchingScenario.brandColor}60` : "rgba(22,106,216,0.40)";
                     const tagBg = isHighlighted ? `${matchingScenario.brandColor}15` : "rgba(22,106,216,0.05)";
 
                     return (
                       <span
                         key={c}
-                        className="jl-tag-hover px-2 py-0.5 text-[9px] uppercase tracking-[0.1em] cursor-default transition-all duration-300"
+                        className="jl-tag-hover px-2.5 py-1 text-[11px] uppercase tracking-[0.1em] cursor-default transition-all duration-300"
                         style={{
                           color: tagColor,
                           border: `1px solid ${tagBorder}`,
@@ -635,16 +635,16 @@ export default function EngineRoomPage() {
               <div className="space-y-5">
                 {gen.chunks.length > 0 && (
                   <div>
-                    <p className="mb-2 text-[9px] uppercase tracking-[0.2em] font-medium" style={{ color: "var(--jl-sapphire)" }}>RETRIEVED — {gen.chunks.length} CHUNKS</p>
+                    <p className="mb-2 text-[11px] uppercase tracking-[0.2em] font-medium" style={{ color: "var(--jl-sapphire)" }}>RETRIEVED — {gen.chunks.length} CHUNKS</p>
                     <div className="space-y-1.5">
                       {gen.chunks.map((chunk, i) => (
                         <div key={chunk.id || i} className="p-2 jl-animate-slide-in jl-hover-lift" style={{ background: "rgba(255,255,255,0.02)", borderLeft: `2px solid ${chunk.score > 0.7 ? "var(--jl-sapphire)" : chunk.score > 0.5 ? "var(--jl-gold)" : "rgba(255,255,255,0.08)"}`, animationDelay: `${i * 50}ms` }}>
                           <div className="flex items-center justify-between mb-0.5">
-                            <span className="text-[10px] font-medium truncate max-w-[220px]" style={{ color: "var(--jl-white)" }}>{chunk.metadata.filename || "Unknown"}</span>
-                            <span className="jl-numeral text-[11px]" style={{ color: chunk.score > 0.7 ? "var(--jl-sapphire)" : chunk.score > 0.5 ? "var(--jl-gold)" : "rgba(255,255,255,0.3)" }}>{(chunk.score * 100).toFixed(0)}%</span>
+                            <span className="text-[12px] font-medium truncate max-w-[220px]" style={{ color: "var(--jl-white)" }}>{chunk.metadata.filename || "Unknown"}</span>
+                            <span className="jl-numeral text-[13px]" style={{ color: chunk.score > 0.7 ? "var(--jl-sapphire)" : chunk.score > 0.5 ? "var(--jl-gold)" : "rgba(255,255,255,0.3)" }}>{(chunk.score * 100).toFixed(0)}%</span>
                           </div>
-                          {chunk.metadata.client && <span className="text-[8px] uppercase tracking-[0.15em] text-white/60">{chunk.metadata.client}</span>}
-                          <p className="mt-1 text-[10px] text-white/65 line-clamp-2 leading-relaxed">{chunk.content}</p>
+                          {chunk.metadata.client && <span className="text-[10px] uppercase tracking-[0.15em] text-white/90">{chunk.metadata.client}</span>}
+                          <p className="mt-1 text-[12px] text-white/95 line-clamp-2 leading-relaxed">{chunk.content}</p>
                         </div>
                       ))}
                     </div>
@@ -652,16 +652,16 @@ export default function EngineRoomPage() {
                 )}
                 {gen.culturalResults.length > 0 && (
                   <div>
-                    <p className="mb-2 text-[9px] uppercase tracking-[0.2em] font-medium" style={{ color: "var(--jl-emerald)" }}>CULTURAL INTELLIGENCE — {gen.culturalResults.length} SIGNALS</p>
+                    <p className="mb-2 text-[11px] uppercase tracking-[0.2em] font-medium" style={{ color: "var(--jl-emerald)" }}>CULTURAL INTELLIGENCE — {gen.culturalResults.length} SIGNALS</p>
                     <div className="space-y-1.5">
                       {gen.culturalResults.map((result, i) => (
                         <div key={i} className="p-2 jl-animate-slide-in jl-hover-lift" style={{ background: "rgba(255,255,255,0.02)", borderLeft: "2px solid var(--jl-emerald)", animationDelay: `${i * 50}ms` }}>
                           <div className="flex items-center justify-between mb-0.5">
-                            <span className="text-[10px] font-medium truncate max-w-[250px]" style={{ color: "var(--jl-white)" }}>{result.title}</span>
-                            <span className="text-[8px] uppercase tracking-[0.15em] text-white/60">{result.source}</span>
+                            <span className="text-[12px] font-medium truncate max-w-[250px]" style={{ color: "var(--jl-white)" }}>{result.title}</span>
+                            <span className="text-[10px] uppercase tracking-[0.15em] text-white/90">{result.source}</span>
                           </div>
-                          <span className="text-[8px] uppercase tracking-[0.15em]" style={{ color: "var(--jl-emerald)" }}>{result.sourceType}</span>
-                          <p className="mt-1 text-[10px] text-white/65 line-clamp-2 leading-relaxed">{result.content}</p>
+                          <span className="text-[10px] uppercase tracking-[0.15em]" style={{ color: "var(--jl-emerald)" }}>{result.sourceType}</span>
+                          <p className="mt-1 text-[12px] text-white/95 line-clamp-2 leading-relaxed">{result.content}</p>
                         </div>
                       ))}
                     </div>
@@ -673,14 +673,17 @@ export default function EngineRoomPage() {
                 <div className="jl-ring-pulse mb-3" style={{ color: "var(--jl-sapphire)" }}>
                   <Loader2 className="h-5 w-5 animate-spin" style={{ color: "var(--jl-sapphire)" }} />
                 </div>
-                <p className="text-[10px] uppercase tracking-[0.2em] text-white/70">{gen.statusMessage}</p>
+                <p className="text-[12px] uppercase tracking-[0.2em] text-white">{gen.statusMessage}</p>
               </div>
             ) : null}
 
             {/* Footer */}
-            <div className="mt-auto px-5 py-3" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-              <p className="text-[8px] uppercase tracking-[0.15em] text-white/25">
-                &copy; {new Date().getFullYear()} Catchfire &middot; Built by Charley Scholz
+            <div className="mt-auto px-5 py-3" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+              <p className="text-[9px] uppercase tracking-[0.15em] text-white/70">
+                &copy; {new Date().getFullYear()} Johannes Leonardo
+              </p>
+              <p className="mt-0.5 text-[8px] tracking-[0.1em] text-white/55">
+                Built by Charley Scholz &middot; Co-authored: Claude Opus 4.6, Cursor IDE
               </p>
             </div>
           </div>
@@ -859,14 +862,14 @@ export default function EngineRoomPage() {
 function JLInput({ label, placeholder, value, onChange }: { label: string; placeholder: string; value: string; onChange: (value: string) => void }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[10px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,0.85)" }}>{label}</label>
+      <label className="text-[12px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,1)" }}>{label}</label>
       <input
         type="text"
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="jl-input-focus w-full border-0 border-b bg-transparent px-0 py-2 text-sm focus:outline-none focus:ring-0 placeholder:text-white/55"
-        style={{ color: "var(--jl-white)", borderColor: "rgba(255,255,255,0.20)" }}
+        className="jl-input-focus w-full border-0 border-b bg-transparent px-0 py-2 text-[15px] focus:outline-none focus:ring-0 placeholder:text-white/90"
+        style={{ color: "var(--jl-white)", borderColor: "rgba(255,255,255,0.50)" }}
       />
     </div>
   );

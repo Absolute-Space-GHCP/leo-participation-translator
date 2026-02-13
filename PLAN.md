@@ -1,9 +1,9 @@
 # The Participation Translator - Implementation Plan
 
-Version: 1.1.0
-Last Updated: 2026-02-06
+Version: 1.2.0
+Last Updated: 2026-02-13
 Author: Charley Scholz, JLIT
-Co-authored: Claude Opus 4.6, Claude Code (coding assistant), Cursor (IDE)
+Co-authored: Claude Opus 4.6, Cursor (IDE)
 
 ---
 
@@ -38,11 +38,11 @@ The Participation Translator is an internal AI-powered strategic tool that trans
 | **0** | Foundation Setup | ✅ COMPLETE | 100% |
 | **1** | Knowledge Base & RAG Core | ✅ COMPLETE | ~95% (Vector Search upgrade pending) |
 | **1.5** | Learning/Evolution System | ✅ COMPLETE | 100% |
-| **2** | 8-Part Framework Integration | 🔜 READY | 0% (waiting for Leo) |
-| **3** | Cultural Intelligence Layer | 🔄 IN PROGRESS | ~55% |
-| **4** | User Interface & Presentation | 🔄 SCAFFOLDED | ~25% |
-| **5** | Testing & Refinement | ⏳ PENDING | 0% |
-| **6** | Deployment & Training | ⏳ PENDING | 0% |
+| **2** | 8-Part Framework Integration | ✅ COMPLETE | 100% (integrated into generation) |
+| **3** | Cultural Intelligence Layer | ✅ COMPLETE | 100% (Exa.ai + Tavily) |
+| **4** | User Interface & Presentation | ✅ COMPLETE | ~85% (3 demo modes + Engine Room + auth) |
+| **5** | Testing & Refinement | 🔄 IN PROGRESS | ~20% (live testing with Leo) |
+| **6** | Deployment & Training | ✅ DEPLOYED | 90% (Cloud Run live, auth active) |
 | **M** | Maintenance / Compatibility | ✅ COMPLETE | 100% |
 | **B** | JL Branding Toolkit | 🆕 AWAITING FILE | 0% |
 | **E** | Exploration / R&D | 🆕 NEW | 0% |
@@ -241,16 +241,17 @@ The tool generates a **presentation-ready deck** that Leo can use directly with 
 
 | Layer                      | Technology                          | Rationale                         |
 | -------------------------- | ----------------------------------- | --------------------------------- |
-| **Frontend**               | Next.js 14 + React 18               | Modern web app, SSR, API routes   |
-| **Backend API**            | Node.js 22 LTS + Express            | Matches existing stack            |
-| **Reasoning Engine**       | Claude Opus 4.6 (configurable)      | Best-in-class strategic reasoning |
+| **Frontend**               | Next.js 16 + React 19               | Modern web app, SSR, API routes   |
+| **Backend API**            | Node.js 22 LTS + Next.js API Routes | Unified frontend + backend        |
+| **Auth**                   | NextAuth.js + Google OAuth           | Email allowlist, JWT sessions     |
+| **Reasoning Engine**       | Claude Sonnet 4.5 (configurable)    | Best-in-class strategic reasoning |
 | **Embedding Model**        | Vertex AI text-embedding-005        | Google ecosystem, high quality    |
 | **Vector Store**           | Firestore (current) → Vector Search | GCP-native, production upgrade    |
 | **Document Storage**       | Cloud Storage                       | Presentation files                |
 | **Session/Output Storage** | Cloud Firestore                     | Real-time, scalable               |
 | **Search API**             | Exa.ai + Tavily                     | Cultural momentum discovery       |
-| **Presentation Gen**       | PptxGenJS + Custom Templates        | Native PPTX generation            |
-| **Deployment**             | Cloud Run                           | Serverless, auto-scaling          |
+| **PDF Export**             | jsPDF                                | Client-side PDF generation        |
+| **Deployment**             | Cloud Run (Dockerfile, standalone)   | Serverless, auto-scaling          |
 
 ### AI Model Configuration
 
@@ -396,25 +397,23 @@ See [docs/EVOLUTION.md](/docs/EVOLUTION.md) for full architecture.
 
 ---
 
-### Phase 2: 8-Part Framework Integration 🔜 READY
+### Phase 2: 8-Part Framework Integration ✅ COMPLETE
 
 **Goal:** Codify the Participation Framework as system prompts
 
-**Dependency:** Requires Leo's input on framework nuances
-
 | Task | Description                    | Deliverable                         | Status |
 | ---- | ------------------------------ | ----------------------------------- | ------ |
-| 2.1  | Document framework sections    | Detailed spec per section           | ⏳ PENDING |
-| 2.2  | Create system prompt templates | `/prompts/` directory               | ⏳ PENDING |
-| 2.3  | Build prompt assembly service  | Dynamic prompt construction         | ⏳ PENDING |
-| 2.4  | Implement Claude integration   | Vertex AI Claude calls              | ⏳ PENDING |
-| 2.5  | Create output formatters       | Structured JSON → display           | ⏳ PENDING |
-| 2.6  | Test with sample inputs        | Validation outputs                  | ⏳ PENDING |
-| 2.7  | Integrate evolution context    | Context injection before generation | ⏳ PENDING |
+| 2.1  | Document framework sections    | 9 sections defined in system prompt | ✅ DONE |
+| 2.2  | Create system prompt templates | `app/src/lib/prompts.ts`            | ✅ DONE |
+| 2.3  | Build prompt assembly service  | Dynamic prompt construction         | ✅ DONE |
+| 2.4  | Implement Claude integration   | `app/src/lib/claude.ts` (Direct + Vertex) | ✅ DONE |
+| 2.5  | Create output formatters       | 3-tab display (Strategic/Exec/Pack) | ✅ DONE |
+| 2.6  | Test with sample inputs        | 3 quick-load scenarios + demo       | ✅ DONE |
+| 2.7  | Integrate evolution context    | Context injection before generation | ✅ DONE |
 
 ---
 
-### Phase 3: Cultural Intelligence Layer 🔄 ~55% COMPLETE
+### Phase 3: Cultural Intelligence Layer ✅ COMPLETE
 
 **Goal:** Real-time trend and subculture discovery
 
@@ -436,7 +435,7 @@ See [docs/CULTURAL_INTELLIGENCE.md](/docs/CULTURAL_INTELLIGENCE.md) for full res
 
 ---
 
-### Phase 4: User Interface & Presentation Generation 🔄 ~25% SCAFFOLDED
+### Phase 4: User Interface & Presentation Generation ✅ ~85% COMPLETE
 
 **Goal:** Build Leo-friendly web application with presentation-ready output
 
@@ -445,17 +444,18 @@ See [docs/CULTURAL_INTELLIGENCE.md](/docs/CULTURAL_INTELLIGENCE.md) for full res
 | 4.0  | Create Next.js app              | `app/` directory                   | ✅ DONE |
 | 4.0b | Install shadcn/ui               | 14 components installed            | ✅ DONE |
 | 4.0c | Create landing page             | `app/src/app/page.tsx`             | ✅ DONE |
-| 4.0d | Create generation wizard        | `app/src/app/generate/`            | ✅ DONE |
-| 4.0e | Create history page             | `app/src/app/history/`             | ✅ DONE |
-| 4.1  | Connect frontend to backend     | API route integration              | ⏳ PENDING |
-| 4.2  | Build generation progress UI    | Real-time streaming                | ⏳ PENDING |
-| 4.3  | Create JL presentation template | Branded PPTX master                | ⏳ PENDING |
-| 4.4  | Build PPTX generation engine    | PptxGenJS integration              | ⏳ PENDING |
-| 4.5  | Build slide preview components  | In-browser deck view               | ⏳ PENDING |
-| 4.6  | Add export functionality        | PPTX, PDF, Google Slides           | ⏳ PENDING |
-| 4.7  | Implement history/saved outputs | User sessions with preview         | ⏳ PENDING |
-| 4.8  | Create feedback dashboard       | Ratings, corrections, suggestions  | ⏳ PENDING |
-| 4.9  | Mobile responsiveness           | iPad-friendly                      | ⏳ PENDING |
+| 4.0d | Create 3 demo modes             | Option A/B/C pages                 | ✅ DONE |
+| 4.0e | Create Engine Room dashboard    | `app/src/app/option-c/page.tsx`    | ✅ DONE |
+| 4.1  | Connect frontend to backend     | 5 API routes (generate/upload/stats/email/auth) | ✅ DONE |
+| 4.2  | Build generation progress UI    | SSE streaming with live tabs       | ✅ DONE |
+| 4.3  | Build auth system               | NextAuth + Google OAuth + allowlist| ✅ DONE |
+| 4.4  | Create login page               | `app/src/app/login/page.tsx`       | ✅ DONE |
+| 4.5  | Add PDF export                  | jsPDF client-side download         | ✅ DONE |
+| 4.6  | Add file upload + extraction    | PPTX/PDF/DOCX/TXT in-memory       | ✅ DONE |
+| 4.7  | Create JL presentation template | Branded PPTX master                | ⏳ PENDING |
+| 4.8  | Build PPTX generation engine    | PptxGenJS integration              | ⏳ PENDING |
+| 4.9  | Implement history/saved outputs | User sessions with preview         | ⏳ PENDING |
+| 4.10 | Create feedback dashboard       | Ratings, corrections, suggestions  | ⏳ PENDING |
 
 ---
 
@@ -473,17 +473,19 @@ See [docs/CULTURAL_INTELLIGENCE.md](/docs/CULTURAL_INTELLIGENCE.md) for full res
 
 ---
 
-### Phase 6: Deployment & Training ⏳ PENDING
+### Phase 6: Deployment & Training ✅ DEPLOYED
 
 **Goal:** Production launch and user onboarding
 
 | Task | Description               | Deliverable            | Status |
 | ---- | ------------------------- | ---------------------- | ------ |
-| 6.1  | Production deployment     | Live Cloud Run service | ⏳ PENDING |
-| 6.2  | Create user documentation | User guide for Leo     | ⏳ PENDING |
-| 6.3  | Training session          | 1:1 walkthrough        | ⏳ PENDING |
-| 6.4  | Feedback collection       | Iteration backlog      | ⏳ PENDING |
-| 6.5  | Handoff documentation     | Maintenance guide      | ⏳ PENDING |
+| 6.1  | Production deployment     | Cloud Run: `https://participation-translator-904747039219.us-central1.run.app` | ✅ DONE |
+| 6.2  | Auth system (Google OAuth)| NextAuth.js + email allowlist (3 users) | ✅ DONE |
+| 6.3  | Dockerfile + standalone   | `app/Dockerfile`, `output: "standalone"` | ✅ DONE |
+| 6.4  | Create user documentation | Demo walkthrough for Leo | ✅ DONE |
+| 6.5  | Training session          | 1:1 walkthrough with Leo | 🔄 IN PROGRESS |
+| 6.6  | Feedback collection       | Iteration backlog      | ⏳ PENDING |
+| 6.7  | Handoff documentation     | Maintenance guide      | ⏳ PENDING |
 
 ---
 
@@ -672,7 +674,7 @@ import PptxGenJS from "pptxgenjs";
 | System             | Integration Method             | Purpose                  | Status |
 | ------------------ | ------------------------------ | ------------------------ | ------ |
 | **GCP Vertex AI**  | SDK (@google-cloud/aiplatform) | Claude, embeddings       | ✅ Active |
-| **Cloud Run**      | gcloud CLI deploy              | Serverless hosting       | ⏳ Pending |
+| **Cloud Run**      | Dockerfile + `gcloud run deploy --source .` | Serverless hosting | ✅ LIVE |
 | **Cloud Storage**  | SDK (@google-cloud/storage)    | Document storage         | ✅ Active |
 | **Firestore**      | SDK (firebase-admin)           | Session/output storage   | ✅ Active |
 | **GitHub Actions** | Workflow YAML                  | CI/CD pipeline           | ⏳ Pending |
@@ -681,9 +683,12 @@ import PptxGenJS from "pptxgenjs";
 ### Authentication Flow
 
 ```
-User → Cloud IAP (Identity-Aware Proxy) → Cloud Run → GCP APIs
+User → NextAuth.js (Google OAuth) → JWT Session → Middleware → Cloud Run → GCP APIs
                      ↓
-              JL Google Workspace
+              Email Allowlist:
+              - charleys@johannesleonardo.com
+              - leop@johannesleonardo.com
+              - janj@johannesleonardo.com
 ```
 
 ---
@@ -730,12 +735,11 @@ On-demand: User queries pull fresh + cached cultural data
 
 ### Environment Tiers
 
-| Environment     | URL                          | Purpose           | Status |
-| --------------- | ---------------------------- | ----------------- | ------ |
-| **Development** | localhost:3000               | Local development | ✅ Active |
-| **Dashboard**   | localhost:8080               | Progress tracking | ✅ Local only |
-| **Staging**     | participation-staging.jl.dev | Testing/QA        | ⏳ Pending |
-| **Production**  | participation.jl.dev         | Leo's access      | ⏳ Pending |
+| Environment     | URL                                                                      | Purpose           | Status |
+| --------------- | ------------------------------------------------------------------------ | ----------------- | ------ |
+| **Development** | `http://localhost:3005`                                                  | Local development | ✅ Active |
+| **Dashboard**   | `http://localhost:8080`                                                  | Progress tracking | ✅ Local only |
+| **Production**  | `https://participation-translator-904747039219.us-central1.run.app`      | Leo's access      | ✅ LIVE |
 
 ### Cloud Run Configuration
 
@@ -873,5 +877,5 @@ _This plan is a living document. Update as requirements evolve._
 ---
 
 Author: Charley Scholz, JLIT
-Co-authored: Claude Opus 4.6, Claude Code (coding assistant), Cursor (IDE)
-Last Updated: 2026-02-06
+Co-authored: Claude Opus 4.6, Cursor (IDE)
+Last Updated: 2026-02-13

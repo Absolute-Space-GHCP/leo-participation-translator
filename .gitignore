@@ -64,3 +64,4 @@ data/uploads/
 
 # Session lock (regenerated per session)
 sessions/.session_started
+oauth-client.json

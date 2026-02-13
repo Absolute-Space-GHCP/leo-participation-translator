@@ -1,6 +1,6 @@
 {
   "name": "participation-translator",
-  "version": "1.0.1",
+  "version": "1.2.0",
   "description": "The Participation Translator - Transform ideas into participation-worthy platforms",
   "private": true,
   "author": "Charley Scholz, JLIT",
@@ -23,6 +23,7 @@
     "lucide-react": "^0.563.0",
     "mammoth": "^1.11.0",
     "next": "16.1.6",
+    "next-auth": "^4.24.13",
     "next-themes": "^0.4.6",
     "pdf-parse": "^2.4.5",
     "pizzip": "^3.2.0",

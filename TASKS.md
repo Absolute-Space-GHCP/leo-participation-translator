@@ -1,7 +1,7 @@
 # TODO - The Participation Translator
 
-Version: 1.2.0
-Last Updated: 2026-02-11
+Version: 1.3.0
+Last Updated: 2026-02-13
 Purpose: Tracks implementation progress across all phases
 
 Priority Legend: HIGH | MEDIUM | LOW
@@ -9,14 +9,16 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 
 ---
 
-## Current Status: Demo Active + Full Pipeline Connected
+## Current Status: DEPLOYED to Cloud Run + Auth Live
 
 **Architecture:** Multi-agent with specialized subagents, knowledge graph, task routing
 **Vector Store:** 23 documents, 1,186 chunks indexed (re-indexed Feb 10)
 **Cultural Intel:** Exa.ai + Tavily connected in parallel ✅
 **Generation:** Claude Sonnet 4.5 via Vertex AI with SSE streaming ✅
 **Frontend:** Engine Room dashboard (Option C) — full pipeline visibility ✅
-**Focus:** Demo validation with Leo & Jan → accuracy testing → production
+**Auth:** NextAuth.js Google OAuth — 3 JL email allowlist ✅
+**Deployment:** Cloud Run — `https://participation-translator-904747039219.us-central1.run.app` ✅
+**Focus:** Live testing with Leo & Jan → iteration → production hardening
 
 ---
 
@@ -135,9 +137,27 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 | Landing page with option picker   | ✅ DONE | `app/src/app/page.tsx`                         |
 | Option A: Clean Sheet             | ✅ DONE | `app/src/app/option-a/page.tsx`                |
 | Option B: Guided Flow             | ✅ DONE | `app/src/app/option-b/` (input + results)      |
+| PDF export (jsPDF)                | ✅ DONE | Client-side download with title page           |
+| Copy to clipboard                 | ✅ DONE | Per-tab content copy                           |
+| Refine with feedback              | ✅ DONE | Re-generate with user notes                    |
 | PPTX export                       | PENDING | PptxGenJS integration                          |
 | History / saved outputs           | PENDING | Session persistence                            |
 | Feedback dashboard                | PENDING | Ratings, corrections                           |
+
+## Phase 6: Deployment & Auth — COMPLETE
+
+| Task                              | Status  | Notes                                          |
+| --------------------------------- | ------- | ---------------------------------------------- |
+| NextAuth.js + Google OAuth        | ✅ DONE | `app/src/lib/auth.ts` (Feb 13)                 |
+| Login page (JL-branded)           | ✅ DONE | `app/src/app/login/page.tsx`                   |
+| Auth middleware (route protection) | ✅ DONE | `app/src/middleware.ts`                        |
+| AuthProvider (session context)    | ✅ DONE | `app/src/components/auth-provider.tsx`          |
+| Email allowlist (3 users)         | ✅ DONE | charleys@, leop@, janj@johannesleonardo.com   |
+| Dockerfile + standalone build     | ✅ DONE | `app/Dockerfile`, `next.config.ts` standalone  |
+| Cloud Run deployment              | ✅ DONE | `https://participation-translator-904747039219.us-central1.run.app` |
+| OAuth client setup (GCP)          | ✅ DONE | Client ID + redirect URIs configured           |
+| Footer branding update            | ✅ DONE | "Johannes Leonardo" + authorship credit        |
+| Sidebar brightness improvements   | ✅ DONE | Multiple passes for readability                |
 
 ---
 
@@ -438,11 +458,12 @@ Browser                   API Route                  External Services
 
 | # | Task | Description | Complexity | Status |
 |---|------|-------------|------------|--------|
-| 6.1 | Production deployment | Live Cloud Run service | Medium | PENDING |
-| 6.2 | Create user documentation | User guide for Leo | Low | PENDING |
-| 6.3 | Training session | 1:1 walkthrough | Low | PENDING |
-| 6.4 | Feedback collection | Iteration backlog | Low | PENDING |
-| 6.5 | Handoff documentation | Maintenance guide | Low | PENDING |
+| 6.1 | Production deployment | Cloud Run live with Dockerfile | Medium | ✅ DONE |
+| 6.2 | Auth system | NextAuth.js + Google OAuth + email allowlist | Medium | ✅ DONE |
+| 6.3 | Create user documentation | Demo walkthrough for Leo | Low | ✅ DONE |
+| 6.4 | Training session | 1:1 walkthrough with Leo | Low | IN PROGRESS |
+| 6.5 | Feedback collection | Iteration backlog | Low | PENDING |
+| 6.6 | Handoff documentation | Maintenance guide | Low | PENDING |
 
 ---
 
@@ -557,5 +578,5 @@ npm run cultural -- sentiment "Nike brand" --brand Nike --deep  # Full analysis
 ---
 
 Author: Charley Scholz, JLIT
-Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
-Last Updated: 2026-02-05
+Co-authored: Claude Opus 4.6, Cursor (IDE)
+Last Updated: 2026-02-13

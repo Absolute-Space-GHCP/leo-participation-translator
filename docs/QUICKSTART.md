@@ -1,7 +1,7 @@
 # Quickstart Guide
 
-Version: 1.0.0
-Last Updated: 2026-02-06
+Version: 1.1.0
+Last Updated: 2026-02-13
 
 ---
 
@@ -103,14 +103,21 @@ npm run cultural -- answer "What are Gen Z's favorite dairy brands?"
 
 ---
 
-## 7. Frontend (Phase 4 — Scaffolded)
+## 7. Frontend (Web UI)
 
 ```bash
 cd app
 npm install
-npm run dev
-# Opens at http://localhost:3000
+npx next dev --port 3005
+# Opens at http://localhost:3005
 ```
+
+**Authentication:** All routes require Google OAuth login. Only allowlisted JL emails can access:
+- `charleys@johannesleonardo.com`
+- `leop@johannesleonardo.com`
+- `janj@johannesleonardo.com`
+
+**Production URL:** `https://participation-translator-904747039219.us-central1.run.app`
 
 ---
 
@@ -124,5 +131,5 @@ npm run dev
 ---
 
 Author: Charley Scholz, JLIT
-Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
-Last Updated: 2026-02-06
+Co-authored: Claude Opus 4.6, Cursor (IDE)
+Last Updated: 2026-02-13

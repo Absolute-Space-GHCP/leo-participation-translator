@@ -1,7 +1,7 @@
 # CLAUDE.md - The Participation Translator
 
-Version: 1.1.0
-Last Updated: 2026-02-05
+Version: 1.2.0
+Last Updated: 2026-02-13
 Purpose: Project-specific context for AI assistants working on The Participation Translator
 
 ---
@@ -109,17 +109,18 @@ The Participation Translator uses specialized agents for different tasks:
 
 | Layer                | Technology                                            |
 | -------------------- | ----------------------------------------------------- |
-| **Frontend**         | Next.js 14 + React 18 + Tailwind CSS                  |
+| **Frontend**         | Next.js 16 + React 19 + Tailwind CSS                  |
 | **Backend**          | Node.js 22 LTS + Next.js API Routes                   |
-| **Reasoning Engine** | Claude Opus 4.6 (primary) / Sonnet 4.5 (fallback)     |
+| **Auth**             | NextAuth.js + Google OAuth (email allowlist)           |
+| **Reasoning Engine** | Claude Sonnet 4.5 (primary) / Vertex AI (fallback)    |
 | **Task Routing**     | Complexity-based model selection                      |
 | **Embeddings**       | Vertex AI text-embedding-005                          |
-| **Vector Store**     | Vertex AI Vector Search                               |
+| **Vector Store**     | Cloud Firestore (vector search)                       |
 | **Knowledge Graph**  | Patterns, campaigns, cultural moments                 |
-| **Cultural APIs**    | Exa.ai, Perplexity API (Phase 3)                      |
+| **Cultural APIs**    | Exa.ai, Tavily (4 parallel searches)                  |
 | **Storage**          | Cloud Firestore, Cloud Storage                        |
-| **Presentation**     | PptxGenJS (PPTX), Google Slides API (future)          |
-| **Deployment**       | Cloud Run                                             |
+| **PDF Export**       | jsPDF                                                 |
+| **Deployment**       | Cloud Run (Dockerfile, standalone output)              |
 
 ### Architecture Flow
 
@@ -148,33 +149,36 @@ Project Seed → rag-engineer → Retrieved Context
 leo-participation-translator/
 ├── .cursor/
 │   ├── agents/                 # Specialized subagents
-│   │   ├── document-analyzer.md
-│   │   ├── rag-engineer.md
-│   │   ├── cultural-intelligence.md (placeholder)
-│   │   ├── participation-strategist.md (placeholder)
-│   │   └── presentation-generator.md (placeholder)
-│   ├── rules/
-│   │   └── agents.mdc          # Agent delegation rules
-│   └── skills/
-│       ├── participation-rag/  # RAG operations skill
-│       └── document-analysis/  # Parsing skill
-├── src/
-│   ├── app/                    # Next.js App Router (Phase 4)
-│   ├── lib/
-│   │   ├── memory/             # Knowledge graph
-│   │   ├── router/             # Task routing
-│   │   ├── parsers/            # Document parsing
-│   │   ├── embeddings/         # Vector operations
-│   │   ├── cultural/           # Trend APIs (Phase 3)
-│   │   ├── generation/         # Claude integration (Phase 2)
-│   │   └── export/             # Google Slides export (Phase 4)
-│   └── prompts/                # System prompts
-├── docs/
-│   ├── GCP_SETUP.md            # GCP configuration guide
-│   └── ARCHITECTURE-*.md       # Technical architecture
+│   ├── rules/                  # Workspace rules
+│   └── skills/                 # Agent skills (RAG, branding, etc.)
+├── app/                        # Next.js application
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── api/            # API routes (generate, upload, stats, email, auth)
+│   │   │   ├── login/          # Google OAuth login page
+│   │   │   ├── option-a/       # Clean Sheet demo
+│   │   │   ├── option-b/       # Guided Flow demo
+│   │   │   ├── option-c/       # Engine Room dashboard
+│   │   │   ├── layout.tsx      # Root layout with AuthProvider
+│   │   │   └── page.tsx        # Landing page (3-option selector)
+│   │   ├── components/         # UI components (shadcn/ui + auth-provider)
+│   │   ├── lib/                # Core libraries
+│   │   │   ├── auth.ts         # NextAuth config + email allowlist
+│   │   │   ├── claude.ts       # Claude API client (Direct + Vertex)
+│   │   │   ├── cultural.ts     # Exa.ai + Tavily integration
+│   │   │   ├── embeddings.ts   # Firestore vector search
+│   │   │   ├── prompts.ts      # System/user prompt assembly
+│   │   │   └── ...             # PDF export, file parsing, etc.
+│   │   └── middleware.ts       # Auth middleware (route protection)
+│   ├── Dockerfile              # Cloud Run production image
+│   ├── .dockerignore
+│   └── next.config.ts          # standalone output mode
+├── src/                        # CLI tools (ingestion, embeddings)
+├── data/                       # Presentations, manifests
+├── docs/                       # Project documentation
 ├── sessions/                   # Session logs
-├── PLAN.md                     # Implementation roadmap
 ├── CLAUDE.md                   # This file
+├── PLAN.md                     # Implementation roadmap
 └── TASKS.md                    # Task tracking
 ```
 
@@ -196,34 +200,43 @@ leo-participation-translator/
 | Phase         | Description                  | Status                  |
 | ------------- | ---------------------------- | ----------------------- |
 | **Phase 0**   | Foundation Setup             | ✅ COMPLETE             |
-| **Phase 1**   | Knowledge Base & RAG Core    | ✅ COMPLETE (need docs) |
+| **Phase 1**   | Knowledge Base & RAG Core    | ✅ COMPLETE             |
 | **Phase 1.5** | Learning/Evolution System    | ✅ COMPLETE             |
-| **Phase 2**   | 8-Part Framework Integration | 🔜 READY FOR LEO        |
-| **Phase 3**   | Cultural Intelligence Layer  | 🔄 ~55% (APIs integrated) |
-| **Phase 4**   | User Interface               | ✅ SCAFFOLDED           |
-| **Phase 5**   | Testing & Refinement         | ⏳ PENDING              |
-| **Phase 6**   | Deployment & Training        | ⏳ PENDING              |
+| **Phase 2**   | 8-Part Framework Integration | ✅ COMPLETE             |
+| **Phase 3**   | Cultural Intelligence Layer  | ✅ COMPLETE (Exa.ai + Tavily) |
+| **Phase 4**   | User Interface               | ✅ COMPLETE (3 demo modes + Engine Room) |
+| **Phase 5**   | Testing & Refinement         | 🔄 IN PROGRESS          |
+| **Phase 6**   | Deployment & Training        | ✅ DEPLOYED (Cloud Run) |
 
 ---
 
 ## GCP Project
 
-- **Project ID:** `participation-translator` ✅ Created
+- **Project ID:** `jl-participation-translator`
 - **Region:** `us-central1`
-- **Services:** Cloud Run, Firestore, Cloud Storage, Vertex AI
+- **Services:** Cloud Run, Firestore, Cloud Storage, Vertex AI, Cloud Build, Artifact Registry
 - **Service Account:** `participation-translator-sa@participation-translator.iam.gserviceaccount.com`
 - **Buckets:** `participation-translator-documents`, `participation-translator-exports`
+- **Production URL:** `https://participation-translator-904747039219.us-central1.run.app`
+
+### Authentication
+
+- **Provider:** Google OAuth via NextAuth.js
+- **Email Allowlist:** `charleys@johannesleonardo.com`, `leop@johannesleonardo.com`, `janj@johannesleonardo.com`
+- **Strategy:** JWT sessions + auth middleware on all routes
+- **Login Page:** `/login` (JL-branded)
 
 ---
 
 ## API Dependencies
 
-| API            | Purpose                     | Credentials              |
-| -------------- | --------------------------- | ------------------------ |
-| **Vertex AI**  | Claude Opus 4.6, Embeddings | GCP Service Account      |
-| **Exa.ai**     | Semantic web search         | API Key (Secret Manager) |
-| **Perplexity** | Search + summarization      | API Key (Secret Manager) |
-| **Brandwatch** | Social listening (optional) | Enterprise subscription  |
+| API             | Purpose                     | Credentials              |
+| --------------- | --------------------------- | ------------------------ |
+| **Anthropic**   | Claude Sonnet 4.5 (primary) | API Key (env var)        |
+| **Vertex AI**   | Embeddings, Claude fallback | GCP Service Account      |
+| **Exa.ai**      | Semantic web search         | API Key (env var)        |
+| **Tavily**      | Search + summarization      | API Key (env var)        |
+| **Google OAuth** | User authentication        | OAuth Client ID/Secret   |
 
 ---
 
@@ -290,13 +303,16 @@ leo-participation-translator/
 
 ## Quick Reference
 
-| Action           | Command / Location              |
-| ---------------- | ------------------------------- |
-| Start dev server | `npm run dev` (after setup)     |
-| Run tests        | `npm test`                      |
-| Build            | `npm run build`                 |
-| Deploy           | `gcloud run deploy`             |
-| Ingest documents | `npm run ingest -- <file>`      |
+| Action           | Command / Location                                                      |
+| ---------------- | ----------------------------------------------------------------------- |
+| Start dev server | `cd app && npx next dev --port 3005`                                    |
+| Run tests        | `npm test`                                                              |
+| Build            | `cd app && npm run build`                                               |
+| Deploy           | `cd app && gcloud run deploy participation-translator --source . --region us-central1 --project jl-participation-translator` |
+| Ingest documents | `npx tsx src/ingest.ts <file>`                                          |
+| Landing page     | `http://localhost:3005/` (dev) or production URL                        |
+| Engine Room      | `http://localhost:3005/option-c` (dev) or production `/option-c`        |
+| Production URL   | `https://participation-translator-904747039219.us-central1.run.app`     |
 
 ---
 
@@ -311,5 +327,5 @@ leo-participation-translator/
 ---
 
 Author: Charley Scholz, JLIT
-Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
-Last Updated: 2026-02-05
+Co-authored: Claude Opus 4.6, Cursor (IDE)
+Last Updated: 2026-02-13

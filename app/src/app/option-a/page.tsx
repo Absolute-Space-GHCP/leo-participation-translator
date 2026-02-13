@@ -294,9 +294,9 @@ export default function OptionAPage() {
 
       {/* Footer */}
       <footer className="border-t py-6 text-center text-sm text-muted-foreground">
-        <p>&copy; {new Date().getFullYear()} Catchfire. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Johannes Leonardo</p>
         <p className="mt-1 text-xs text-muted-foreground/60">
-          The Participation Translator &middot; Built by Charley Scholz
+          Built by Charley Scholz &middot; Co-authored: Claude Opus 4.6, Cursor IDE
         </p>
       </footer>
     </div>

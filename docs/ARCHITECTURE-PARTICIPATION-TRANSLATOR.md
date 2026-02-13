@@ -1,9 +1,9 @@
 # Participation Translator - Technical Architecture
 
-Version: 1.0.1
-Last Updated: 2026-02-03
+Version: 1.1.0
+Last Updated: 2026-02-13
 Author: Charley Scholz, JLIT
-Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
+Co-authored: Claude Opus 4.6, Cursor (IDE)
 
 ---
 
@@ -17,7 +17,7 @@ This document details the technical architecture for The Participation Translato
 
 ### 1. Frontend Application
 
-**Technology:** Next.js 14 with App Router, React 18, Tailwind CSS
+**Technology:** Next.js 16 with App Router, React 19, Tailwind CSS, NextAuth.js
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -25,25 +25,23 @@ This document details the technical architecture for The Participation Translato
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
 │  ┌─────────────────────────────────────────────────────────┐    │
-│  │                    App Router (Next.js 14)               │    │
-│  │  /                     → Landing page                    │    │
-│  │  /generate             → Multi-step generation wizard    │    │
-│  │  /generate/[id]        → View generation in progress     │    │
-│  │  /history              → Past outputs list               │    │
-│  │  /history/[id]         → View specific output            │    │
-│  │  /admin/ingest         → Document upload (admin)         │    │
+│  │                    App Router (Next.js 16)               │    │
+│  │  /                     → Landing page (3-option picker)  │    │
+│  │  /login                → Google OAuth login (JL-branded) │    │
+│  │  /option-a             → Clean Sheet demo                │    │
+│  │  /option-b             → Guided Flow demo                │    │
+│  │  /option-c             → Engine Room dashboard           │    │
+│  │  /api/auth/[...nextauth] → NextAuth API routes           │    │
+│  │  /api/generate         → SSE streaming generation        │    │
+│  │  /api/upload           → File upload + text extraction   │    │
+│  │  /api/stats            → Knowledge base statistics       │    │
+│  │  /api/email            → Email delivery (optional)       │    │
 │  └─────────────────────────────────────────────────────────┘    │
 │                              │                                   │
 │  ┌───────────────────────────┴───────────────────────────┐      │
-│  │                  Component Library                     │      │
-│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐   │      │
-│  │  │ SeedForm    │  │ OutputView  │  │ ExportMenu  │   │      │
-│  │  │ (wizard)    │  │ (blueprint) │  │ (PDF/PPTX)  │   │      │
-│  │  └─────────────┘  └─────────────┘  └─────────────┘   │      │
-│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐   │      │
-│  │  │ ProgressBar │  │ TrendCard   │  │ HistoryList │   │      │
-│  │  │ (streaming) │  │ (cultural)  │  │ (sessions)  │   │      │
-│  │  └─────────────┘  └─────────────┘  └─────────────┘   │      │
+│  │            Auth Middleware (middleware.ts)              │      │
+│  │  Protects all routes except /login, /api/auth, static │      │
+│  │  Redirects unauthenticated → /login with callbackUrl  │      │
 │  └───────────────────────────────────────────────────────┘      │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘
@@ -52,9 +50,10 @@ This document details the technical architecture for The Participation Translato
 **Key Features:**
 
 - Server-side rendering for SEO and performance
-- Streaming responses for real-time generation feedback
-- Responsive design (desktop + iPad)
-- Dark mode support
+- SSE streaming responses for real-time blueprint generation
+- Google OAuth authentication with JL email allowlist
+- Responsive dark-mode design (desktop + iPad)
+- 3-tab output (Strategic Narrative, Executional, Participation Pack)
 
 ### 2. Backend API Layer
 
@@ -440,9 +439,9 @@ const generateBlueprint = async (input: GenerationInput) => {
 │  │                           VPC Network                                    │    │
 │  │                                                                          │    │
 │  │  ┌───────────────────┐        ┌───────────────────┐                     │    │
-│  │  │   Cloud Load      │        │   Cloud IAP       │                     │    │
-│  │  │   Balancer        │◄──────►│   (Auth)          │                     │    │
-│  │  │   (HTTPS)         │        │                   │                     │    │
+│  │  │   Cloud Run       │        │   NextAuth.js     │                     │    │
+│  │  │   HTTPS           │◄──────►│   (Google OAuth)  │                     │    │
+│  │  │   (Auto TLS)      │        │                   │                     │    │
 │  │  └─────────┬─────────┘        └───────────────────┘                     │    │
 │  │            │                                                             │    │
 │  │            ▼                                                             │    │
@@ -475,8 +474,8 @@ const generateBlueprint = async (input: GenerationInput) => {
 │  │                        External Services                                 │    │
 │  │                                                                          │    │
 │  │  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐                  │    │
-│  │  │ Exa.ai      │    │ Perplexity  │    │ Zapier      │                  │    │
-│  │  │ (Search)    │    │ (Search)    │    │ (Automation)│                  │    │
+│  │  │ Exa.ai      │    │ Tavily      │    │ Anthropic   │                  │    │
+│  │  │ (Search)    │    │ (Search)    │    │ (Claude)    │                  │    │
 │  │  └─────────────┘    └─────────────┘    └─────────────┘                  │    │
 │  │                                                                          │    │
 │  └─────────────────────────────────────────────────────────────────────────┘    │
@@ -492,9 +491,9 @@ const generateBlueprint = async (input: GenerationInput) => {
 
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│   User      │     │ Cloud IAP   │     │ Cloud Run   │     │ GCP APIs    │
+│   User      │     │ NextAuth.js │     │ Cloud Run   │     │ GCP APIs    │
 │   Browser   │     │ (Google     │     │ Service     │     │             │
-│             │     │ Workspace)  │     │             │     │             │
+│             │     │ OAuth)      │     │             │     │             │
 └──────┬──────┘     └──────┬──────┘     └──────┬──────┘     └──────┬──────┘
        │                   │                   │                   │
        │  HTTPS Request    │                   │                   │
@@ -503,6 +502,8 @@ const generateBlueprint = async (input: GenerationInput) => {
        │  Google Login     │                   │                   │
        │◄─────────────────►│                   │                   │
        │                   │                   │                   │
+       │  Check Allowlist  │                   │                   │
+       │  (JWT Session)    │                   │                   │
        │                   │  Authenticated    │                   │
        │                   │  Request          │                   │
        │                   │──────────────────►│                   │
@@ -515,18 +516,25 @@ const generateBlueprint = async (input: GenerationInput) => {
        │                   │◄──────────────────│                   │
        │◄──────────────────│                   │                   │
        │                   │                   │                   │
+
+Email Allowlist:
+  - charleys@johannesleonardo.com
+  - leop@johannesleonardo.com
+  - janj@johannesleonardo.com
 ```
 
 ### API Key Management
 
 | Key                              | Storage              | Purpose                     |
 | -------------------------------- | -------------------- | --------------------------- |
-| `EXA_API_KEY`                    | Secret Manager       | Exa.ai semantic search      |
-| `TAVILY_API_KEY`                 | Secret Manager       | Tavily LLM-optimized search |
-| `PERPLEXITY_API_KEY`             | Secret Manager       | Perplexity (failover)       |
-| `REDDIT_CLIENT_ID`               | Secret Manager       | Reddit API OAuth            |
-| `REDDIT_CLIENT_SECRET`           | Secret Manager       | Reddit API OAuth            |
-| `GOOGLE_APPLICATION_CREDENTIALS` | Local/Secret Manager | GCP services (Gemini, etc.) |
+| `NEXTAUTH_SECRET`                | Env var              | JWT session signing         |
+| `NEXTAUTH_URL`                   | Env var              | Auth callback base URL      |
+| `GOOGLE_OAUTH_CLIENT_ID`         | Env var              | Google OAuth client ID      |
+| `GOOGLE_OAUTH_CLIENT_SECRET`     | Env var              | Google OAuth client secret  |
+| `ANTHROPIC_API_KEY`              | Env var              | Claude API (primary)        |
+| `EXA_API_KEY`                    | Env var              | Exa.ai semantic search      |
+| `TAVILY_API_KEY`                 | Env var              | Tavily LLM-optimized search |
+| `GOOGLE_APPLICATION_CREDENTIALS` | Local/Secret Manager | GCP services (Vertex AI)    |
 
 ---
 
@@ -605,4 +613,4 @@ const log = {
 
 ---
 
-_This document evolves with the implementation. Last updated: 2026-02-03_
+_This document evolves with the implementation. Last updated: 2026-02-13_

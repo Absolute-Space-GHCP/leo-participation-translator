@@ -181,8 +181,10 @@ async function parsePDF(
   buffer: Buffer,
   filename: string
 ): Promise<ParseResult> {
-  // pdf-parse uses a default export
-  const pdfParse = (await import("pdf-parse")).default;
+  // pdf-parse uses a default export — use type assertion for ESM compat
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const pdfModule = await import("pdf-parse") as any;
+  const pdfParse = pdfModule.default ?? pdfModule;
   const data = await pdfParse(buffer);
 
   return {

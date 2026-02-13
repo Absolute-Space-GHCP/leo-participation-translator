@@ -1,7 +1,7 @@
 # The Participation Translator
 
-Version: 1.1.0
-Last Updated: 2026-02-05
+Version: 1.2.0
+Last Updated: 2026-02-13
 Purpose: AI-powered strategic tool that transforms passive advertising ideas into participation-worthy platforms
 
 ---
@@ -13,11 +13,15 @@ The Participation Translator is an internal tool for Johannes Leonardo that appl
 **Key Capabilities:**
 
 - **RAG-powered context** - Retrieves relevant past JL work for pattern matching
-- **Cultural intelligence** - Real-time trend analysis and subculture identification
+- **Cultural intelligence** - Real-time trend analysis via Exa.ai + Tavily
 - **Framework application** - Systematic 8-Part Participation Framework reasoning
-- **Presentation output** - Google Slides blueprint generation
+- **Streaming generation** - Claude Sonnet 4.5 streams blueprints in real time
+- **PDF export** - Client-side formatted PDF download
+- **Authenticated access** - Google OAuth with JL email allowlist
 
 **Priority:** HIGH | **Visibility:** HIGH | **Sponsor:** Leo (Founder)
+
+**Production URL:** `https://participation-translator-904747039219.us-central1.run.app`
 
 ---
 
@@ -27,7 +31,7 @@ The Participation Translator is an internal tool for Johannes Leonardo that appl
 
 - Node.js 22 LTS
 - GCP account with billing enabled
-- API keys: Anthropic (Claude), Exa.ai, Perplexity
+- API keys: Anthropic (Claude), Exa.ai, Tavily
 
 ### Setup
 
@@ -36,25 +40,40 @@ The Participation Translator is an internal tool for Johannes Leonardo that appl
 git clone https://github.com/Absolute-Space-GHCP/leo-participation-translator.git
 cd leo-participation-translator
 
-# Install dependencies
+# Install CLI/backend dependencies
 npm install
+
+# Install frontend dependencies
+cd app && npm install && cd ..
 
 # Copy environment template
 cp .env.example .env
+cp app/.env.example app/.env.local
 
-# Configure your API keys in .env
+# Configure your API keys in .env and app/.env.local
 # See docs/GCP_SETUP.md for GCP configuration
 ```
 
 ### Development
 
 ```bash
-# Start development server
-npm run dev
+# Start the web UI (dev server)
+cd app && npx next dev --port 3005
 
-# Run tests
-npm test
+# Open in browser
+open http://localhost:3005
+
+# Run CLI tools
+npm run stats        # Vector store statistics
+npm run retrieve -- "query"  # Test retrieval
 ```
+
+### Authentication
+
+The app requires Google OAuth login. Only allowlisted JL emails can access:
+- `charleys@johannesleonardo.com`
+- `leop@johannesleonardo.com`
+- `janj@johannesleonardo.com`
 
 ---
 
@@ -86,12 +105,15 @@ npm test
 
 | Layer        | Technology                                      |
 | ------------ | ----------------------------------------------- |
-| Frontend     | Next.js 14, React 18, Tailwind CSS              |
-| Backend      | Node.js 22 LTS, TypeScript                      |
-| AI/LLM       | Claude Opus 4.6 (Vertex AI), task-based routing |
-| Vector Store | Vertex AI Vector Search                         |
-| Storage      | Cloud Firestore, Cloud Storage                  |
-| Presentation | PptxGenJS, Google Slides API (future)           |
+| Frontend     | Next.js 16, React 19, Tailwind CSS              |
+| Backend      | Node.js 22 LTS, TypeScript, Next.js API Routes  |
+| Auth         | NextAuth.js, Google OAuth, JWT sessions          |
+| AI/LLM       | Claude Sonnet 4.5 (Direct + Vertex AI)          |
+| Embeddings   | Vertex AI text-embedding-005                    |
+| Vector Store | Cloud Firestore (vector search)                 |
+| Cultural     | Exa.ai + Tavily (parallel search)               |
+| PDF Export   | jsPDF (client-side)                              |
+| Deployment   | Cloud Run (Dockerfile, standalone)               |
 
 ---
 
@@ -99,22 +121,25 @@ npm test
 
 ```
 leo-participation-translator/
-├── .cursor/
-│   ├── agents/          # Specialized subagents
-│   ├── rules/           # AI guidance rules
-│   ├── skills/          # Reusable skills
-│   └── hooks/           # Session automation
-├── src/
-│   ├── lib/
-│   │   ├── memory/      # Knowledge graph
-│   │   ├── router/      # Task routing
-│   │   ├── parsers/     # Document parsing
-│   │   ├── embeddings/  # Vector operations
-│   │   └── ...
-│   └── prompts/         # System prompts
-├── docs/                # Documentation
-├── sessions/            # Session logs
-└── PLAN.md              # Implementation roadmap
+├── app/                         # Next.js web application
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── api/             # API routes (generate, upload, stats, auth)
+│   │   │   ├── login/           # Google OAuth login page
+│   │   │   ├── option-a/        # Clean Sheet demo
+│   │   │   ├── option-b/        # Guided Flow demo
+│   │   │   ├── option-c/        # Engine Room dashboard
+│   │   │   └── page.tsx         # Landing page
+│   │   ├── components/          # UI components (shadcn/ui + auth)
+│   │   ├── lib/                 # Core libraries (auth, claude, cultural, etc.)
+│   │   └── middleware.ts        # Auth route protection
+│   ├── Dockerfile               # Cloud Run production image
+│   └── next.config.ts           # standalone output mode
+├── src/                         # CLI tools (ingestion, embeddings)
+├── data/                        # Presentations, manifests
+├── docs/                        # Project documentation
+├── sessions/                    # Session logs
+└── PLAN.md                      # Implementation roadmap
 ```
 
 ---
@@ -124,13 +149,13 @@ leo-participation-translator/
 | Phase | Focus                 | Status                  |
 | ----- | --------------------- | ----------------------- |
 | 0     | Foundation Setup      | ✅ Complete             |
-| 1     | Knowledge Base & RAG  | ✅ Complete (need docs) |
+| 1     | Knowledge Base & RAG  | ✅ Complete             |
 | 1.5   | Learning System       | ✅ Complete             |
-| 2     | Framework Engine      | 🔜 Ready for Leo        |
-| 3     | Cultural Intelligence | 📋 Research complete    |
-| 4     | UI & Presentation     | ✅ Scaffolded           |
-| 5     | Testing & Refinement  | ⏳ Pending              |
-| 6     | Deployment            | ⏳ Pending              |
+| 2     | Framework Engine      | ✅ Complete             |
+| 3     | Cultural Intelligence | ✅ Complete (Exa + Tavily) |
+| 4     | UI & Presentation     | ✅ Complete (~85%)      |
+| 5     | Testing & Refinement  | 🔄 In Progress          |
+| 6     | Deployment & Auth     | ✅ Deployed (Cloud Run) |
 
 ---
 
@@ -147,4 +172,5 @@ See `SECURITY.md` for security policy.
 ---
 
 Author: Charley Scholz, JLIT
-Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
+Co-authored: Claude Opus 4.6, Cursor (IDE)
+Last Updated: 2026-02-13

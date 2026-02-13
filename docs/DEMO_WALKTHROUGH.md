@@ -1,40 +1,62 @@
 # Demo Walkthrough - Engine Room Dashboard
 
-**Version:** 2.0.0
-**Date:** 2026-02-12
+**Version:** 2.1.0
+**Date:** 2026-02-13
 **Purpose:** Step-by-step guide for the live demo with Leo and Jan
 
 ---
 
 ## Pre-Demo Checklist
 
-- [x] Dev server running on `http://localhost:3005`
-- [x] Anthropic API key configured in `app/.env.local`
+- [x] **Production URL live:** `https://participation-translator-904747039219.us-central1.run.app`
+- [x] **Auth configured:** Google OAuth with JL email allowlist
+- [x] Anthropic API key configured
 - [x] Knowledge base: 23 documents, 1,186 chunks, 12 clients
 - [x] Cultural APIs: Exa.ai + Tavily configured
 - [x] Demo sample fallback ready (Nike Running)
 - [x] Three quick-load scenarios prepared (Adidas, Uber, Roblox)
 - [ ] Resend API key for email delivery (optional — PDF download works without it)
 
+### Authorized Users
+- `charleys@johannesleonardo.com`
+- `leop@johannesleonardo.com`
+- `janj@johannesleonardo.com`
+
 ---
 
 ## Quick Start
 
+**Production (recommended for demos):**
+```
+https://participation-translator-904747039219.us-central1.run.app
+```
+
+**Local development:**
 ```bash
-# Verify server is running
-curl -s http://localhost:3005/api/stats | python3 -m json.tool
+# Start dev server
+cd app && npx next dev --port 3005
 
 # Open dashboard
-open http://localhost:3005/option-c
+open http://localhost:3005
 ```
 
 ---
 
 ## Demo Flow (15-20 minutes)
 
+### 0. Login (30 seconds)
+
+Navigate to the production URL or `http://localhost:3005`. You will be redirected to the login page.
+
+1. Click **"Sign in with Google"**
+2. Select your `@johannesleonardo.com` Google account
+3. You'll be redirected to the landing page
+
+> Only allowlisted JL emails can access the tool. Unauthorized emails see an access denied page.
+
 ### 1. Dashboard Overview (2 min)
 
-Open `http://localhost:3005/option-c`
+Click **"Engine Room"** (Option C) from the landing page, or navigate directly to `/option-c`
 
 **Show:**
 - Split-panel layout (dark command center / white canvas)
@@ -155,10 +177,12 @@ Shows the system works across different brands and categories, not just sports.
 
 | Issue | Solution |
 |---|---|
-| "Connection refused" | Dev server stopped — restart: `cd app && npx next dev --port 3005` |
+| Redirected to login page | Expected — sign in with your `@johannesleonardo.com` account |
+| "Access Denied" after login | Email not on allowlist — contact Charley to add |
+| "Connection refused" (local) | Dev server stopped — restart: `cd app && npx next dev --port 3005` |
 | "Email not configured" | Normal — add `RESEND_API_KEY` to `.env.local` or use PDF download |
 | Generation takes 4+ min | Normal for 10-section output — content streams progressively |
-| "No chunks found" | Knowledge base issue — check `curl http://localhost:3005/api/stats` |
+| "No chunks found" | Knowledge base issue — check `/api/stats` |
 | Error during generation | Click "TRY AGAIN" or use the demo sample fallback |
 
 ---
@@ -175,5 +199,5 @@ Shows the system works across different brands and categories, not just sports.
 ---
 
 Author: Charley Scholz, JLIT
-Co-authored: Claude Opus 4.6, Claude Code (coding assistant), Cursor (IDE)
-Updated: 2026-02-12
+Co-authored: Claude Opus 4.6, Cursor (IDE)
+Updated: 2026-02-13

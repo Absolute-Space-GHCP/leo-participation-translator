@@ -1,7 +1,7 @@
 # API Keys & URLs Reference
 
-Version: 1.1.0
-Last Updated: 2026-02-06
+Version: 1.2.0
+Last Updated: 2026-02-13
 
 ---
 
@@ -11,8 +11,9 @@ All external API keys are stored in **Google Cloud Secret Manager** (project: `p
 
 | Logical Name | Secret Manager ID | Used By |
 |---|---|---|
-| `EXA_API_KEY` | `exa-api-key` | `src/lib/cultural/exa.ts` |
-| `TAVILY_API_KEY` | `tavily-api-key` | `src/lib/cultural/tavily.ts` |
+| `EXA_API_KEY` | `exa-api-key` | `app/src/lib/cultural.ts`, `src/lib/cultural/exa.ts` |
+| `TAVILY_API_KEY` | `tavily-api-key` | `app/src/lib/cultural.ts`, `src/lib/cultural/tavily.ts` |
+| `ANTHROPIC_API_KEY` | (env var only) | `app/src/lib/claude.ts` |
 
 **Runtime Resolution (via `src/lib/secrets/index.ts`):**
 1. In-memory cache (avoids repeated API calls)
@@ -64,21 +65,67 @@ Then add the mapping in `src/lib/secrets/index.ts` → `SECRET_MAP`.
 
 ---
 
+### Anthropic (Claude API)
+
+| Property | Value |
+|----------|-------|
+| **Purpose** | Primary LLM for blueprint generation (Claude Sonnet 4.5) |
+| **API Key** | Environment variable: `ANTHROPIC_API_KEY` |
+| **Base URL** | `https://api.anthropic.com` |
+| **Documentation** | https://docs.anthropic.com |
+| **Console** | https://console.anthropic.com |
+| **Pricing** | Per-token (input + output) |
+
+#### Models Used
+
+| Model | Purpose |
+|-------|---------|
+| `claude-sonnet-4-5-20250514` | Primary generation (via Direct API) |
+| `claude-sonnet-4-5-v2@20250514` | Fallback (via Vertex AI) |
+
+---
+
 ### Google Cloud Platform
 
 | Property | Value |
 |----------|-------|
-| **Project ID** | `participation-translator` |
+| **Project ID (infra)** | `participation-translator` |
+| **Project ID (Cloud Run)** | `jl-participation-translator` |
 | **Region** | `us-central1` |
-| **Service Account** | `sa-key.json` (local) |
+| **Service Account** | `participation-translator-sa@participation-translator.iam.gserviceaccount.com` |
+| **Cloud Run URL** | `https://participation-translator-904747039219.us-central1.run.app` |
 
 #### APIs Enabled
 
-- Vertex AI
-- Cloud Firestore
-- Cloud Storage
-- Google Slides API
+- Vertex AI (embeddings, Claude fallback)
+- Cloud Firestore (vector store, documents, chunks)
+- Cloud Storage (presentation files, exports)
+- Cloud Build (Docker image builds)
+- Artifact Registry (Docker image storage)
 - Secret Manager
+- Cloud Run
+
+---
+
+### Google OAuth (Authentication)
+
+| Property | Value |
+|----------|-------|
+| **Purpose** | User authentication for the web UI |
+| **Client ID** | Environment variable: `GOOGLE_OAUTH_CLIENT_ID` |
+| **Client Secret** | Environment variable: `GOOGLE_OAUTH_CLIENT_SECRET` |
+| **Console** | https://console.cloud.google.com/apis/credentials |
+| **Authorized Redirect** | `https://participation-translator-904747039219.us-central1.run.app/api/auth/callback/google` |
+
+#### Email Allowlist
+
+| Email | User |
+|-------|------|
+| `charleys@johannesleonardo.com` | Charley (developer) |
+| `leop@johannesleonardo.com` | Leo (founder) |
+| `janj@johannesleonardo.com` | Jan (founder) |
+
+Managed in: `app/src/lib/auth.ts` → `ALLOWED_EMAILS`
 
 ---
 
@@ -113,26 +160,46 @@ Then add the mapping in `src/lib/secrets/index.ts` → `SECRET_MAP`.
 
 | Service | Purpose | Status |
 |---------|---------|--------|
-| Gemini Grounding | Search/summarization | Planned |
 | Perplexity | Failover summarization | Planned |
+| Resend | Email delivery of blueprints | Planned (optional) |
+| Brandwatch | Social listening | Deferred |
 
 ---
 
 ## Internal Endpoints
 
+### Production
+
+| URL | Purpose |
+|-----|---------|
+| `https://participation-translator-904747039219.us-central1.run.app` | Production (Cloud Run) |
+| `https://participation-translator-904747039219.us-central1.run.app/login` | Login page |
+| `https://participation-translator-904747039219.us-central1.run.app/option-c` | Engine Room |
+
+### Local Development
+
 | Endpoint | Purpose | Port |
 |----------|---------|------|
-| Next.js Dev | Frontend | 3000 |
-| API Routes | Backend | 3000 |
+| Next.js Dev | Frontend + API Routes | 3005 |
+| Dashboard (legacy) | Progress tracker | 8080 |
+
+### API Routes
+
+| Route | Method | Purpose |
+|-------|--------|---------|
+| `/api/auth/[...nextauth]` | GET/POST | NextAuth Google OAuth |
+| `/api/generate` | POST | SSE streaming blueprint generation |
+| `/api/upload` | POST | File upload + text extraction |
+| `/api/stats` | GET | Knowledge base statistics |
+| `/api/email` | POST | Email blueprint delivery (optional) |
 
 ---
 
 ## Environment Variables
 
-```bash
-# ⚠️  API keys are stored in GCP Secret Manager — NOT in env vars or this file.
-#     The application reads them at runtime via src/lib/secrets/index.ts
+### CLI Tools (`/.env`)
 
+```bash
 # GCP (required — tells the app which project to query Secret Manager in)
 GCP_PROJECT_ID=participation-translator
 GCP_REGION=us-central1
@@ -141,15 +208,34 @@ GOOGLE_APPLICATION_CREDENTIALS=./sa-key.json
 # Secret Manager Secrets (for reference only — do NOT paste keys here):
 #   exa-api-key       → EXA_API_KEY
 #   tavily-api-key    → TAVILY_API_KEY
-#   (future) perplexity-api-key → PERPLEXITY_API_KEY
+```
 
-# Local dev override (optional — only if Secret Manager is unreachable):
-# EXA_API_KEY=<get from Secret Manager or dashboard.exa.ai>
-# TAVILY_API_KEY=<get from Secret Manager or app.tavily.com>
+### Web App (`app/.env.local`)
+
+```bash
+# Authentication (required)
+NEXTAUTH_SECRET=<random-string>
+NEXTAUTH_URL=http://localhost:3005          # or Cloud Run URL for production
+GOOGLE_OAUTH_CLIENT_ID=<from-gcp-console>
+GOOGLE_OAUTH_CLIENT_SECRET=<from-gcp-console>
+
+# Claude API (required)
+ANTHROPIC_API_KEY=<from-console.anthropic.com>
+
+# Cultural Intelligence (required)
+EXA_API_KEY=<from-dashboard.exa.ai>
+TAVILY_API_KEY=<from-app.tavily.com>
+
+# GCP (for Firestore vector search + Vertex AI embeddings)
+GCP_PROJECT_ID=participation-translator
+VERTEX_AI_CLAUDE_REGION=us-east5
+
+# Optional
+# RESEND_API_KEY=<for-email-delivery>
 ```
 
 ---
 
 Author: Charley Scholz, JLIT
-Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
-Last Updated: 2026-02-06
+Co-authored: Claude Opus 4.6, Cursor (IDE)
+Last Updated: 2026-02-13

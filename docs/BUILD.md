@@ -1,7 +1,7 @@
 # Build & Development Guide
 
-Version: 1.0.0
-Last Updated: 2026-02-06
+Version: 1.1.0
+Last Updated: 2026-02-13
 
 ---
 
@@ -122,10 +122,15 @@ See `.env.example` for the full template. Key variables:
 | `GCP_PROJECT_ID` | Yes | GCP project for all services |
 | `GCP_REGION` | Yes | Default: `us-central1` |
 | `VERTEX_AI_CLAUDE_REGION` | Yes | Claude on Vertex: `us-east5` |
+| `NEXTAUTH_SECRET` | Yes (app) | JWT session signing key |
+| `NEXTAUTH_URL` | Yes (app) | Auth callback base URL |
+| `GOOGLE_OAUTH_CLIENT_ID` | Yes (app) | Google OAuth client ID |
+| `GOOGLE_OAUTH_CLIENT_SECRET` | Yes (app) | Google OAuth client secret |
+| `ANTHROPIC_API_KEY` | Yes (app) | Claude API key (primary) |
+| `EXA_API_KEY` | Yes (app) | Exa.ai semantic search |
+| `TAVILY_API_KEY` | Yes (app) | Tavily LLM-optimized search |
 | `NODE_ENV` | No | `development` (default) or `production` |
 | `LOG_LEVEL` | No | `debug`, `info`, `warn`, `error` |
-
-> **Secret Manager keys** (EXA_API_KEY, TAVILY_API_KEY) are fetched automatically in production. See `src/lib/secrets/index.ts`.
 
 ---
 
@@ -148,19 +153,30 @@ Test framework: **Vitest**
 
 ## Deployment
 
-Production deployment uses Google Cloud Run:
+Production deployment uses Google Cloud Run with a Dockerfile in `app/`:
 
 ```bash
-# Build container
-gcloud builds submit --tag gcr.io/participation-translator/app
+cd app
 
-# Deploy
+# Deploy (builds Docker image via Cloud Build and deploys to Cloud Run)
 gcloud run deploy participation-translator \
-  --image gcr.io/participation-translator/app \
+  --source . \
   --region us-central1 \
-  --platform managed \
-  --allow-unauthenticated
+  --project jl-participation-translator \
+  --set-env-vars "NEXTAUTH_SECRET=...,NEXTAUTH_URL=https://...,GOOGLE_OAUTH_CLIENT_ID=...,GOOGLE_OAUTH_CLIENT_SECRET=...,ANTHROPIC_API_KEY=...,EXA_API_KEY=...,TAVILY_API_KEY=..." \
+  --service-account participation-translator-sa@participation-translator.iam.gserviceaccount.com
 ```
+
+**Production URL:** `https://participation-translator-904747039219.us-central1.run.app`
+
+### Dockerfile
+
+The `app/Dockerfile` uses a multi-stage build:
+1. **deps** — Install production dependencies
+2. **builder** — Build the Next.js standalone output
+3. **runner** — Minimal production image (node:22-alpine)
+
+**Key config:** `next.config.ts` uses `output: "standalone"` for Docker-compatible builds.
 
 See `docs/GCP_SETUP.md` for full infrastructure setup.
 
@@ -174,9 +190,12 @@ See `docs/GCP_SETUP.md` for full infrastructure setup.
 | `GOOGLE_APPLICATION_CREDENTIALS` errors | Run `gcloud auth login --update-adc` |
 | Import errors (ERR_MODULE_NOT_FOUND) | Ensure `.js` extensions on all imports |
 | Firestore permission denied | Check service account roles in GCP Console |
+| Cloud Build "Cannot find namespace JSX" | Use `React.ReactNode` instead of `JSX.Element` (React 19) |
+| Redirected to `/login` | Expected — auth middleware protects all routes |
+| `pdf-parse` import error in build | Use dynamic import with `as any` + fallback pattern |
 
 ---
 
 Author: Charley Scholz, JLIT
-Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
-Last Updated: 2026-02-06
+Co-authored: Claude Opus 4.6, Cursor (IDE)
+Last Updated: 2026-02-13
