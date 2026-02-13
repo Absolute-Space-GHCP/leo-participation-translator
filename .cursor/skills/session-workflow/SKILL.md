@@ -13,6 +13,8 @@ Task Progress:
 - [ ] Step 2: Check git status
 - [ ] Step 3: Review TASKS.md priorities
 - [ ] Step 4: Check claude-mem status
+- [ ] Step 5: Validate API keys & services
+- [ ] Step 6: Verify dev server (if needed)
 ```
 
 ### Step 1: Verify Workspace
@@ -43,6 +45,48 @@ Read `TASKS.md` to identify current priorities and in-progress tasks.
 ```bash
 curl -s http://127.0.0.1:37777/api/readiness
 # Expected: {"status":"ready","mcpReady":true}
+```
+
+### Step 5: Validate API Keys & Services
+
+Run these checks to verify all external dependencies are healthy:
+
+```bash
+# --- GCP Authentication ---
+gcloud auth application-default print-access-token > /dev/null 2>&1 \
+  && echo "✅ GCP auth valid" || echo "❌ GCP auth expired — run: gcloud auth login --update-adc"
+
+# --- Exa.ai API Key ---
+EXA_KEY=$(grep "EXA_API_KEY" app/.env.local | cut -d'=' -f2)
+EXA_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://api.exa.ai/search" \
+  -H "Content-Type: application/json" -H "x-api-key: $EXA_KEY" \
+  -d '{"query":"test","numResults":1}')
+[ "$EXA_STATUS" = "200" ] && echo "✅ Exa.ai key valid" || echo "❌ Exa.ai key INVALID ($EXA_STATUS) — rotate at dashboard.exa.ai"
+
+# --- Tavily API Key ---
+TAVILY_KEY=$(grep "TAVILY_API_KEY" app/.env.local | cut -d'=' -f2)
+TAVILY_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://api.tavily.com/search" \
+  -H "Content-Type: application/json" \
+  -d "{\"api_key\":\"$TAVILY_KEY\",\"query\":\"test\",\"max_results\":1}")
+[ "$TAVILY_STATUS" = "200" ] && echo "✅ Tavily key valid" || echo "❌ Tavily key INVALID ($TAVILY_STATUS) — check app.tavily.com"
+
+# --- Anthropic API Key ---
+ANTHROPIC_KEY=$(grep "ANTHROPIC_API_KEY" app/.env.local | cut -d'=' -f2)
+ANTHROPIC_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://api.anthropic.com/v1/models" \
+  -H "x-api-key: $ANTHROPIC_KEY" -H "anthropic-version: 2023-06-01")
+[ "$ANTHROPIC_STATUS" = "200" ] && echo "✅ Anthropic key valid" || echo "❌ Anthropic key INVALID ($ANTHROPIC_STATUS)"
+
+# --- Cloud Run (production) ---
+PROD_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+  "https://participation-translator-904747039219.us-central1.run.app/login")
+[ "$PROD_STATUS" = "200" ] && echo "✅ Cloud Run healthy" || echo "❌ Cloud Run issue ($PROD_STATUS)"
+```
+
+### Step 6: Verify Dev Server (if needed)
+
+```bash
+cd app && npx next dev --port 3005
+# Verify: curl -s -o /dev/null -w "%{http_code}" http://localhost:3005/api/stats
 ```
 
 ---
@@ -135,16 +179,19 @@ npm test
 
 ## Quick Reference Commands
 
-| Task            | Command            |
-| --------------- | ------------------ |
-| Check workspace | `pwd`              |
-| Git status      | `git status`       |
-| Run dev server  | `npm run dev`      |
-| Run tests       | `npm test`         |
-| Build           | `npm run build`    |
-| Type check      | `npx tsc --noEmit` |
+| Task            | Command                                     |
+| --------------- | ------------------------------------------- |
+| Check workspace | `pwd`                                       |
+| Git status      | `git status`                                |
+| Run dev server  | `cd app && npx next dev --port 3005`        |
+| Run tests       | `npm test`                                  |
+| Build           | `cd app && npm run build`                   |
+| Type check      | `cd app && npx tsc --noEmit`                |
+| Deploy          | `cd app && gcloud run deploy participation-translator --source . --region us-central1 --project jl-participation-translator` |
+| Production URL  | `https://participation-translator-904747039219.us-central1.run.app` |
 
 ---
 
 Author: Charley Scholz, JLIT
-Co-authored: Claude Opus 4.5, Claude Code (coding assistant), Cursor (IDE)
+Co-authored: Claude Opus 4.6, Cursor (IDE)
+Last Updated: 2026-02-13

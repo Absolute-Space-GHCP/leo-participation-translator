@@ -59,35 +59,25 @@ OUTPUT FORMAT:
 
 CRITICAL: You MUST use the exact "## SECTION_NAME" markdown headers shown below. The system parses your output into sections using these headers. Do NOT skip any section. Do NOT rename them. Output them in this exact order:
 
---- TIER A: STRATEGIC NARRATIVE ---
+--- THE TRANSFORMED IDEA ---
 
 ## PARTICIPATION WORTHY IDEA WRITE-UP
-A seamless, manifesto-style narrative (1-2 pages) using the 9-section framework internally but reading as a flowing story. This is the strategic heart — make it compelling, bold, and narrative-driven.
+A seamless, manifesto-style narrative (1-2 pages). This is ONE continuous flowing piece — the strategic heart of the output.
 
-## OVERALL CREATIVE APPROACH
-Creative direction statement (2-3 paragraphs). The overarching creative philosophy that ties everything together.
+Use the 9-section framework INTERNALLY to shape the narrative, but do NOT expose any framework structure. Weave in the overall creative direction, media thinking, and creator/influencer philosophy naturally within the flow — do NOT create separate sections for creative approach, media strategy, or creator strategy. Everything is part of one unbroken manifesto.
 
-## MEDIA STRATEGY OVERVIEW
-Channel and platform recommendations optimized for participation (2-3 paragraphs). Be specific about which platforms and why.
+The reader should feel the cultural context, the brand truth, the shared interest, the participation-worthy reframe, and the creative/media/talent vision — all flowing naturally without headers, labels, or numbered sections.
 
-## CREATOR/INFLUENCER STRATEGY
-Talent approach focused on authenticity and community (2-3 paragraphs). Name types of creators, not generic influencer tiers.
-
---- TIER B: EXECUTIONAL ---
-
-## EXECUTIONAL RECOMMENDATIONS
-5-8 specific, actionable ideas. Each MAY combine creative + media + creator — but not every one needs all three. Use ### sub-headers for each idea.
-
---- PARTICIPATION PACK ---
+--- CREATIVE TACTICS & IDEAS ---
 
 ## THE BIG AUDACIOUS ACT
-The single, headline-grabbing centerpiece activation. The thing people will talk about. Be bold — this should make someone say "holy shit, can we actually do that?" (2-3 paragraphs)
+The single, headline-grabbing centerpiece activation. The thing people will talk about. Be bold — this should make someone say "holy shit, can we actually do that?" (2-3 paragraphs). This can also incorporate specific campaign suggestions that combine creative + media + creator elements.
 
 ## SUBCULTURE MINI-BRIEFS
 3 niche community activations. Use ### sub-headers for each subculture. For each: identify the subculture, explain why they matter for this brand, and describe a specific activation tailored to their world.
 
 ## MECHANIC DEEP-DIVES
-3-5 detailed participation mechanics. Use ### sub-headers for each mechanic. For each: name the mechanic, explain how it works, what the consumer does, and why it drives participation (not just engagement).
+3-5 detailed participation mechanics. Use ### sub-headers for each mechanic. For each: name the mechanic, explain how it works, what the consumer does, and why it drives participation (not just engagement). Include specific campaign tactics — each MAY combine creative idea + media choice + creator/influencer choice, but NOT every one needs all three.
 
 ## CASTING AND CREATORS
 Specific talent and creator recommendations. Name real creator types, communities, or archetypes. Explain the role each plays in the ecosystem. Include both "First Responders" (niche) and "Amplifiers" (broader reach).
@@ -101,9 +91,9 @@ FINAL INSTRUCTIONS:
 - Be specific and actionable, not generic
 - Write in the JL voice: bold, smart, culturally fluent
 - Every recommendation should ladder back to participation
-- The write-up MUST read as a seamless narrative (framework is invisible)
-- Use ### sub-headers within sections for individual items (recommendations, subcultures, mechanics, etc.)
-- The Participation Pack should feel like a ready-to-brief creative toolkit`;
+- The write-up MUST read as ONE seamless narrative (framework is invisible, no sub-section headers)
+- Creative Tactics & Ideas sections should feel like a ready-to-brief creative toolkit
+- Use ### sub-headers within tactical sections for individual items`;
 
 // ── Prompt Assembly ──
 
@@ -156,10 +146,10 @@ ${culturalContext}`;
 
 ## YOUR TASK
 
-Transform the passive idea above into a Participation-Worthy Platform. Generate ALL sections in the exact order specified in the output format (Tier A, Tier B, and Participation Pack).
+Transform the generic idea write-up above into a Participation-Worthy idea write-up with creative tactics and ideas. Generate ALL sections in the exact order specified in the output format (The Transformed Idea + Creative Tactics & Ideas).
 
 Remember:
-- The write-up MUST flow as a seamless narrative (framework is invisible)
+- The write-up MUST flow as ONE seamless narrative (framework is invisible, no sub-section headers)
 - The Shared Interest is the strategic heart — everything revolves around it
 - Ground in JL past work and current culture
 - Be bold. Be specific. Be JL.

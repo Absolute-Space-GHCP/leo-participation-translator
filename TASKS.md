@@ -143,6 +143,8 @@ Status Legend: PENDING | IN_PROGRESS | DONE
 | PPTX export                       | PENDING | PptxGenJS integration                          |
 | History / saved outputs           | PENDING | Session persistence                            |
 | Feedback dashboard                | PENDING | Ratings, corrections                           |
+| Firestore session logging         | ✅ DONE | All generations logged to `user-sessions` collection |
+| Deck-input pair library           | PENDING | Auto-suggest paired idea write-ups when known decks are uploaded |
 
 ## Phase 6: Deployment & Auth — COMPLETE
 
@@ -439,6 +441,8 @@ Browser                   API Route                  External Services
 | 4.6 | Add export functionality | PPTX, PDF, Google Slides | Medium | PENDING |
 | 4.7 | Implement history/saved outputs | User sessions with preview | Medium | PENDING |
 | 4.8 | Create feedback dashboard | Ratings, corrections, suggestions | High | PENDING |
+| 4.9 | Deck-input pair library | Auto-suggest idea write-ups for known decks | Medium | PENDING |
+| 4.10 | Firestore session logging | Every generation logged per-user for learning | Medium | ✅ DONE |
 
 ---
 

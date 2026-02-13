@@ -77,7 +77,7 @@ export default function EngineRoomPage() {
   const [copied, setCopied] = useState(false);
 
   // Tabs
-  const [activeTab, setActiveTab] = useState<SectionTier>("narrative");
+  const [activeTab, setActiveTab] = useState<SectionTier>("writeup");
 
   // Refine
   const [showRefine, setShowRefine] = useState(false);
@@ -202,7 +202,7 @@ export default function EngineRoomPage() {
   function handleLoadDemo(): void {
     setSeed(SAMPLE_SEED);
     setDemoMode(true);
-    setActiveTab("narrative");
+    setActiveTab("writeup");
   }
 
   // ── Copy / Download ──
@@ -277,7 +277,7 @@ export default function EngineRoomPage() {
                 THE PARTICIPATION TRANSLATOR
               </h1>
               <p className="mt-0.5 text-[10px] uppercase tracking-[0.2em] text-white/85">
-                Strategic Intelligence
+                Input. Transform. Output.
               </p>
             </div>
           </div>
@@ -426,9 +426,9 @@ export default function EngineRoomPage() {
               </div>
 
               <div className="space-y-1.5 jl-stagger-in" style={{ animationDelay: "200ms" }}>
-                <label className="text-[12px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,1)" }}>THE PASSIVE IDEA</label>
+                <label className="text-[12px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,1)" }}>IDEA WRITE-UP</label>
                 <textarea
-                  placeholder="The traditional advertising concept to transform..."
+                  placeholder="The generic idea write-up — a few paragraphs, manifesto-style..."
                   rows={3}
                   value={seed.passiveIdea}
                   onChange={(e) => updateSeed("passiveIdea", e.target.value)}
@@ -448,14 +448,15 @@ export default function EngineRoomPage() {
 
               {showOptions && (
                 <div className="space-y-3 jl-animate-fade-in" style={{ borderLeft: "2px solid rgba(255,255,255,0.12)", paddingLeft: "12px" }}>
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-white/70 mb-1">BUSINESS CONSIDERATIONS</p>
                   <div className="grid grid-cols-2 gap-3">
                     <JLInput label="BUDGET" placeholder="$500K–$1M" value={seed.budget || ""} onChange={(v) => updateSeed("budget", v)} />
                     <JLInput label="TIMELINE" placeholder="Q3 2026" value={seed.timeline || ""} onChange={(v) => updateSeed("timeline", v)} />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-[12px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,1)" }}>CONTEXT</label>
+                    <label className="text-[12px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,1)" }}>CONSTRAINTS / CONTEXT</label>
                     <textarea
-                      placeholder="Brand considerations, past campaigns..."
+                      placeholder="Budget constraints, timeline pressures, past campaigns..."
                       rows={2}
                       value={seed.context}
                       onChange={(e) => updateSeed("context", e.target.value)}
@@ -468,7 +469,7 @@ export default function EngineRoomPage() {
 
               {/* File Upload Zone */}
               <div className="space-y-2">
-                <label className="text-[12px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,1)" }}>REFERENCE DOCUMENTS</label>
+                <label className="text-[12px] uppercase tracking-[0.15em] font-medium" style={{ color: "rgba(22,106,216,1)" }}>STRATEGY DECK</label>
                 <div
                   className={`border border-dashed p-3 text-center transition-all ${dragOver ? "border-[var(--jl-sapphire)] bg-[rgba(22,106,216,0.05)]" : "border-white/20 hover:border-white/30"}`}
                   onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
@@ -487,7 +488,7 @@ export default function EngineRoomPage() {
                       <span className="text-[12px] uppercase tracking-[0.15em]">DROP OR BROWSE</span>
                     </button>
                   )}
-                  <p className="mt-1 text-[11px] text-white/90 uppercase tracking-[0.1em]">PPTX &middot; PDF &middot; DOCX &middot; TXT &middot; MD</p>
+                  <p className="mt-1 text-[11px] text-white/90 uppercase tracking-[0.1em]">UPLOAD STRATEGY DECK &middot; PPTX &middot; PDF &middot; DOCX</p>
                 </div>
 
                 {uploadError && (
@@ -525,7 +526,7 @@ export default function EngineRoomPage() {
                   {isGenerating ? (
                     <span className="flex items-center justify-center gap-2"><Loader2 className="h-3.5 w-3.5 animate-spin" /> GENERATING...</span>
                   ) : (
-                    <span className="flex items-center justify-center gap-2"><Sparkles className="h-3.5 w-3.5" /> GENERATE BLUEPRINT</span>
+                    <span className="flex items-center justify-center gap-2"><Sparkles className="h-3.5 w-3.5" /> TRANSLATE</span>
                   )}
                 </button>
 
@@ -750,8 +751,8 @@ export default function EngineRoomPage() {
           ) : (
             <div className="jl-shimmer flex flex-1 flex-col items-center justify-center px-10 text-center">
               <p className="jl-title text-[40px] mb-4 jl-animate-slide-up" style={{ color: "var(--jl-black)", opacity: 0.06 }}>FROM PASSIVE<br />TO PARTICIPATION</p>
-              <p className="text-[12px] uppercase tracking-[0.2em] jl-animate-slide-up" style={{ color: "var(--jl-black)", opacity: 0.25, animationDelay: "150ms" }}>Fill in the form. Click generate.</p>
-              <p className="mt-1 text-[11px] jl-animate-slide-up" style={{ color: "var(--jl-black)", opacity: 0.15, animationDelay: "300ms" }}>RAG retrieval, cultural intelligence, and Claude&apos;s response stream in real time.</p>
+              <p className="text-[12px] uppercase tracking-[0.2em] jl-animate-slide-up" style={{ color: "var(--jl-black)", opacity: 0.25, animationDelay: "150ms" }}>Input your idea. Click translate.</p>
+              <p className="mt-1 text-[11px] jl-animate-slide-up" style={{ color: "var(--jl-black)", opacity: 0.15, animationDelay: "300ms" }}>The Participation Framework transforms your idea with RAG retrieval and cultural intelligence.</p>
             </div>
           )}
 

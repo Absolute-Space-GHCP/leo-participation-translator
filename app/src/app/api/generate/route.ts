@@ -7,6 +7,8 @@
  */
 
 import { NextRequest } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { searchSimilar } from "@/lib/embeddings";
 import { streamGeneration } from "@/lib/claude";
 import { getCulturalContext, formatCulturalContext } from "@/lib/cultural";
@@ -15,6 +17,7 @@ import {
   buildUserPrompt,
   formatRetrievedContext,
 } from "@/lib/prompts";
+import { logGenerationSession } from "@/lib/session-store";
 import type { ProjectSeed } from "@/lib/types";
 
 export const maxDuration = 300; // 5 min timeout for streaming
@@ -54,6 +57,20 @@ export async function POST(request: NextRequest): Promise<Response> {
     );
   }
 
+  // Get user identity from NextAuth session (for session logging)
+  let userEmail = "anonymous";
+  let userName = "";
+  try {
+    const authSession = await getServerSession(authOptions);
+    if (authSession?.user?.email) {
+      userEmail = authSession.user.email;
+      userName = authSession.user.name || "";
+    }
+  } catch {
+    // Non-fatal — session logging will use "anonymous"
+    console.warn("[generate] Could not retrieve auth session for logging");
+  }
+
   // Create SSE stream
   const encoder = new TextEncoder();
 
@@ -64,6 +81,12 @@ export async function POST(request: NextRequest): Promise<Response> {
         controller.enqueue(encoder.encode(payload));
       }
 
+      // Accumulate full output for session logging
+      let fullOutput = "";
+      let ragChunkCount = 0;
+      let ragTopScore = 0;
+      let culturalResultCount = 0;
+
       try {
         // ── Step 1: RAG Retrieval ──
         sendEvent("status", {
@@ -73,6 +96,8 @@ export async function POST(request: NextRequest): Promise<Response> {
 
         const query = `${seed.brand} ${seed.category} ${seed.passiveIdea} participation`;
         const chunks = await searchSimilar(query, 10);
+        ragChunkCount = chunks.length;
+        ragTopScore = chunks.length > 0 ? chunks[0].score : 0;
 
         // ── Step 2: Cultural Intelligence ──
         sendEvent("status", {
@@ -85,6 +110,7 @@ export async function POST(request: NextRequest): Promise<Response> {
           seed.category,
           seed.audience
         );
+        culturalResultCount = culturalResults.length;
 
         // Send context event (for Option C to display)
         sendEvent("context", {
@@ -139,8 +165,11 @@ export async function POST(request: NextRequest): Promise<Response> {
 
         for await (const event of generator) {
           if (event.type === "text") {
+            fullOutput += event.text;
             sendEvent("chunk", { text: event.text });
           } else if (event.type === "done") {
+            const durationMs = Date.now() - startTime;
+
             sendEvent("status", {
               step: "complete",
               message: "Blueprint generation complete",
@@ -151,7 +180,43 @@ export async function POST(request: NextRequest): Promise<Response> {
                 inputTokens: event.inputTokens,
                 outputTokens: event.outputTokens,
               },
-              durationMs: Date.now() - startTime,
+              durationMs,
+            });
+
+            // ── Log session to Firestore (non-blocking) ──
+            logGenerationSession({
+              userEmail,
+              userName,
+              timestamp: new Date().toISOString(),
+              seed: {
+                brand: seed.brand,
+                category: seed.category,
+                passiveIdea: seed.passiveIdea,
+                audience: seed.audience,
+                budget: seed.budget,
+                timeline: seed.timeline,
+                context: seed.context,
+                refinementNotes: seed.refinementNotes,
+              },
+              uploadedDocNames: seed.uploadedDocuments?.map((d) => d.filename) || [],
+              output: fullOutput,
+              metadata: {
+                model: event.model,
+                inputTokens: event.inputTokens,
+                outputTokens: event.outputTokens,
+                durationMs,
+              },
+              context: {
+                ragChunkCount,
+                ragTopScore,
+                culturalResultCount,
+                themes: [],
+              },
+              isRefinement: !!seed.refinementNotes,
+              refinementNotes: seed.refinementNotes,
+            }).catch((err) => {
+              // Non-fatal — don't fail the generation if logging fails
+              console.error("[generate] Session logging failed:", err);
             });
           }
         }

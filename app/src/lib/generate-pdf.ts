@@ -28,9 +28,8 @@ const COLORS = {
 };
 
 const TIER_COLORS: Record<SectionTier, [number, number, number]> = {
-  narrative: COLORS.sapphire,
-  executional: COLORS.emerald,
-  pack: [246, 198, 39], // gold
+  writeup: COLORS.sapphire,
+  tactics: COLORS.emerald,
 };
 
 interface PDFOptions {
@@ -51,9 +50,8 @@ export function generatePDF({ brand, sections, date }: PDFOptions): Blob {
 
   // ── Content Pages ──
   const tiers: { tier: SectionTier; label: string }[] = [
-    { tier: "narrative", label: "STRATEGIC NARRATIVE" },
-    { tier: "executional", label: "EXECUTIONAL RECOMMENDATIONS" },
-    { tier: "pack", label: "PARTICIPATION PACK" },
+    { tier: "writeup", label: "THE TRANSFORMED IDEA" },
+    { tier: "tactics", label: "CREATIVE TACTICS & IDEAS" },
   ];
 
   for (const { tier, label } of tiers) {
@@ -103,9 +101,8 @@ export function generatePDFBase64(options: PDFOptions): string {
   drawTitlePage(doc, options.brand, today);
 
   const tiers: { tier: SectionTier; label: string }[] = [
-    { tier: "narrative", label: "STRATEGIC NARRATIVE" },
-    { tier: "executional", label: "EXECUTIONAL RECOMMENDATIONS" },
-    { tier: "pack", label: "PARTICIPATION PACK" },
+    { tier: "writeup", label: "THE TRANSFORMED IDEA" },
+    { tier: "tactics", label: "CREATIVE TACTICS & IDEAS" },
   ];
 
   for (const { tier, label } of tiers) {

@@ -7,7 +7,7 @@
  * @updated 2026-02-11
  */
 
-export type SectionTier = "narrative" | "executional" | "pack";
+export type SectionTier = "writeup" | "tactics";
 
 export interface OutputSection {
   key: string;
@@ -19,55 +19,37 @@ export interface OutputSection {
 // ── Known section headers mapped to tier ──
 
 const SECTION_MAP: Record<string, { key: string; title: string; tier: SectionTier }> = {
+  // ── Tab 1: The Transformed Idea (one seamless narrative) ──
   "PARTICIPATION WORTHY IDEA WRITE-UP": {
     key: "write-up",
     title: "Participation Worthy Idea Write-Up",
-    tier: "narrative",
+    tier: "writeup",
   },
-  "OVERALL CREATIVE APPROACH": {
-    key: "creative-approach",
-    title: "Overall Creative Approach",
-    tier: "narrative",
-  },
-  "MEDIA STRATEGY OVERVIEW": {
-    key: "media-strategy",
-    title: "Media Strategy Overview",
-    tier: "narrative",
-  },
-  "CREATOR/INFLUENCER STRATEGY": {
-    key: "creator-strategy",
-    title: "Creator / Influencer Strategy",
-    tier: "narrative",
-  },
-  "EXECUTIONAL RECOMMENDATIONS": {
-    key: "executional",
-    title: "Executional Recommendations",
-    tier: "executional",
-  },
+  // ── Tab 2: Creative Tactics & Ideas (5 tactical sections) ──
   "THE BIG AUDACIOUS ACT": {
     key: "big-act",
     title: "The Big Audacious Act",
-    tier: "pack",
+    tier: "tactics",
   },
   "SUBCULTURE MINI-BRIEFS": {
     key: "subcultures",
     title: "Subculture Mini-Briefs",
-    tier: "pack",
+    tier: "tactics",
   },
   "MECHANIC DEEP-DIVES": {
     key: "mechanics",
     title: "Mechanic Deep-Dives",
-    tier: "pack",
+    tier: "tactics",
   },
   "CASTING AND CREATORS": {
     key: "casting",
     title: "Casting & Creators",
-    tier: "pack",
+    tier: "tactics",
   },
   "72-HOUR TREND HIJACKS": {
     key: "trend-hijacks",
     title: "72-Hour Trend Hijacks",
-    tier: "pack",
+    tier: "tactics",
   },
 };
 
@@ -104,11 +86,11 @@ export function parseOutput(raw: string): OutputSection[] {
       const [, meta] = match;
       sections.push({ ...meta, content });
     } else if (content.length > 50) {
-      // Unknown header but has content -- include as narrative fallback
+      // Unknown header but has content -- include as writeup fallback
       sections.push({
         key: headerRaw.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, ""),
         title: headerRaw,
-        tier: "narrative",
+        tier: "writeup",
         content,
       });
     }
@@ -119,7 +101,7 @@ export function parseOutput(raw: string): OutputSection[] {
     sections.push({
       key: "raw",
       title: "Blueprint Output",
-      tier: "narrative",
+      tier: "writeup",
       content: raw.trim(),
     });
   }
@@ -139,8 +121,7 @@ export function getSectionsByTier(sections: OutputSection[], tier: SectionTier):
  */
 export function getTierCounts(sections: OutputSection[]): { tier: SectionTier; label: string; count: number }[] {
   return [
-    { tier: "narrative", label: "STRATEGIC NARRATIVE", count: sections.filter((s) => s.tier === "narrative").length },
-    { tier: "executional", label: "EXECUTIONAL", count: sections.filter((s) => s.tier === "executional").length },
-    { tier: "pack", label: "PARTICIPATION PACK", count: sections.filter((s) => s.tier === "pack").length },
+    { tier: "writeup" as SectionTier, label: "THE TRANSFORMED IDEA", count: sections.filter((s) => s.tier === "writeup").length },
+    { tier: "tactics" as SectionTier, label: "CREATIVE TACTICS & IDEAS", count: sections.filter((s) => s.tier === "tactics").length },
   ];
 }
